@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find jobs in Kenya - errands, cleaning, deliveries, and more on Connect.">
+    <meta name="keywords" content="jobs, Kenya, Nairobi, Mombasa, Kisumu, errands, cleaning, delivery">
+    <title>Jobs - Connect</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+   <!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .fade-in { animation: fadeIn 1s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .job-card { transition: transform 0.3s; }
+        .job-card:hover { transform: scale(1.05); }
+        .dark-mode { background-color: #1f2937; color: #f3f4f6; }
+        .dark-mode .bg-white { background-color: #374151; }
+        .dark-mode .text-gray-600 { color: #d1d5db; }
+        #map-view { height: 500px; display: none; }
+        .high-contrast { filter: contrast(1.5); }
+        @media (prefers-reduced-motion: reduce) { .fade-in, .job-card:hover { animation: none; transform: none; } }
+    </style>
+</head>
+<body class="bg-gray-50">
+   
+      
+
+    <!-- Jobs Section -->
+    <section id="jobs" class="container mx-auto px-4 py-12 pt-24 fade-in">
+        <h2 class="text-3xl font-bold text-blue-800 mb-4 text-center">Available Jobs</h2>
+        <div class="h-1 w-24 mx-auto mb-6" style="background: linear-gradient(to right, #14B8A6, #1E40AF)"></div>
+        <div class="mb-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <input type="text" id="searchInput" class="p-2 border rounded flex-1 focus:ring-2 focus:ring-teal-500" placeholder="Search jobs or locations..." aria-label="Search jobs">
+            <select id="categoryFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500" aria-label="Filter by category">
+                <option value="All">All Categories</option>
+                <option value="Errands">Errands</option>
+                <option value="Labor">Labor</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Gardening">Gardening</option>
+                <option value="Tutoring">Tutoring</option>
+                <option value="Painting">Painting</option>
+                <option value="Tech Help">Tech Help</option>
+            </select>
+            <select id="locationFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500" aria-label="Filter by location">
+                <option value="All">All Locations</option>
+                <option value="Nairobi">Nairobi</option>
+                <option value="Mombasa">Mombasa</option>
+                <option value="Kisumu">Kisumu</option>
+            </select>
+            <select id="sortFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500" aria-label="Sort jobs">
+                <option value="default">Sort By</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating-desc">Rating: High to Low</option>
+            </select>
+            <input type="range" id="payRange" min="500" max="5000" value="5000" class="p-2" aria-label="Filter by pay range">
+            <select id="urgencyFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500" aria-label="Filter by urgency">
+                <option value="All">All Urgency</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Flexible">Flexible</option>
+            </select>
+            <button id="toggleMap" class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700" aria-label="Toggle map view">Map View</button>
+            <button id="toggleDarkMode" class="p-2 bg-gray-600 text-white rounded hover:bg-gray-700" aria-label="Toggle dark mode">Dark Mode</button>
+            <button id="toggleContrast" class="p-2 bg-yellow-600 text-white rounded hover:bg-yellow-700" aria-label="Toggle high contrast">Contrast</button>
+        </div>
+        <div id="map-view"></div>
+        <div id="jobs-container" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- 40 Mock Job Cards -->
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Delivery" data-location="Nairobi" data-pay="2000" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Boda-boda Delivery</h3>
+                    <p class="text-gray-600">Company: QuickRides</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 2,000 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 hr ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(1)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(1)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Delivery, Navigation</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(1)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Cleaning" data-location="Nairobi" data-pay="1500" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">House Cleaner</h3>
+                    <p class="text-gray-600">Company: Sparkle Homes</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,500 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 hrs ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(2)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1500)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(2)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Cleaning, Organization</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(2)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Errands" data-location="Mombasa" data-pay="1000" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Mama Mboga Errands</h3>
+                    <p class="text-gray-600">Company: Local Mart</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 1,000 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 hrs ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(3)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(3)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Shopping, Time Management</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(3)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Labor" data-location="Kisumu" data-pay="2500" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Fundi for Plumbing</h3>
+                    <p class="text-gray-600">Company: FixIt Pros</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,500 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 day ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(4)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2500)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(4)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Plumbing, Repairs</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(4)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Gardening" data-location="Nairobi" data-pay="1800" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Garden Trimming</h3>
+                    <p class="text-gray-600">Company: GreenSpaces</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,800 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(5)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1800)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(5)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Gardening, Landscaping</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(5)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tutoring" data-location="Mombasa" data-pay="3000" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Math Tutor</h3>
+                    <p class="text-gray-600">Company: EduConnect</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 3,000 / session</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(6)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(6)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Teaching, Math</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(6)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Painting" data-location="Kisumu" data-pay="2200" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">House Painter</h3>
+                    <p class="text-gray-600">Company: ColorWorks</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,200 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 4 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(7)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2200)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(7)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Painting, Attention to Detail</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(7)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tech Help" data-location="Nairobi" data-pay="3500" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Phone Repair</h3>
+                    <p class="text-gray-600">Company: TechFix</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 3,500 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(8)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3500)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(8)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Electronics, Customer Service</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(8)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Delivery" data-location="Mombasa" data-pay="1800" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Food Delivery</h3>
+                    <p class="text-gray-600">Company: TastyBites</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 1,800 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 6 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(9)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1800)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(9)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Delivery, Time Management</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(9)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Cleaning" data-location="Kisumu" data-pay="1400" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Office Cleaner</h3>
+                    <p class="text-gray-600">Company: CleanCorp</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 1,400 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 7 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(10)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1400)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(10)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Cleaning, Efficiency</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(10)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Errands" data-location="Nairobi" data-pay="1200" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Market Runner</h3>
+                    <p class="text-gray-600">Company: ShopEasy</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,200 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 hrs ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(11)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1200)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(11)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Shopping, Communication</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(11)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Labor" data-location="Mombasa" data-pay="2700" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Construction Helper</h3>
+                    <p class="text-gray-600">Company: BuildRight</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,700 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 day ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(12)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2700)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(12)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Construction, Strength</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(12)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Gardening" data-location="Kisumu" data-pay="1600" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Lawn Mowing</h3>
+                    <p class="text-gray-600">Company: GreenCare</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 1,600 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(13)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1600)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(13)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Gardening, Equipment Use</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(13)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tutoring" data-location="Nairobi" data-pay="2800" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">English Tutor</h3>
+                    <p class="text-gray-600">Company: LearnFast</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 2,800 / session</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(14)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2800)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(14)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Teaching, Communication</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(14)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Painting" data-location="Mombasa" data-pay="2000" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Fence Painter</h3>
+                    <p class="text-gray-600">Company: PaintPro</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,000 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 4 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(15)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(15)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Painting, Precision</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(15)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tech Help" data-location="Kisumu" data-pay="3200" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Laptop Setup</h3>
+                    <p class="text-gray-600">Company: TechAid</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 3,200 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(16)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3200)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(16)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: IT, Troubleshooting</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(16)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Delivery" data-location="Nairobi" data-pay="1900" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Parcel Delivery</h3>
+                    <p class="text-gray-600">Company: SwiftSend</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,900 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 6 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(17)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1900)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(17)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Delivery, Customer Service</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(17)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Cleaning" data-location="Mombasa" data-pay="1300" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Apartment Cleaning</h3>
+                    <p class="text-gray-600">Company: NeatNest</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 1,300 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 7 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(18)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1300)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(18)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Cleaning, Detail-Oriented</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(18)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Errands" data-location="Kisumu" data-pay="1100" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Bill Payment Runner</h3>
+                    <p class="text-gray-600">Company: PayEasy</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 1,100 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 hr ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(19)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1100)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(19)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Errands, Reliability</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(19)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Labor" data-location="Nairobi" data-pay="2600" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Furniture Mover</h3>
+                    <p class="text-gray-600">Company: MoveIt</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 2,600 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(20)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2600)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(20)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Lifting, Teamwork</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(20)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Gardening" data-location="Mombasa" data-pay="1700" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Tree Planting</h3>
+                    <p class="text-gray-600">Company: EcoGrow</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 1,700 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(21)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1700)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(21)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Gardening, Environmental Care</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(21)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tutoring" data-location="Kisumu" data-pay="2900" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Science Tutor</h3>
+                    <p class="text-gray-600">Company: StudySmart</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,900 / session</p>
+                    <p class="text-gray-400 text-sm">Posted: 4 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(22)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2900)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(22)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Teaching, Science</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(22)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Painting" data-location="Nairobi" data-pay="2100" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Wall Painter</h3>
+                    <p class="text-gray-600">Company: BrightCoats</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 2,100 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(23)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2100)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(23)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Painting, Creativity</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(23)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tech Help" data-location="Mombasa" data-pay="3400" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Wi-Fi Setup</h3>
+                    <p class="text-gray-600">Company: NetConnect</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 3,400 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 6 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(24)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3400)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(24)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Networking, IT</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(24)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Delivery" data-location="Kisumu" data-pay="1700" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Grocery Delivery</h3>
+                    <p class="text-gray-600">Company: FreshCart</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 1,700 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 7 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(25)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1700)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(25)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Delivery, Customer Service</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(25)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Cleaning" data-location="Nairobi" data-pay="1600" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Car Wash</h3>
+                    <p class="text-gray-600">Company: ShineAuto</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,600 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 hr ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(26)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1600)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(26)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Cleaning, Vehicle Care</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(26)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Errands" data-location="Mombasa" data-pay="1300" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Dry Cleaning Pickup</h3>
+                    <p class="text-gray-600">Company: CleanPress</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 1,300 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(27)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1300)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(27)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Errands, Organization</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(27)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Labor" data-location="Kisumu" data-pay="2400" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Carpenter Assistant</h3>
+                    <p class="text-gray-600">Company: WoodCraft</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,400 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(28)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2400)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(28)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Carpentry, Teamwork</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(28)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Gardening" data-location="Nairobi" data-pay="1900" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Flower Bed Setup</h3>
+                    <p class="text-gray-600">Company: BloomEasy</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,900 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 4 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(29)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1900)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(29)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Gardening, Design</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(29)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tutoring" data-location="Mombasa" data-pay="2700" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Swahili Tutor</h3>
+                    <p class="text-gray-600">Company: LinguaLearn</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,700 / session</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(30)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2700)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(30)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Teaching, Swahili</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(30)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Painting" data-location="Kisumu" data-pay="2300" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Room Painter</h3>
+                    <p class="text-gray-600">Company: ColorSplash</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,300 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 6 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(31)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2300)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(31)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Painting, Finishing</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(31)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tech Help" data-location="Nairobi" data-pay="3600" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Software Installation</h3>
+                    <p class="text-gray-600">Company: SoftPeak</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 3,600 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 7 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(32)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3600)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(32)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: IT, Software</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(32)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Delivery" data-location="Mombasa" data-pay="2000" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Courier Service</h3>
+                    <p class="text-gray-600">Company: SpeedyMail</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,000 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 hr ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(33)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(33)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Delivery, Logistics</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(33)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Cleaning" data-location="Kisumu" data-pay="1500" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Window Cleaner</h3>
+                    <p class="text-gray-600">Company: ClearView</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 1,500 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 2 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(34)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1500)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(34)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Cleaning, Safety</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(34)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Errands" data-location="Nairobi" data-pay="1400" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Document Delivery</h3>
+                    <p class="text-gray-600">Company: DocRun</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 1,400 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 3 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(35)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(1400)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(35)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Errands, Punctuality</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(35)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Labor" data-location="Mombasa" data-pay="2800" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Electrician Helper</h3>
+                    <p class="text-gray-600">Company: SparkFix</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,800 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 4 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(36)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2800)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(36)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Electrical, Safety</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(36)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Gardening" data-location="Kisumu" data-pay="2000" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Hedge Trimming</h3>
+                    <p class="text-gray-600">Company: TrimTidy</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 2,000 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 5 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(37)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(37)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Gardening, Precision</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(37)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tutoring" data-location="Nairobi" data-pay="3000" data-rating="3">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">History Tutor</h3>
+                    <p class="text-gray-600">Company: PastLearn</p>
+                    <p class="text-gray-500">Location: Nairobi</p>
+                    <p class="text-teal-600">Pay: KES 3,000 / session</p>
+                    <p class="text-gray-400 text-sm">Posted: 6 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★☆☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(38)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3000)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(38)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Teaching, History</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(38)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Painting" data-location="Mombasa" data-pay="2400" data-rating="5">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Shop Painter</h3>
+                    <p class="text-gray-600">Company: VividColors</p>
+                    <p class="text-gray-500">Location: Mombasa</p>
+                    <p class="text-teal-600">Pay: KES 2,400 / day</p>
+                    <p class="text-gray-400 text-sm">Posted: 7 days ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★★</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(39)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(2400)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(39)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Painting, Design</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(39)">Share Job</button>
+                </div>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card" data-category="Tech Help" data-location="Kisumu" data-pay="3700" data-rating="4">
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold">Printer Repair</h3>
+                    <p class="text-gray-600">Company: PrintPro</p>
+                    <p class="text-gray-500">Location: Kisumu</p>
+                    <p class="text-teal-600">Pay: KES 3,700 / task</p>
+                    <p class="text-gray-400 text-sm">Posted: 1 hr ago</p>
+                    <p class="text-yellow-500">Rating: ★★★★☆</p>
+                    <div class="mt-2 flex space-x-2 text-white">
+                        <button class="bg-blue-600 rounded px-4 py-2" onclick="viewDetails(40)">View Details</button>
+                        <button class="bg-teal-600 rounded px-4 py-2" onclick="payMpesa(3700)">Apply & Pay</button>
+                        <button class="bg-gray-300 text-gray-800 rounded px-2 py-1" onclick="bookmarkJob(40)">★</button>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600">Skills: Electronics, Repair</p>
+                    <button class="mt-2 text-blue-600 text-sm" onclick="shareJob(40)">Share Job</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-center space-x-2">
+            <button id="prevPage" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" aria-label="Previous page">Previous</button>
+            <span id="pageInfo" class="py-2 px-4">Page 1 - Showing 1-10 of 40 jobs</span>
+            <button id="nextPage" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" aria-label="Next page">Next</button>
+        </div>
+        <div class="mt-4 text-center">
+            <button id="subscribeAlerts" class="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700">Subscribe to Job Alerts</button>
+        </div>
+    </section>
+
+         <!-- Footer -->
+         <footer class="text-white py-8" style="background: var(--gradient-primary)">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                        <p class="text-sm">Connecting you with trusted services and job opportunities across Kenya.</p>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="about.html" class="hover:underline">About</a></li>
+                            <li><a href="contact.html" class="hover:underline">Contact</a></li>
+                            <li><a href="faq.html" class="hover:underline">FAQ</a></li>
+                            <li><a href="pricing.html" class="hover:underline">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Services</h3>
+                        <ul class="space-y-2">
+                            <li><a href="jobs.html?category=cleaning" class="hover:underline">Cleaning</a></li>
+                            <li><a href="jobs.html?category=delivery" class="hover:underline">Delivery</a></li>
+                            <li><a href="jobs.html?category=errands" class="hover:underline">Errands</a></li>
+                            <li><a href="jobs.html?category=tutoring" class="hover:underline">Tutoring</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                        <div class="flex gap-4">
+                            <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+            </div>
+        </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="jobs.js"></script>

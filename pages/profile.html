@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Connect user profile - view wallet, ratings, personal details and job history." />
+  <meta name="keywords" content="Connect, Kenya, Profile, Wallet, Reviews, Jobs, M-Pesa, Earnings" />
+  <title>Profile - Connect</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+  <style>
+    .bg-gradient {
+      background: linear-gradient(to right, #1E40AF, #2563EB);
+    }
+    
+    .btn-gradient-primary {
+      background: linear-gradient(to right, #14B8A6, #059669);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gradient-primary:hover {
+      background: linear-gradient(to right, #059669, #047857);
+      transform: translateY(-1px);
+    }
+    
+    .btn-gradient-secondary {
+      background: linear-gradient(to right, #F97316, #EA580C);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gradient-secondary:hover {
+      background: linear-gradient(to right, #EA580C, #C2410C);
+      transform: translateY(-1px);
+    }
+    
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .nav-link.active-tab {
+      border-bottom: 3px solid #EA580C;
+      color: #1E40AF !important;
+      font-weight: bold;
+    }
+    
+    .review-item {
+      transition: all 0.2s ease;
+    }
+    
+    .review-item:hover {
+      background-color: #f8fafc;
+    }
+    
+    /* Notification badge */
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <nav class="navbar navbar-expand-lg fixed-top bg-gradient text-white shadow-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="fas fa-handshake me-2"></i>Connect
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link text-white" href="connect.html"><i class="fas fa-home me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/jobs.html"><i class="fas fa-briefcase me-1"></i> Jobs</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/map.html"><i class="fas fa-map-marker-alt me-1"></i> Map</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/faq.html"><i class="fas fa-question-circle me-1"></i> FAQ</a></li>
+
+          <!-- Notifications -->
+          <li class="nav-item me-2">
+            <a class="nav-link text-white position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+              <li class="p-2 bg-light border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold">Notifications</span>
+                  <a href="#" class="text-decoration-none small">Mark all as read</a>
+                </div>
+              </li>
+              <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-primary">New booking:</span> John M. has booked your service</a></li>
+              <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-success">Payment received:</span> KES 1,500 from Sarah K.</a></li>
+              <li><a class="dropdown-item py-2" href="#"><span class="text-warning">Reminder:</span> Upcoming job tomorrow at 9 AM</a></li>
+              <li class="text-center p-2 bg-light"><a href="#" class="text-decoration-none small">View all notifications</a></li>
+            </ul>
+          </li>
+
+          <!-- Messages -->
+          <li class="nav-item me-2">
+            <a class="nav-link text-white position-relative" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-envelope"></i>
+              <span class="notification-badge">2</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+              <li class="p-2 bg-light border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold">Messages</span>
+                  <a href="#" class="text-decoration-none small">View all</a>
+                </div>
+              </li>
+              <li>
+                <a class="dropdown-item py-2 border-bottom" href="#">
+                  <div class="d-flex">
+                    <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                    <div>
+                      <p class="mb-0 fw-bold">John M.</p>
+                      <p class="small text-muted mb-0">What time will you arrive tomorrow?</p>
+                      <p class="small text-muted mb-0">2 hours ago</p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2" href="#">
+                  <div class="d-flex">
+                    <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                    <div>
+                      <p class="mb-0 fw-bold">Sarah K.</p>
+                      <p class="small text-muted mb-0">Thank you for your service yesterday!</p>
+                      <p class="small text-muted mb-0">1 day ago</p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Dropdown menu -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ellipsis-h me-1"></i> More
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="pages/wallet.html"><i class="fas fa-wallet me-2"></i>Wallet</a></li>
+              <li><a class="dropdown-item" href="pages/profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+              <li><a class="dropdown-item" href="pages/support.html"><i class="fas fa-headset me-2"></i>Support</a></li>
+            </ul>
+          </li>
+
+          <!-- Profile dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../assets/img/avatar-placeholder.png" class="rounded-circle" alt="Profile" width="40" height="40">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="pages/profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Profile Section -->
+  <main class="pt-28 px-6 lg:px-20">
+    <div class="max-w-6xl mx-auto">
+      <!-- Top Profile Section -->
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <div class="grid md:grid-cols-5 gap-8">
+          <!-- Profile Summary -->
+          <div class="md:col-span-2 flex flex-col items-center text-center">
+            <div class="relative">
+              <img src="../assets/img/avatar-placeholder.png" alt="Avatar" class="w-32 h-32 rounded-full mb-4 border-4 border-blue-100" />
+              <button class="absolute bottom-4 right-0 bg-blue-500 text-white rounded-full p-2 shadow-lg">
+                <i class="fas fa-camera"></i>
+              </button>
+            </div>
+            <h2 class="text-2xl font-semibold text-blue-900">Jane Wanjiku</h2>
+            <p class="text-gray-600"><i class="fas fa-map-marker-alt me-1"></i> Nairobi, Kenya</p>
+            <p class="text-gray-600 text-sm mt-1"><i class="fas fa-briefcase me-1"></i> Service Provider - Cleaning, Errands</p>
+            <div class="flex justify-center items-center gap-1 my-3 text-yellow-400">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+              <span class="text-gray-700 text-sm ml-2">(4.8/5)</span>
+            </div>
+            <p class="text-teal-600 text-sm mb-3"><i class="fas fa-check-circle me-1"></i> Verified Account</p>
+            <div class="flex gap-2 mt-2">
+              <a href="edit-profile.html" class="btn btn-sm btn-gradient-secondary text-white px-3">
+                <i class="fas fa-edit me-1"></i> Edit Profile
+              </a>
+              <a href="#" class="btn btn-sm bg-blue-500 text-white px-3">
+                <i class="fas fa-share-alt me-1"></i> Share Profile
+              </a>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 w-full mt-6">
+              <div class="text-center p-3 bg-blue-50 rounded-lg stat-card">
+                <p class="text-xl font-bold text-blue-700">28</p>
+                <p class="text-xs text-gray-600">Jobs Done</p>
+              </div>
+              <div class="text-center p-3 bg-green-50 rounded-lg stat-card">
+                <p class="text-xl font-bold text-green-700">98%</p>
+                <p class="text-xs text-gray-600">Success Rate</p>
+              </div>
+              <div class="text-center p-3 bg-amber-50 rounded-lg stat-card">
+                <p class="text-xl font-bold text-amber-700">17</p>
+                <p class="text-xs text-gray-600">Bookmarks</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats and Wallet Section -->
+          <div class="md:col-span-3">
+            <!-- Profile Tabs -->
+            <ul class="nav nav-tabs border-0 mb-4">
+              <li class="nav-item">
+                <a class="nav-link active-tab" data-tab="overview">Overview</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-tab="wallet">Wallet</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-tab="reviews">Reviews</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-tab="jobs">Jobs</a>
+              </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content active" id="overview">
+              <!-- Quick Stats -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
+                <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg shadow-sm">
+                  <p class="text-blue-800"><i class="fas fa-money-bill-wave me-2"></i> Earnings</p>
+                  <p class="text-2xl font-bold text-blue-900">KES 35,200</p>
+                  <p class="text-sm text-blue-600">Last month: KES 12,800</p>
+                </div>
+                <div class="bg-gradient-to-r from-teal-50 to-teal-100 p-4 rounded-lg shadow-sm">
+                  <p class="text-teal-800"><i class="fas fa-wallet me-2"></i> Balance</p>
+                  <p class="text-2xl font-bold text-teal-900">KES 2,500</p>
+                  <p class="text-sm text-teal-600"><i class="fas fa-arrow-up"></i> +1,000 since last week</p>
+                </div>
+                <div class="bg-gradient-to-r from-amber-50 to-amber-100 p-4 rounded-lg shadow-sm">
+                  <p class="text-amber-800"><i class="fas fa-calendar me-2"></i> Upcoming</p>
+                  <p class="text-2xl font-bold text-amber-900">3 Jobs</p>
+                  <p class="text-sm text-amber-600">Next: Today at 3:30 PM</p>
+                </div>
+              </div>
+
+              <!-- Earnings Chart -->
+              <div class="bg-white p-4 rounded-lg shadow-sm mb-5">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">Earnings History</h4>
+                <canvas id="earningsChart" height="200"></canvas>
+              </div>
+
+              <!-- Recent Activity -->
+              <div class="bg-white p-4 rounded-lg shadow-sm">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">Recent Activity</h4>
+                <div class="space-y-4">
+                  <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="text-blue-500 mt-1">
+                      <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium">Payment Received</p>
+                      <p class="text-sm text-gray-600">You received KES 1,500 from John M. for cleaning services</p>
+                      <p class="text-xs text-gray-500">April 10, 2025 • 2:15 PM</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="text-green-500 mt-1">
+                      <i class="fas fa-star"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium">New Review</p>
+                      <p class="text-sm text-gray-600">John M. gave you a 5-star rating for your work</p>
+                      <p class="text-xs text-gray-500">April 10, 2025 • 2:20 PM</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="text-amber-500 mt-1">
+                      <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                      <p class="font-medium">Job Completed</p>
+                      <p class="text-sm text-gray-600">You completed a cleaning job at Riverside Apartments</p>
+                      <p class="text-xs text-gray-500">April 10, 2025 • 2:00 PM</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Wallet Tab -->
+            <div class="tab-content" id="wallet">
+              <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <h3 class="text-xl font-bold text-blue-800 mb-4">Wallet Overview</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-5 rounded-lg text-white">
+                    <div class="flex justify-between mb-3">
+                      <div>
+                        <p class="text-sm opacity-80">Current Balance</p>
+                        <p class="text-3xl font-bold">KES 2,500</p>
+                      </div>
+                      <div>
+                        <i class="fas fa-wallet text-4xl opacity-50"></i>
+                      </div>
+                    </div>
+                    <p class="text-sm opacity-80">Account ID: 8234-5611</p>
+                    <p class="text-sm opacity-80">Updated: April 15, 2025 • 11:45 AM</p>
+                  </div>
+                  <div class="bg-gradient-to-r from-teal-600 to-teal-800 p-5 rounded-lg text-white">
+                    <div class="flex justify-between mb-3">
+                      <div>
+                        <p class="text-sm opacity-80">Total Earnings</p>
+                        <p class="text-3xl font-bold">KES 35,200</p>
+                      </div>
+                      <div>
+                        <i class="fas fa-money-bill-wave text-4xl opacity-50"></i>
+                      </div>
+                    </div>
+                    <p class="text-sm opacity-80">Jobs Completed: 28</p>
+                    <p class="text-sm opacity-80">Avg. Job Value: KES 1,257</p>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 mb-4">
+                  <button class="btn btn-gradient-primary text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-plus me-2"></i> Deposit via M-Pesa
+                  </button>
+                  <button class="btn btn-gradient-secondary text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-money-bill-wave me-2"></i> Withdraw to M-Pesa
+                  </button>
+                  <button class="btn bg-blue-500 text-white px-4 py-2 rounded-lg">
+                    <i class="fas fa-history me-2"></i> Transaction History
+                  </button>
+                </div>
+
+                <h4 class="font-semibold text-gray-700 mt-5 mb-3">Recent Transactions</h4>
+                <div class="overflow-x-auto">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Apr 10, 2025</td>
+                        <td><span class="badge bg-success">Deposit</span></td>
+                        <td>M-Pesa Deposit</td>
+                        <td class="text-success">+KES 1,000</td>
+                        <td><span class="badge bg-light text-dark">Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>Apr 8, 2025</td>
+                        <td><span class="badge bg-primary">Payment</span></td>
+                        <td>Payment from John M.</td>
+                        <td class="text-success">+KES 1,500</td>
+                        <td><span class="badge bg-light text-dark">Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>Apr 5, 2025</td>
+                        <td><span class="badge bg-danger">Withdrawal</span></td>
+                        <td>M-Pesa Withdrawal</td>
+                        <td class="text-danger">-KES 2,000</td>
+                        <td><span class="badge bg-light text-dark">Completed</span></td>
+                      </tr>
+                      <tr>
+                        <td>Apr 1, 2025</td>
+                        <td><span class="badge bg-primary">Payment</span></td>
+                        <td>Payment from Sarah K.</td>
+                        <td class="text-success">+KES 1,200</td>
+                        <td><span class="badge bg-light text-dark">Completed</span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reviews Tab -->
+            <div class="tab-content" id="reviews">
+              <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-xl font-bold text-blue-800">Client Reviews</h3>
+                  <div class="text-sm">
+                    <span class="me-2">Filter by:</span>
+                    <select class="border rounded p-1">
+                      <option>All Ratings</option>
+                      <option>5 Stars</option>
+                      <option>4 Stars</option>
+                      <option>3 Stars</option>
+                      <option>1-2 Stars</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg mb-5">
+                  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center">
+                      <p class="text-5xl font-bold text-blue-800">4.8</p>
+                      <div class="text-yellow-400 my-1">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                      </div>
+                      <p class="text-sm text-gray-600">Based on 24 reviews</p>
+                    </div>
+                    <div class="md:col-span-3">
+                      <div class="space-y-2">
+                        <div class="flex items-center">
+                          <span class="w-16 text-sm text-gray-600">5 stars</span>
+                          <div class="flex-grow mx-2 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 85%"></div>
+                          </div>
+                          <span class="w-10 text-sm text-gray-600">85%</span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="w-16 text-sm text-gray-600">4 stars</span>
+                          <div class="flex-grow mx-2 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 10%"></div>
+                          </div>
+                          <span class="w-10 text-sm text-gray-600">10%</span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="w-16 text-sm text-gray-600">3 stars</span>
+                          <div class="flex-grow mx-2 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 5%"></div>
+                          </div>
+                          <span class="w-10 text-sm text-gray-600">5%</span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="w-16 text-sm text-gray-600">2 stars</span>
+                          <div class="flex-grow mx-2 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 0%"></div>
+                          </div>
+                          <span class="w-10 text-sm text-gray-600">0%</span>
+                        </div>
+                        <div class="flex items-center">
+                          <span class="w-16 text-sm text-gray-600">1 star</span>
+                          <div class="flex-grow mx-2 bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-400 h-2.5 rounded-full" style="width: 0%"></div>
+                          </div>
+                          <span class="w-10 text-sm text-gray-600">0%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm review-item">
+                    <div class="flex justify-between items-start">
+                      <div class="flex gap-3">
+                        <img src="../assets/img/avatar-placeholder.png" alt="John" class="w-12 h-12 rounded-full" />
+                        <div>
+                          <p class="text-gray-800 font-medium">John M.</p>
+                          <p class="text-gray-500 text-sm">Cleaning Service • April 5, 2025</p>
+                        </div>
+                      </div>
+                      <div class="text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 mt-3">"Jane was amazing. House was spotless. Arrived on time and finished ahead of schedule. Very professional and pleasant to work with. Highly recommend."</p>
+                    <div class="mt-2 text-gray-500 text-sm flex items-center">
+                      <i class="fas fa-reply me-1"></i> Your response:
+                      <p class="ms-2 text-gray-600">Thank you John! It was a pleasure working for you.</p>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm review-item">
+                    <div class="flex justify-between items-start">
+                      <div class="flex gap-3">
+                        <img src="../assets/img/avatar-placeholder.png" alt="Sarah" class="w-12 h-12 rounded-full" />
+                        <div>
+                          <p class="text-gray-800 font-medium">Sarah K.</p>
+                          <p class="text-gray-500 text-sm">Cleaning Service • March 28, 2025</p>
+                        </div>
+                      </div>
+                      <div class="text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 mt-3">"Efficient service. Arrived slightly late but delivered well. The bathroom and kitchen were spotless. Would hire again."</p>
+                    <div class="mt-2 text-gray-500 text-sm flex items-center">
+                      <i class="fas fa-reply me-1"></i> Your response:
+                      <p class="ms-2 text-gray-600">Thanks for the feedback, Sarah! I'll ensure better punctuality next time.</p>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm review-item">
+                    <div class="flex justify-between items-start">
+                      <div class="flex gap-3">
+                        <img src="../assets/img/avatar-placeholder.png" alt="Michael" class="w-12 h-12 rounded-full" />
+                        <div>
+                          <p class="text-gray-800 font-medium">Michael T.</p>
+                          <p class="text-gray-500 text-sm">Errands Service • March 15, 2025</p>
+                        </div>
+                      </div>
+                      <div class="text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                      </div>
+                    </div>
+                    <p class="text-gray-600 mt-3">"Jane handled my errands perfectly. Everything was delivered on time, and she was very communicative. Excellent service!"</p>
+                    <div class="mt-2 text-gray-500 text-sm flex items-center">
+                      <i class="fas fa-reply me-1"></i> Your response:
+                      <p class="ms-2 text-gray-600">Glad I could help, Michael! Looking forward to assisting again.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jobs Tab -->
+            <div class="tab-content" id="jobs">
+              <div class="bg-white p-5 rounded-lg shadow-sm mb-5">
+                <div class="flex justify-between items-center mb-4">
+                  <h3 class="text-xl font-bold text-blue-800">Job History</h3>
+                  <div class="text-sm">
+                    <span class="me-2">Filter by:</span>
+                    <select class="border rounded p-1">
+                      <option>All Jobs</option>
+                      <option>Completed</option>
+                      <option>Upcoming</option>
+                      <option>Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="text-gray-800 font-medium">Cleaning Service</p>
+                        <p class="text-gray-600 text-sm">Client: John M.</p>
+                        <p class="text-gray-500 text-sm">Location: Riverside Apartments, Nairobi</p>
+                        <p class="text-gray-500 text-sm">Date: April 10, 2025 • 10:00 AM</p>
+                      </div>
+                      <div class="text-right">
+                        <p class="text-teal-600 font-medium">KES 1,500</p>
+                        <p class="text-sm text-gray-600">Status: <span class="badge bg-success">Completed</span></p>
+                      </div>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                      <button class="btn btn-sm btn-gradient-primary text-white px-3">View Details</button>
+                      <button class="btn btn-sm bg-blue-500 text-white px-3">Rebook Client</button>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="text-gray-800 font-medium">Errands Service</p>
+                        <p class="text-gray-600 text-sm">Client: Sarah K.</p>
+                        <p class="text-gray-500 text-sm">Location: Westlands, Nairobi</p>
+                        <p class="text-gray-500 text-sm">Date: April 8, 2025 • 2:00 PM</p>
+                      </div>
+                      <div class="text-right">
+                        <p class="text-teal-600 font-medium">KES 1,200</p>
+                        <p class="text-sm text-gray-600">Status: <span class="badge bg-success">Completed</span></p>
+                      </div>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                      <button class="btn btn-sm btn-gradient-primary text-white px-3">View Details</button>
+                      <button class="btn btn-sm bg-blue-500 text-white px-3">Rebook Client</button>
+                    </div>
+                  </div>
+
+                  <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <p class="text-gray-800 font-medium">Cleaning Service</p>
+                        <p class="text-gray-600 text-sm">Client: Michael T.</p>
+                        <p class="text-gray-500 text-sm">Location: Kilimani, Nairobi</p>
+                        <p class="text-gray-500 text-sm">Date: April 15, 2025 • 3:30 PM</p>
+                      </div>
+                      <div class="text-right">
+                        <p class="text-teal-600 font-medium">KES 1,800</p>
+                        <p class="text-sm text-gray-600">Status: <span class="badge bg-warning">Upcoming</span></p>
+                      </div>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                      <button class="btn btn-sm btn-gradient-primary text-white px-3">View Details</button>
+                      <button class="btn btn-sm bg-blue-500 text-white px-3">Contact Client</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gradient text-white py-6">
+    <div class="container mx-auto text-center">
+      <p class="mb-4">© 2025 Connect. All rights reserved.</p>
+      <div class="flex justify-center space-x-4">
+        <a href="pages/about.html" class="hover:underline">About</a>
+        <a href="pages/contact.html" class="hover:underline">Contact</a>
+        <a href="pages/faq.html" class="hover:underline">FAQ</a>
+        <a href="pages/pricing.html" class="hover:underline">Pricing</a>
+        <a href="pages/safety.html" class="hover:underline">Safety</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll('.nav-link').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active-tab'));
+        tab.classList.add('active-tab');
+        
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // Earnings Chart
+    const ctx = document.getElementById('earningsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        datasets: [{
+          label: 'Earnings (KES)',
+          data: [5000, 7500, 10000, 12800, 3500, 9200],
+          borderColor: '#1E40AF',
+          backgroundColor: 'rgba(30, 64, 175, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Earnings (KES)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+
+    // Mock button actions
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const text = e.target.textContent.trim();
+        if (text.includes('Edit Profile')) {
+          alert('Redirecting to edit profile page...');
+        } else if (text.includes('Share Profile')) {
+          alert('Profile link copied to clipboard!');
+        } else if (text.includes('Deposit via M-Pesa')) {
+          alert('Initiating M-Pesa deposit...');
+        } else if (text.includes('Withdraw to M-Pesa')) {
+          alert('Initiating M-Pesa withdrawal...');
+        } else if (text.includes('Transaction History')) {
+          alert('Loading transaction history...');
+        } else if (text.includes('View Details')) {
+          alert('Loading job details...');
+        } else if (text.includes('Rebook Client') || text.includes('Contact Client')) {
+          alert('Contacting client...');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
