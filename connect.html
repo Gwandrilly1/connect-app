@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Connect - Find and offer services in Kenya with ease. Book cleaning, errands, and more in Nairobi and beyond." />
+    <meta name="keywords" content="Connect, Kenya, services, jobs, cleaning, errands, Nairobi, M-Pesa" />
+    <title>Connect - Home</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" />
+
+    <!-- Animate.css for Scroll Animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <!-- Lottie Player for Animations -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@1.5.7/dist/lottie-player.js"></script>
+
+    <link rel="stylesheet" href="connect.css" />
+
+    <style>
+        :root {
+            --bg-color: #d3d0d0;
+            --text-color: #1A1A1A;
+            --card-bg: #FFFFFF;
+            --gradient-primary: linear-gradient(to right, #2B6CB0, #4FD1C5);
+            --accent-color: #add10b;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1F2A44;
+            --text-color: #E5E7EB;
+            --card-bg: #374151;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .bg-gradient {
+            background: var(--gradient-primary);
+        }
+
+        .btn-gradient-primary {
+            background: var(--gradient-primary);
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .btn-gradient-primary:hover {
+            background: linear-gradient(to right, #1E4E8C, #38B2AC);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: #1A1A1A;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .btn-accent:hover {
+            background-color: #F59E0B;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #FFFFFF;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stat-card, .category-card, .job-card {
+            background: var(--card-bg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 12px;
+        }
+
+        .stat-card:hover, .category-card:hover, .job-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translateY(-5px) scale(1.02); }
+            50% { transform: translateY(-3px) scale(1.03); }
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--accent-color);
+            color: #1A1A1A;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-section {
+            background: linear-gradient(to bottom, rgba(43, 108, 176, 0.8), rgba(79, 209, 197, 0.8)), url('assets/img/hero-bg.jpg') no-repeat center center/cover;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-card {
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .category-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .review-item {
+            background: var(--card-bg);
+            transition: all 0.2s ease;
+            border-radius: 12px;
+        }
+
+        .review-item:hover {
+            background: #E5E7EB;
+        }
+
+        [data-theme="dark"] .review-item:hover {
+            background: #4B5563;
+        }
+
+        .navbar {
+            z-index: 1000;
+        }
+
+        footer {
+            z-index: 800;
+            --text-color: #1A1A1A;
+        }
+
+        lottie-player {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+        }
+
+        .dropdown-menu {
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+        }
+
+        .dropdown-item {
+            color: #FFFFFF;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(to right, #1E4E8C, #38B2AC);
+        }
+
+        .faq-toggle:hover {
+            background-color: #E5E7EB;
+        }
+
+        [data-theme="dark"] .faq-toggle:hover {
+            background-color: #4B5563;
+        }
+
+        .faq-content {
+            display: none;
+        }
+
+        .leaflet-popup-content-wrapper {
+            z-index: 9999 !important;
+        }
+
+        .search-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+
+        .search-dropdown.show {
+            display: block;
+        }
+
+        .search-dropdown-item:hover {
+            background: #E5E7EB;
+        }
+
+        [data-theme="dark"] .search-dropdown-item:hover {
+            background: #4B5563;
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: #1A1A1A;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            background: conic-gradient(var(--accent-color) var(--progress, 0%), #E5E7EB var(--progress, 0%));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 0 auto 1rem;
+        }
+
+        .progress-circle::before {
+            content: '';
+            width: 50px;
+            height: 50px;
+            background: var(--card-bg);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        a:focus, button:focus, input:focus {
+            outline: 3px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+
+            lottie-player {
+                width: 80px;
+                height: 80px;
+            }
+
+            .progress-circle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .progress-circle::before {
+                width: 32px;
+                height: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-gradient text-white shadow-lg" style="background: linear-gradient(to right, #1E40AF, #2563EB);">
+        <div class="container">
+          <a class="navbar-brand fw-bold text-white" href="connect.html">
+            <i class="fas fa-handshake me-2"></i>Connect
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto align-items-center">
+              <!-- Links -->
+              <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="connect.html"><i class="fas fa-home me-1"></i>Home</a></li>
+              <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="pages/jobs.html"><i class="fas fa-briefcase me-1"></i>Jobs</a></li>
+              <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="pages/map.html"><i class="fas fa-map-marker-alt me-1"></i>Map</a></li>
+              <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="pages/faq.html"><i class="fas fa-question-circle me-1"></i>FAQ</a></li>
+      
+              <!-- Dark Mode -->
+              <li class="nav-item me-2">
+                <button id="theme-toggle" class="nav-link text-white bg-transparent border-0" aria-label="Toggle dark mode">
+                  <i class="fas fa-moon"></i>
+                </button>
+              </li>
+      
+              <!-- Notifications -->
+              <li class="nav-item dropdown me-2">
+                <a class="nav-link text-white position-relative" href="#" data-bs-toggle="dropdown">
+                  <i class="fas fa-bell"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                  <li class="p-2 bg-light fw-bold border-bottom">Notifications</li>
+                  <li><a class="dropdown-item border-bottom" href="#"><span class="text-info">New booking:</span> John M. has booked your service</a></li>
+                  <li><a class="dropdown-item border-bottom" href="#"><span class="text-success">Payment received:</span> KES 1,500</a></li>
+                  <li><a class="dropdown-item" href="#"><span class="text-warning">Reminder:</span> Job at 9 AM</a></li>
+                  <li class="text-center p-2"><a href="#" class="small">View all</a></li>
+                </ul>
+              </li>
+      
+              <!-- Messages -->
+              <li class="nav-item dropdown me-2">
+                <a class="nav-link text-white position-relative" href="#" data-bs-toggle="dropdown">
+                  <i class="fas fa-envelope"></i>
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">2</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                  <li class="p-2 bg-light fw-bold border-bottom">Messages</li>
+                  <li><a class="dropdown-item border-bottom" href="#"><strong>John M:</strong> What time will you arrive?</a></li>
+                  <li><a class="dropdown-item" href="#"><strong>Sarah K:</strong> Thank you for yesterday!</a></li>
+                </ul>
+              </li>
+      
+              <!-- More Dropdown -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                  <i class="fas fa-ellipsis-h me-1"></i>More
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="pages/about.html"><i class="fas fa-info-circle me-2"></i> About</a></li>
+                  <li><a class="dropdown-item" href="pages/contact.html"><i class="fas fa-envelope me-2"></i> Contact</a></li>
+                  <li><a class="dropdown-item" href="pages/pricing.html"><i class="fas fa-tag me-2"></i> Pricing</a></li>
+                  <li><a class="dropdown-item" href="pages/safety.html"><i class="fas fa-shield-alt me-2"></i> Safety</a></li>
+                  <li><a class="dropdown-item" href="pages/blog.html"><i class="fas fa-blog me-2"></i> Blog</a></li>
+                </ul>
+              </li>
+      
+              <!-- Profile -->
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                  <img src="assets/img/avatar-placeholder.png" class="rounded-circle" width="40" height="40" alt="User">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li><a class="dropdown-item" href="pages/profile.html"><i class="fas fa-user me-2"></i> Profile</a></li>
+                  <li><a class="dropdown-item" href="pages/wallet.html"><i class="fas fa-wallet me-2"></i> Wallet</a></li>
+                  <li><a class="dropdown-item" href="pages/edit-profile.html"><i class="fas fa-edit me-2"></i> Edit Profile</a></li>
+                  <li><a class="dropdown-item" href="pages/settings.html"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                  <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section text-white text-center pt-28 animate__animated animate__slideInUp">
+            <div class="container px-4 fade-in">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">Connect with Trusted Services in Kenya</h1>
+                <p class="text-xl mb-6">Find reliable cleaners, errand runners, and more in Nairobi and beyond.</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="pages/jobs.html" class="btn btn-gradient-primary px-8 py-3 rounded-lg shadow hover:shadow-lg transition-all">Find a Job</a>
+                    <a href="pages/profile.html" class="btn btn-accent px-8 py-3 rounded-lg shadow hover:shadow-lg transition-all">Offer a Service</a>
+                </div>
+                <div class="mt-8 relative">
+                    <div class="relative max-w-md mx-auto">
+                        <input type="text" id="search-services" class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-amber-400" style="background: var(--card-bg); color: var(--text-color);" placeholder="Search for services (e.g., Cleaning, Errands)" />
+                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-amber-400">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <div id="search-dropdown" class="search-dropdown">
+                        <a href="pages/jobs.html?category=cleaning" class="search-dropdown-item block p-2 text-sm" style="color: var(--text-color);">Cleaning</a>
+                        <a href="pages/jobs.html?category=errands" class="search-dropdown-item block p-2 text-sm" style="color: var(--text-color);">Errands</a>
+                        <a href="pages/jobs.html?category=delivery" class="search-dropdown-item block p-2 text-sm" style="color: var(--text-color);">Delivery</a>
+                        <a href="pages/jobs.html?category=gardening" class="search-dropdown-item block p-2 text-sm" style="color: var(--text-color);">Gardening</a>
+                        <a href="pages/jobs.html?category=tutoring" class="search-dropdown-item block p-2 text-sm" style="color: var(--text-color);">Tutoring</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Categories -->
+        <section class="container mx-auto px-4 py-12 animate__animated animate__slideInUp">
+            <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-color);">Popular Service Categories</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.1s;">
+                    <lottie-player src="assets/animations/Animation.json" background="transparent" speed="1" loop autoplay fallback="Cleaning"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Cleaning</h3>
+                    <p style="color: var(--text-color);">Professional home and office cleaning services.</p>
+                    <a href="pages/jobs.html?category=cleaning" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.2s;">
+                    <lottie-player src="assets/animations/Animationerrands.json" background="transparent" speed="1" loop autoplay fallback="Errands"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Errands</h3>
+                    <p style="color: var(--text-color);">Grocery shopping, deliveries, and more.</p>
+                    <a href="pages/jobs.html?category=errands" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.3s;">
+                    <lottie-player src="assets/animations/Animationdelivery.json" background="transparent" speed="1" loop autoplay fallback="Delivery"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Delivery</h3>
+                    <p style="color: var(--text-color);">Fast and reliable delivery services.</p>
+                    <a href="pages/jobs.html?category=delivery" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.4s;">
+                    <lottie-player src="assets/animations/AnimationGardening.json" background="transparent" speed="1" loop autoplay fallback="Gardening"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Gardening</h3>
+                    <p style="color: var(--text-color);">Lawn care and garden maintenance.</p>
+                    <a href="pages/jobs.html?category=gardening" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.5s;">
+                    <lottie-player src="assets/animations/Animationtutoring.json" background="transparent" speed="1" loop autoplay fallback="Tutoring"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Tutoring</h3>
+                    <p style="color: var(--text-color);">Personalized academic and skill-based tutoring.</p>
+                    <a href="pages/jobs.html?category=tutoring" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+                <div class="category-card p-6 rounded-lg shadow-md text-center" style="animation-delay: 0.6s;">
+                    <lottie-player src="assets/animations/Animationmore.json" background="transparent" speed="1" loop autoplay fallback="More Services"></lottie-player>
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">More Services</h3>
+                    <p style="color: var(--text-color);">Explore additional services tailored to your needs.</p>
+                    <a href="pages/jobs.html?category=more" class="mt-2 inline-block" style="color: var(--accent-color); hover:underline;">Browse</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="py-12 animate__animated animate__slideInUp" style="background: var(--card-bg);">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-color);">How Connect Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center stat-card p-6 rounded-lg shadow-md">
+                        <div class="progress-circle" style="--progress: 33;"></div>
+                        <h3 class="text-xl font-semibold" style="color: var(--text-color);">Find a Service</h3>
+                        <p style="color: var(--text-color);">Search for trusted providers in your area for cleaning, errands, and more.</p>
+                    </div>
+                    <div class="text-center stat-card p-6 rounded-lg shadow-md">
+                        <div class="progress-circle" style="--progress: 66;"></div>
+                        <h3 class="text-xl font-semibold" style="color: var(--text-color);">Book Instantly</h3>
+                        <p style="color: var(--text-color);">Schedule services at your convenience with secure M-Pesa payments.</p>
+                    </div>
+                    <div class="text-center stat-card p-6 rounded-lg shadow-md">
+                        <div class="progress-circle" style="--progress: 100;"></div>
+                        <h3 class="text-xl font-semibold" style="color: var(--text-color);">Rate & Review</h3>
+                        <p style="color: var(--text-color);">Share feedback to help others find the best providers.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Providers -->
+        <section class="container mx-auto px-4 py-12 animate__animated animate__slideInUp">
+            <h2 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-color);">Top Service Providers</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div class="job-card p-6 rounded-lg shadow-md text-center">
+                    <img src="assets/img/avatar-placeholder.png" class="w-24 h-24 rounded-full mx-auto mb-4" alt="Provider">
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Jane Wanjiku</h3>
+                    <p style="color: var(--text-color);">Cleaner & Errand Runner</p>
+                    <div class="flex justify-center gap-1 text-yellow-400 my-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                    <a href="pages/profile.html" class="btn btn-gradient-primary px-4 py-2 rounded-lg mt-2">View Profile</a>
+                </div>
+                <div class="job-card p-6 rounded-lg shadow-md text-center">
+                    <img src="assets/img/avatar-placeholder.png" class="w-24 h-24 rounded-full mx-auto mb-4" alt="Provider">
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Peter Kamau</h3>
+                    <p style="color: var(--text-color);">Delivery Specialist</p>
+                    <div class="flex justify-center gap-1 text-yellow-400 my-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <a href="pages/profile.html" class="btn btn-gradient-primary px-4 py-2 rounded-lg mt-2">View Profile</a>
+                </div>
+                <div class="job-card p-6 rounded-lg shadow-md text-center">
+                    <img src="assets/img/avatar-placeholder.png" class="w-24 h-24 rounded-full mx-auto mb-4" alt="Provider">
+                    <h3 class="text-xl font-semibold" style="color: var(--text-color);">Mary Achieng</h3>
+                    <p style="color: var(--text-color);">Gardener</p>
+                    <div class="flex justify-center gap-1 text-yellow-400 my-2">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                    <a href="pages/profile.html" class="btn btn-gradient-primary px-4 py-2 rounded-lg mt-2">View Profile</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="bg-gradient text-white py-12 animate__animated animate__slideInUp">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold mb-6 text-center">What Our Users Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="review-item p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <img src="assets/img/avatar-placeholder.png" class="w-12 h-12 rounded-full mr-4" alt="User">
+                            <div>
+                                <h4 class="font-semibold" style="color: var(--text-color);">Sarah K.</h4>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-color);">"Connect made finding a reliable cleaner so easy! Jane was professional and thorough."</p>
+                    </div>
+                    <div class="review-item p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <img src="assets/img/avatar-placeholder.png" class="w-12 h-12 rounded-full mr-4" alt="User">
+                            <div>
+                                <h4 class="font-semibold" style="color: var(--text-color);">John M.</h4>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-color);">"I booked a delivery service through Connect, and it was seamless. Highly recommend!"</p>
+                    </div>
+                    <div class="review-item p-6 rounded-lg shadow-md">
+                        <div class="flex items-center mb-4">
+                            <img src="assets/img/avatar-placeholder.png" class="w-12 h-12 rounded-full mr-4" alt="User">
+                            <div>
+                                <h4 class="font-semibold" style="color: var(--text-color);">Grace N.</h4>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="color: var(--text-color);">"The platform is user-friendly, and I love the secure payment options with M-Pesa."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="container mx-auto px-4 py-12 text-center animate__animated animate__slideInUp">
+            <h2 class="text-3xl font-bold mb-4" style="color: var(--text-color);">Ready to Get Started?</h2>
+            <p style="color: var(--text-color);">Join thousands of Kenyans finding and offering trusted services today.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="pages/profile.html" class="btn btn-gradient-primary px-8 py-3 rounded-lg shadow hover:shadow-lg transition-all">Sign Up</a>
+                <a href="pages/jobs.html" class="btn btn-accent px-8 py-3 rounded-lg shadow hover:shadow-lg transition-all">Browse Services</a>
+            </div>
+        </section>
+    </main>
+
+     <!-- Footer -->
+     <footer class="text-white py-8" style="background: var(--gradient-primary)">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <p class="text-sm">Connecting you with trusted services and job opportunities across Kenya.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="hover:underline">About</a></li>
+                        <li><a href="contact.html" class="hover:underline">Contact</a></li>
+                        <li><a href="faq.html" class="hover:underline">FAQ</a></li>
+                        <li><a href="pricing.html" class="hover:underline">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="jobs.html?category=cleaning" class="hover:underline">Cleaning</a></li>
+                        <li><a href="jobs.html?category=delivery" class="hover:underline">Delivery</a></li>
+                        <li><a href="jobs.html?category=errands" class="hover:underline">Errands</a></li>
+                        <li><a href="jobs.html?category=tutoring" class="hover:underline">Tutoring</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        // Theme Toggle
+        const toggleButton = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const themeIcon = toggleButton.querySelector('i');
+
+        const setTheme = (theme) => {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        };
+
+        toggleButton.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme') || 'light';
+            setTheme(currentTheme === 'light' ? 'dark' : 'light');
+        });
+
+        // Apply saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Navbar Fix
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarCollapse = document.querySelector('#navbarNavDropdown');
+            navbarToggler.addEventListener('click', () => {
+                navbarCollapse.classList.toggle('show');
+            });
+
+            // Animate Category Cards
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate');
+                }, index * 100);
+            });
+
+            // Lottie Fallback
+            const lottiePlayers = document.querySelectorAll('lottie-player');
+            lottiePlayers.forEach(player => {
+                player.addEventListener('error', () => {
+                    const fallbackText = player.getAttribute('fallback');
+                    const fallbackIcon = document.createElement('i');
+                    fallbackIcon.className = 'fas fa-exclamation-circle text-4xl text-amber-400 mb-4';
+                    const textNode = document.createTextNode(` ${fallbackText}`);
+                    player.parentNode.replaceChild(fallbackIcon, player);
+                    player.parentNode.appendChild(textNode);
+                });
+            });
+        });
+
+        // Intersection Observer for Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__slideInUp');
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section, .category-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Search Autocomplete
+        const searchInput = document.getElementById('search-services');
+        const searchDropdown = document.getElementById('search-dropdown');
+        searchInput.addEventListener('focus', () => {
+            searchDropdown.classList.add('show');
+        });
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => searchDropdown.classList.remove('show'), 200);
+        });
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const query = e.target.value.trim();
+                if (query) {
+                    window.location.href = `pages/jobs.html?search=${encodeURIComponent(query)}`;
+                }
+            }
+        });
+
+        // Button Loading Animation
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (e.target.href) {
+                    e.target.classList.add('loading');
+                    setTimeout(() => e.target.classList.remove('loading'), 1000);
+                }
+            });
+        });
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

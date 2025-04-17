@@ -1,0 +1,55 @@
+<!-- File: verify.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify - Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="connect.css">
+</head>
+<body class="bg-gray-50">
+  <nav class="bg-blue-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="index.html" class="font-bold text-xl">Connect</a>
+      <a href="profile.html">
+        <img src="../assets/img/avatar-placeholder.png" class="w-8 h-8 rounded-full border-white border hover:border-orange-400">
+      </a>
+    </div>
+  </nav>
+
+  <section class="container mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold text-blue-800 text-center mb-6">Account Verification</h2>
+    <div class="grid sm:grid-cols-2 gap-6">
+      <!-- Feature 1: Upload ID -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-2">Upload National ID or Passport</h3>
+        <input type="file" class="block w-full border rounded p-2 mb-2">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      </div>
+      <!-- Feature 2: Selfie Upload -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-2">Upload Selfie</h3>
+        <input type="file" class="block w-full border rounded p-2 mb-2">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      </div>
+      <!-- Feature 3: Verification Status -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-2">Verification Status</h3>
+        <p class="text-gray-600">Pending Review</p>
+      </div>
+      <!-- Feature 4: SMS Verification -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-2">Phone Verification</h3>
+        <input type="text" placeholder="Enter code" class="block w-full border rounded p-2 mb-2">
+        <button class="bg-green-600 text-white px-4 py-2 rounded">Verify</button>
+      </div>
+      <!-- Feature 5: Help Section -->
+      <div class="bg-white p-6 rounded-lg shadow col-span-full">
+        <h3 class="text-lg font-semibold mb-2">Need Help?</h3>
+        <p class="text-sm text-gray-600">Contact our support via live chat or <a href="contact.html" class="text-blue-600 underline">email us</a>.</p>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

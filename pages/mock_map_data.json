@@ -1,0 +1,722 @@
+[
+  {
+    "type": "Tutoring",
+    "name": "English lessons",
+    "lat": -1.290309,
+    "lng": 36.822424
+  },
+  {
+    "type": "Plumbing",
+    "name": "Replace tap",
+    "lat": -1.284214,
+    "lng": 36.82872
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.289469,
+    "lng": 36.816939
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.285291,
+    "lng": 36.821633
+  },
+  {
+    "type": "Errands",
+    "name": "Deliver parcel",
+    "lat": -1.291748,
+    "lng": 36.826861
+  },
+  {
+    "type": "Cleaning",
+    "name": "Sanitize bathroom",
+    "lat": -1.291966,
+    "lng": 36.820901
+  },
+  {
+    "type": "Tutoring",
+    "name": "English lessons",
+    "lat": -1.296047,
+    "lng": 36.829818
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.28375,
+    "lng": 36.829552
+  },
+  {
+    "type": "Pet Care",
+    "name": "Groom pets",
+    "lat": -1.284104,
+    "lng": 36.819346
+  },
+  {
+    "type": "Errands",
+    "name": "Collect laundry",
+    "lat": -1.290568,
+    "lng": 36.828867
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.290797,
+    "lng": 36.824012
+  },
+  {
+    "type": "Pet Care",
+    "name": "Groom pets",
+    "lat": -1.293752,
+    "lng": 36.823729
+  },
+  {
+    "type": "Plumbing",
+    "name": "Fix sink",
+    "lat": -1.301723,
+    "lng": 36.817853
+  },
+  {
+    "type": "Plumbing",
+    "name": "Install shower",
+    "lat": -1.287628,
+    "lng": 36.820064
+  },
+  {
+    "type": "Errands",
+    "name": "Deliver parcel",
+    "lat": -1.282567,
+    "lng": 36.822148
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.290414,
+    "lng": 36.827253
+  },
+  {
+    "type": "Pet Care",
+    "name": "Pet sitting",
+    "lat": -1.290076,
+    "lng": 36.826238
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.29382,
+    "lng": 36.814632
+  },
+  {
+    "type": "Cleaning",
+    "name": "Clean apartment",
+    "lat": -1.287265,
+    "lng": 36.820071
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.300894,
+    "lng": 36.813426
+  },
+  {
+    "type": "Cleaning",
+    "name": "Clean apartment",
+    "lat": -1.284095,
+    "lng": 36.822216
+  },
+  {
+    "type": "Cleaning",
+    "name": "Mop floor",
+    "lat": -1.289191,
+    "lng": 36.812791
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.293595,
+    "lng": 36.822884
+  },
+  {
+    "type": "Plumbing",
+    "name": "Replace tap",
+    "lat": -1.297729,
+    "lng": 36.818046
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.29305,
+    "lng": 36.818061
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.28249,
+    "lng": 36.818105
+  },
+  {
+    "type": "Errands",
+    "name": "Deliver parcel",
+    "lat": -1.28727,
+    "lng": 36.813538
+  },
+  {
+    "type": "Errands",
+    "name": "Collect laundry",
+    "lat": -1.297368,
+    "lng": 36.819641
+  },
+  {
+    "type": "Errands",
+    "name": "Deliver parcel",
+    "lat": -1.290345,
+    "lng": 36.815818
+  },
+  {
+    "type": "Pet Care",
+    "name": "Clean cage",
+    "lat": -1.294439,
+    "lng": 36.827458
+  },
+  {
+    "type": "Tutoring",
+    "name": "Math tutor",
+    "lat": -1.285618,
+    "lng": 36.831462
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.290913,
+    "lng": 36.818969
+  },
+  {
+    "type": "Tutoring",
+    "name": "Homework help",
+    "lat": -1.29851,
+    "lng": 36.827992
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.282306,
+    "lng": 36.813231
+  },
+  {
+    "type": "Tutoring",
+    "name": "Math tutor",
+    "lat": -1.299435,
+    "lng": 36.813148
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.300449,
+    "lng": 36.816081
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.293107,
+    "lng": 36.831516
+  },
+  {
+    "type": "Plumbing",
+    "name": "Check pipes",
+    "lat": -1.286969,
+    "lng": 36.816515
+  },
+  {
+    "type": "Plumbing",
+    "name": "Fix sink",
+    "lat": -1.295303,
+    "lng": 36.812935
+  },
+  {
+    "type": "Plumbing",
+    "name": "Check pipes",
+    "lat": -1.28938,
+    "lng": 36.821694
+  },
+  {
+    "type": "Errands",
+    "name": "Collect laundry",
+    "lat": -1.29939,
+    "lng": 36.81965
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.294899,
+    "lng": 36.830013
+  },
+  {
+    "type": "Tutoring",
+    "name": "Homework help",
+    "lat": -1.290955,
+    "lng": 36.822543
+  },
+  {
+    "type": "Cleaning",
+    "name": "Sanitize bathroom",
+    "lat": -1.286562,
+    "lng": 36.827393
+  },
+  {
+    "type": "Tutoring",
+    "name": "Math tutor",
+    "lat": -1.300258,
+    "lng": 36.825263
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.295365,
+    "lng": 36.816074
+  },
+  {
+    "type": "Cleaning",
+    "name": "Mop floor",
+    "lat": -1.286298,
+    "lng": 36.825536
+  },
+  {
+    "type": "Errands",
+    "name": "Queue at bank",
+    "lat": -1.296421,
+    "lng": 36.814106
+  },
+  {
+    "type": "Plumbing",
+    "name": "Replace tap",
+    "lat": -1.293485,
+    "lng": 36.820357
+  },
+  {
+    "type": "Pet Care",
+    "name": "Clean cage",
+    "lat": -1.287889,
+    "lng": 36.830502
+  },
+  {
+    "type": "Errands",
+    "name": "Buy airtime",
+    "lat": -1.301667,
+    "lng": 36.829245
+  },
+  {
+    "type": "Cleaning",
+    "name": "Clean apartment",
+    "lat": -1.29433,
+    "lng": 36.829902
+  },
+  {
+    "type": "Pet Care",
+    "name": "Groom pets",
+    "lat": -1.289516,
+    "lng": 36.817169
+  },
+  {
+    "type": "Errands",
+    "name": "Buy airtime",
+    "lat": -1.293012,
+    "lng": 36.82174
+  },
+  {
+    "type": "Plumbing",
+    "name": "Install shower",
+    "lat": -1.289227,
+    "lng": 36.820317
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.301747,
+    "lng": 36.828921
+  },
+  {
+    "type": "Tutoring",
+    "name": "Science help",
+    "lat": -1.299593,
+    "lng": 36.825492
+  },
+  {
+    "type": "Plumbing",
+    "name": "Install shower",
+    "lat": -1.285009,
+    "lng": 36.827013
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.283099,
+    "lng": 36.826617
+  },
+  {
+    "type": "Errands",
+    "name": "Buy airtime",
+    "lat": -1.299342,
+    "lng": 36.819927
+  },
+  {
+    "type": "Tutoring",
+    "name": "Homework help",
+    "lat": -1.294548,
+    "lng": 36.817669
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.300492,
+    "lng": 36.814759
+  },
+  {
+    "type": "Tutoring",
+    "name": "Exam prep",
+    "lat": -1.29259,
+    "lng": 36.82379
+  },
+  {
+    "type": "Pet Care",
+    "name": "Groom pets",
+    "lat": -1.290869,
+    "lng": 36.817763
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.292837,
+    "lng": 36.820192
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.302014,
+    "lng": 36.8134
+  },
+  {
+    "type": "Pet Care",
+    "name": "Pet sitting",
+    "lat": -1.290614,
+    "lng": 36.815527
+  },
+  {
+    "type": "Plumbing",
+    "name": "Fix sink",
+    "lat": -1.289386,
+    "lng": 36.813657
+  },
+  {
+    "type": "Tutoring",
+    "name": "Homework help",
+    "lat": -1.284986,
+    "lng": 36.820674
+  },
+  {
+    "type": "Tutoring",
+    "name": "Math tutor",
+    "lat": -1.283642,
+    "lng": 36.83148
+  },
+  {
+    "type": "Errands",
+    "name": "Queue at bank",
+    "lat": -1.297514,
+    "lng": 36.815222
+  },
+  {
+    "type": "Tutoring",
+    "name": "English lessons",
+    "lat": -1.285938,
+    "lng": 36.821307
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.299519,
+    "lng": 36.819284
+  },
+  {
+    "type": "Errands",
+    "name": "Deliver parcel",
+    "lat": -1.288626,
+    "lng": 36.824563
+  },
+  {
+    "type": "Cleaning",
+    "name": "Mop floor",
+    "lat": -1.295129,
+    "lng": 36.827519
+  },
+  {
+    "type": "Tutoring",
+    "name": "Science help",
+    "lat": -1.292907,
+    "lng": 36.82623
+  },
+  {
+    "type": "Tutoring",
+    "name": "Math tutor",
+    "lat": -1.297641,
+    "lng": 36.816356
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.299953,
+    "lng": 36.822749
+  },
+  {
+    "type": "Pet Care",
+    "name": "Clean cage",
+    "lat": -1.293016,
+    "lng": 36.813127
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.293469,
+    "lng": 36.825138
+  },
+  {
+    "type": "Pet Care",
+    "name": "Clean cage",
+    "lat": -1.29882,
+    "lng": 36.821805
+  },
+  {
+    "type": "Errands",
+    "name": "Queue at bank",
+    "lat": -1.292154,
+    "lng": 36.815506
+  },
+  {
+    "type": "Errands",
+    "name": "Collect laundry",
+    "lat": -1.2987,
+    "lng": 36.812798
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.298612,
+    "lng": 36.830569
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.295082,
+    "lng": 36.824167
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.282563,
+    "lng": 36.830898
+  },
+  {
+    "type": "Errands",
+    "name": "Queue at bank",
+    "lat": -1.300335,
+    "lng": 36.824003
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.286614,
+    "lng": 36.813191
+  },
+  {
+    "type": "Cleaning",
+    "name": "Sanitize bathroom",
+    "lat": -1.300292,
+    "lng": 36.820164
+  },
+  {
+    "type": "Errands",
+    "name": "Buy airtime",
+    "lat": -1.282416,
+    "lng": 36.812283
+  },
+  {
+    "type": "Plumbing",
+    "name": "Replace tap",
+    "lat": -1.296602,
+    "lng": 36.819858
+  },
+  {
+    "type": "Errands",
+    "name": "Pick up groceries",
+    "lat": -1.299751,
+    "lng": 36.812406
+  },
+  {
+    "type": "Pet Care",
+    "name": "Walk dogs",
+    "lat": -1.284996,
+    "lng": 36.829183
+  },
+  {
+    "type": "Pet Care",
+    "name": "Groom pets",
+    "lat": -1.291885,
+    "lng": 36.829204
+  },
+  {
+    "type": "Cleaning",
+    "name": "Wash windows",
+    "lat": -1.28583,
+    "lng": 36.831576
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.300493,
+    "lng": 36.824277
+  },
+  {
+    "type": "Plumbing",
+    "name": "Install shower",
+    "lat": -1.292677,
+    "lng": 36.829109
+  },
+  {
+    "type": "Cleaning",
+    "name": "Wash windows",
+    "lat": -1.301812,
+    "lng": 36.819715
+  },
+  {
+    "type": "Cleaning",
+    "name": "Dust shelves",
+    "lat": -1.285161,
+    "lng": 36.827695
+  },
+  {
+    "type": "Plumbing",
+    "name": "Unclog toilet",
+    "lat": -1.299067,
+    "lng": 36.827073
+  },
+  {
+    "type": "Worker",
+    "name": "George - Electrician",
+    "lat": -1.289386,
+    "lng": 36.828549
+  },
+  {
+    "type": "Worker",
+    "name": "Faith - Electrician",
+    "lat": -1.301945,
+    "lng": 36.82929
+  },
+  {
+    "type": "Worker",
+    "name": "Nora - Nanny",
+    "lat": -1.286943,
+    "lng": 36.823735
+  },
+  {
+    "type": "Worker",
+    "name": "Faith - Delivery",
+    "lat": -1.294176,
+    "lng": 36.813248
+  },
+  {
+    "type": "Worker",
+    "name": "Nora - Driver",
+    "lat": -1.300526,
+    "lng": 36.825824
+  },
+  {
+    "type": "Worker",
+    "name": "Brian - Nanny",
+    "lat": -1.284574,
+    "lng": 36.818676
+  },
+  {
+    "type": "Worker",
+    "name": "Kevin - Tutor",
+    "lat": -1.289368,
+    "lng": 36.821447
+  },
+  {
+    "type": "Worker",
+    "name": "John - Nanny",
+    "lat": -1.282877,
+    "lng": 36.827342
+  },
+  {
+    "type": "Worker",
+    "name": "Rose - Dog Walker",
+    "lat": -1.29857,
+    "lng": 36.818117
+  },
+  {
+    "type": "Worker",
+    "name": "Lucy - Carpenter",
+    "lat": -1.296359,
+    "lng": 36.822277
+  },
+  {
+    "type": "Worker",
+    "name": "Winnie - Chef",
+    "lat": -1.287179,
+    "lng": 36.831772
+  },
+  {
+    "type": "Worker",
+    "name": "Elijah - Tutor",
+    "lat": -1.286401,
+    "lng": 36.825599
+  },
+  {
+    "type": "Worker",
+    "name": "Brian - Maid",
+    "lat": -1.283557,
+    "lng": 36.830061
+  },
+  {
+    "type": "Worker",
+    "name": "Winnie - Plumber",
+    "lat": -1.300761,
+    "lng": 36.819703
+  },
+  {
+    "type": "Worker",
+    "name": "Winnie - Electrician",
+    "lat": -1.285611,
+    "lng": 36.817054
+  },
+  {
+    "type": "Worker",
+    "name": "George - Maid",
+    "lat": -1.296189,
+    "lng": 36.818399
+  },
+  {
+    "type": "Worker",
+    "name": "Kevin - Dog Walker",
+    "lat": -1.282124,
+    "lng": 36.831432
+  },
+  {
+    "type": "Worker",
+    "name": "Faith - Electrician",
+    "lat": -1.287925,
+    "lng": 36.821078
+  },
+  {
+    "type": "Worker",
+    "name": "Faith - Plumber",
+    "lat": -1.282307,
+    "lng": 36.826259
+  },
+  {
+    "type": "Worker",
+    "name": "Faith - Delivery",
+    "lat": -1.294965,
+    "lng": 36.823835
+  }
+]
