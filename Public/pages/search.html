@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search for trusted services in Kenya - Connect">
+    <meta name="keywords" content="Connect, Kenya, services, search, jobs, Nairobi, M-Pesa">
+    <title>Connect - Search Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@1.5.7/dist/lottie-player.js"></script>
+    <link rel="stylesheet" href="../connect.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top bg-gradient text-white shadow-lg" style="background: linear-gradient(to right, #1E40AF, #2563EB);">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white" href="../connect.html"><i class="fas fa-handshake me-2"></i>Connect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="connect.html"><i class="fas fa-home me-1"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="jobs.html"><i class="fas fa-briefcase me-1"></i>Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="map.html"><i class="fas fa-map-marker-alt me-1"></i>Map</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="search.html"><i class="fas fa-search me-1"></i>Search</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-warning" href="faq.html"><i class="fas fa-question-circle me-1"></i>FAQ</a></li>
+                    <li class="nav-item me-2">
+                        <button id="theme-toggle" class="nav-link text-white bg-transparent border-0" aria-label="Toggle dark mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link text-white position-relative" href="notifications.html" data-bs-toggle="dropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                            <li class="p-2 bg-light fw-bold border-bottom">Notifications</li>
+                            <li><a class="dropdown-item border-bottom" href="#"><span class="text-info">New booking:</span> John M. has booked your service</a></li>
+                            <li><a class="dropdown-item border-bottom" href="#"><span class="text-success">Payment received:</span> KES 1,500</a></li>
+                            <li><a class="dropdown-item" href="#"><span class="text-warning">Reminder:</span> Job at 9 AM</a></li>
+                            <li class="text-center p-2"><a href="notifications.html" class="small">View all</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link text-white position-relative" href="messages.html" data-bs-toggle="dropdown">
+                            <i class="fas fa-envelope"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">2</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                            <li class="p-2 bg-light fw-bold border-bottom">Messages</li>
+                            <li><a class="dropdown-item border-bottom" href="messages.html"><strong>John M:</strong> What time will you arrive?</a></li>
+                            <li><a class="dropdown-item" href="messages.html"><strong>Sarah K:</strong> Thank you for yesterday!</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-h me-1"></i>More
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="about.html"><i class="fas fa-info-circle me-2"></i>About</a></li>
+                            <li><a class="dropdown-item" href="contact.html"><i class="fas fa-envelope me-2"></i>Contact</a></li>
+                            <li><a class="dropdown-item" href="pricing.html"><i class="fas fa-tag me-2"></i>Pricing</a></li>
+                            <li><a class="dropdown-item" href="safety.html"><i class="fas fa-shield-alt me-2"></i>Safety</a></li>
+                            <li><a class="dropdown-item" href="blog.html"><i class="fas fa-blog me-2"></i>Blog</a></li>
+                            <li><a class="dropdown-item" href="language.html"><i class="fas fa-globe me-2"></i>Language</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <img src="../assets/img/avatar-placeholder.png" class="rounded-circle" width="40" height="40" alt="User">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="wallet.html"><i class="fas fa-wallet me-2"></i>Wallet</a></li>
+                            <li><a class="dropdown-item" href="provider-dashboard.html"><i class="fas fa-chart-line me-2"></i>Dashboard</a></li>
+                            <li><a class="dropdown-item" href="edit-profile.html"><i class="fas fa-edit me-2"></i>Edit Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <button class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+    <main>
+        <section class="container mx-auto px-4 py-12 pt-28 animate__animated animate__slideInUp">
+            <h1 class="text-3xl font-bold mb-6 text-center" style="color: var(--text-color);">Search Services</h1>
+            <div class="bg-gradient p-6 rounded-lg shadow-md mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <input type="text" id="searchInput" class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-amber-400" style="background: var(--card-bg); color: var(--text-color);" placeholder="E.g., fundi in Nairobi">
+                    </div>
+                    <div>
+                        <select id="category" class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-amber-400" style="background: var(--card-bg); color: var(--text-color);">
+                            <option value="">All Categories</option>
+                            <option value="tech">Tech</option>
+                            <option value="repairs">Repairs</option>
+                            <option value="transport">Transport</option>
+                            <option value="cleaning">Cleaning</option>
+                            <option value="tutoring">Tutoring</option>
+                        </select>
+                    </div>
+                    <div>
+                        <input type="text" id="location" class="w-full p-3 rounded-lg border focus:ring-2 focus:ring-amber-400" style="background: var(--card-bg); color: var(--text-color);" placeholder="E.g., Nairobi">
+                    </div>
+                    <div>
+                        <button onclick="searchServices()" class="btn btn-gradient-primary w-full p-3 rounded-lg">Search</button>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-4 flex-wrap">
+                    <label class="flex items-center gap-2" style="color: var(--text-color);">
+                        <input type="checkbox" id="highRating" class="form-checkbox"> High Rating (4+)
+                    </label>
+                    <label class="flex items-center gap-2" style="color: var(--text-color);">
+                        <input type="checkbox" id="availableNow" class="form-checkbox"> Available Now
+                    </label>
+                </div>
+            </div>
+            <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <!-- Results populated via JS -->
+            </div>
+        </section>
+    </main>
+    <footer class="text-white py-8" style="background: var(--gradient-primary)">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <p class="text-sm">Connecting you with trusted services and job opportunities across Kenya.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="hover:underline">About</a></li>
+                        <li><a href="contact.html" class="hover:underline">Contact</a></li>
+                        <li><a href="faq.html" class="hover:underline">FAQ</a></li>
+                        <li><a href="pricing.html" class="hover:underline">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="jobs.html?category=cleaning" class="hover:underline">Cleaning</a></li>
+                        <li><a href="jobs.html?category=delivery" class="hover:underline">Delivery</a></li>
+                        <li><a href="jobs.html?category=errands" class="hover:underline">Errands</a></li>
+                        <li><a href="jobs.html?category=tutoring" class="hover:underline">Tutoring</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Theme Toggle
+        const toggleButton = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        const themeIcon = toggleButton.querySelector('i');
+        const setTheme = (theme) => {
+            htmlElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        };
+        toggleButton.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme') || 'light';
+            setTheme(currentTheme === 'light' ? 'dark' : 'light');
+        });
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Navbar Fix
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbarToggler = document.querySelector('.navbar-toggler');
+            const navbarCollapse = document.querySelector('#navbarNavDropdown');
+            navbarToggler.addEventListener('click', () => {
+                navbarCollapse.classList.toggle('show');
+            });
+        });
+
+        // Intersection Observer for Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate__animated', 'animate__slideInUp');
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('section').forEach(el => observer.observe(el));
+
+        // Back to Top Button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Search Functionality
+        async function searchServices() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('category').value;
+            const location = document.getElementById('location').value.toLowerCase();
+            const highRating = document.getElementById('highRating').checked;
+            const availableNow = document.getElementById('availableNow').checked;
+
+            try {
+                const response = await fetch('../mock_map_data.json');
+                const data = await response.json();
+                let results = data.filter(item => {
+                    const matchesQuery = query ? item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query) : true;
+                    const matchesCategory = category ? item.category === category : true;
+                    const matchesLocation = location ? item.location.toLowerCase().includes(location) : true;
+                    const matchesRating = highRating ? item.rating >= 4 : true;
+                    const matchesAvailability = availableNow ? item.available : true;
+                    return matchesQuery && matchesCategory && matchesLocation && matchesRating && matchesAvailability;
+                });
+
+                document.getElementById('results').innerHTML = results.length ? results.map(item => `
+                    <div class="job-card p-6 rounded-lg shadow-md text-center">
+                        <h3 class="text-xl font-semibold" style="color: var(--text-color);">${item.title}</h3>
+                        <p style="color: var(--text-color);">${item.category} in ${item.location}</p>
+                        <div class="flex justify-center gap-1 text-yellow-400 my-2">
+                            ${Array(Math.floor(item.rating)).fill('<i class="fas fa-star"></i>').join('')}
+                            ${item.rating % 1 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                        </div>
+                        <a href="profile.html?id=${item.providerId}" class="btn btn-gradient-primary px-4 py-2 rounded-lg mt-2">View Provider</a>
+                    </div>
+                `).join('') : '<p class="text-center" style="color: var(--text-color);">No results found. Try different filters.</p>';
+
+                // Cache results
+                localStorage.setItem('searchResults', JSON.stringify(results));
+            } catch (error) {
+                document.getElementById('results').innerHTML = '<p class="text-center text-red-500">Error loading results. Please try again.</p>';
+            }
+        }
+
+        // Load cached results
+        document.addEventListener('DOMContentLoaded', () => {
+            const cachedResults = localStorage.getItem('searchResults');
+            if (cachedResults) {
+                document.getElementById('results').innerHTML = JSON.parse(cachedResults).map(item => `
+                    <div class="job-card p-6 rounded-lg shadow-md text-center">
+                        <h3 class="text-xl font-semibold" style="color: var(--text-color);">${item.title}</h3>
+                        <p style="color: var(--text-color);">${item.category} in ${item.location}</p>
+                        <div class="flex justify-center gap-1 text-yellow-400 my-2">
+                            ${Array(Math.floor(item.rating)).fill('<i class="fas fa-star"></i>').join('')}
+                            ${item.rating % 1 ? '<i class="fas fa-star-half-alt"></i>' : ''}
+                        </div>
+                        <a href="profile.html?id=${item.providerId}" class="btn btn-gradient-primary px-4 py-2 rounded-lg mt-2">View Provider</a>
+                    </div>
+                `).join('');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Connect wallet - manage balance, view transactions, deposit, withdraw, and track earnings." />
+  <meta name="keywords" content="Connect, Kenya, Wallet, M-Pesa, Transactions, Earnings, Balance" />
+  <title>Wallet - Connect</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+  <style>
+    .bg-gradient {
+      background: linear-gradient(to right, #1E40AF, #2563EB);
+    }
+    
+    .btn-gradient-primary {
+      background: linear-gradient(to right, #14B8A6, #059669);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gradient-primary:hover {
+      background: linear-gradient(to right, #059669, #047857);
+      transform: translateY(-1px);
+    }
+    
+    .btn-gradient-secondary {
+      background: linear-gradient(to right, #F97316, #EA580C);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-gradient-secondary:hover {
+      background: linear-gradient(to right, #EA580C, #C2410C);
+      transform: translateY(-1px);
+    }
+    
+    .stat-card {
+      transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top bg-gradient text-white shadow-lg">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="fas fa-handshake me-2"></i>Connect
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link text-white" href="connect.html"><i class="fas fa-home me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/jobs.html"><i class="fas fa-briefcase me-1"></i> Jobs</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/map.html"><i class="fas fa-map-marker-alt me-1"></i> Map</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pages/faq.html"><i class="fas fa-question-circle me-1"></i> FAQ</a></li>
+
+          <!-- Notifications -->
+          <li class="nav-item me-2">
+            <a class="nav-link text-white position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge">3</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+              <li class="p-2 bg-light border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold">Notifications</span>
+                  <a href="#" class="text-decoration-none small">Mark all as read</a>
+                </div>
+              </li>
+              <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-primary">New booking:</span> John M. has booked your service</a></li>
+              <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-success">Payment received:</span> KES 1,500 from Sarah K.</a></li>
+              <li><a class="dropdown-item py-2" href="#"><span class="text-warning">Reminder:</span> Upcoming job tomorrow at 9 AM</a></li>
+              <li class="text-center p-2 bg-light"><a href="#" class="text-decoration-none small">View all notifications</a></li>
+            </ul>
+          </li>
+
+          <!-- Messages -->
+          <li class="nav-item me-2">
+            <a class="nav-link text-white position-relative" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-envelope"></i>
+              <span class="notification-badge">2</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+              <li class="p-2 bg-light border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-bold">Messages</span>
+                  <a href="#" class="text-decoration-none small">View all</a>
+                </div>
+              </li>
+              <li>
+                <a class="dropdown-item py-2 border-bottom" href="#">
+                  <div class="d-flex">
+                    <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                    <div>
+                      <p class="mb-0 fw-bold">John M.</p>
+                      <p class="small text-muted mb-0">What time will you arrive tomorrow?</p>
+                      <p class="small text-muted mb-0">2 hours ago</p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item py-2" href="#">
+                  <div class="d-flex">
+                    <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                    <div>
+                      <p class="mb-0 fw-bold">Sarah K.</p>
+                      <p class="small text-muted mb-0">Thank you for your service yesterday!</p>
+                      <p class="small text-muted mb-0">1 day ago</p>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Dropdown menu -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ellipsis-h me-1"></i> More
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="pages/wallet.html"><i class="fas fa-wallet me-2"></i>Wallet</a></li>
+              <li><a class="dropdown-item" href="pages/profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+              <li><a class="dropdown-item" href="pages/support.html"><i class="fas fa-headset me-2"></i>Support</a></li>
+            </ul>
+          </li>
+
+          <!-- Profile dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="../assets/img/avatar-placeholder.png" class="rounded-circle" alt="Profile" width="40" height="40">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <li><a class="dropdown-item" href="pages/profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-28 px-6 lg:px-20">
+    <div class="max-w-6xl mx-auto">
+      <div class="bg-white p-6 rounded-xl shadow mb-6">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-3xl font-bold text-blue-900">Wallet</h1>
+          <div class="flex gap-3">
+            <button class="btn btn-gradient-primary text-white px-4 py-2 rounded-lg">
+              <i class="fas fa-plus me-2"></i> Deposit via M-Pesa
+            </button>
+            <button class="btn btn-gradient-secondary text-white px-4 py-2 rounded-lg">
+              <i class="fas fa-money-bill-wave me-2"></i> Withdraw to M-Pesa
+            </button>
+          </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div class="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-lg shadow-sm stat-card">
+            <p class="text-blue-800"><i class="fas fa-wallet me-2"></i> Balance</p>
+            <p class="text-2xl font-bold text-blue-900">KES 12,000</p>
+            <p class="text-sm text-blue-600">Updated: April 15, 2025</p>
+          </div>
+          <div class="bg-gradient-to-r from-teal-50 to-teal-100 p-4 rounded-lg shadow-sm stat-card">
+            <p class="text-teal-800"><i class="fas fa-money-bill-wave me-2"></i> Total Deposits</p>
+            <p class="text-2xl font-bold text-teal-900">KES 20,000</p>
+            <p class="text-sm text-teal-600">+KES 5,000 this month</p>
+          </div>
+          <div class="bg-gradient-to-r from-red-50 to-red-100 p-4 rounded-lg shadow-sm stat-card">
+            <p class="text-red-800"><i class="fas fa-arrow-down me-2"></i> Withdrawals</p>
+            <p class="text-2xl font-bold text-red-900">KES 8,000</p>
+            <p class="text-sm text-red-600">Last: March 10, 2025</p>
+          </div>
+          <div class="bg-gradient-to-r from-amber-50 to-amber-100 p-4 rounded-lg shadow-sm stat-card">
+            <p class="text-amber-800"><i class="fas fa-chart-line me-2"></i> Earnings</p>
+            <p class="text-2xl font-bold text-amber-900">KES 4,000</p>
+            <p class="text-sm text-amber-600">This week: KES 1,200</p>
+          </div>
+        </div>
+
+        <!-- Transaction Chart -->
+        <div class="bg-white p-4 rounded-lg shadow-sm mb-6">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Transaction Overview</h4>
+          <canvas id="transactionChart" height="200"></canvas>
+        </div>
+
+        <!-- Filter and Export -->
+        <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
+          <div class="flex gap-4">
+            <div>
+              <label for="startDate" class="text-sm text-gray-600">Start Date</label>
+              <input id="startDate" type="date" class="border p-2 rounded w-full" value="2025-03-01" />
+            </div>
+            <div>
+              <label for="endDate" class="text-sm text-gray-600">End Date</label>
+              <input id="endDate" type="date" class="border p-2 rounded w-full" value="2025-04-15" />
+            </div>
+            <div>
+              <label for="transactionType" class="text-sm text-gray-600">Type</label>
+              <select id="transactionType" class="border p-2 rounded w-full">
+                <option value="all">All</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
+                <option value="payment">Payment</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-gradient-secondary text-white px-4 py-2 rounded-lg">
+            <i class="fas fa-file-pdf me-2"></i> Export to PDF
+          </button>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="bg-white p-4 rounded-lg shadow-sm">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Recent Transactions</h4>
+          <div class="overflow-x-auto">
+            <table class="table table-hover w-full">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Mar 12, 2025</td>
+                  <td><span class="badge bg-success">Deposit</span></td>
+                  <td>M-Pesa Deposit</td>
+                  <td class="text-success">+KES 5,000</td>
+                  <td><span class="badge bg-light text-dark">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>Mar 10, 2025</td>
+                  <td><span class="badge bg-danger">Withdrawal</span></td>
+                  <td>M-Pesa Withdrawal</td>
+                  <td class="text-danger">-KES 2,000</td>
+                  <td><span class="badge bg-light text-dark">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>Mar 8, 2025</td>
+                  <td><span class="badge bg-primary">Payment</span></td>
+                  <td>Payment from John M.</td>
+                  <td class="text-success">+KES 1,500</td>
+                  <td><span class="badge bg-light text-dark">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>Mar 5, 2025</td>
+                  <td><span class="badge bg-success">Deposit</span></td>
+                  <td>M-Pesa Deposit</td>
+                  <td class="text-success">+KES 3,000</td>
+                  <td><span class="badge bg-light text-dark">Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Smart Insights -->
+        <div class="mt-6">
+          <h4 class="text-lg font-semibold text-gray-800 mb-4">Smart Insights</h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-blue-50 p-4 rounded-lg shadow-sm stat-card">
+              <p class="text-sm text-blue-800"><i class="fas fa-chart-line me-2"></i> Weekly Earnings</p>
+              <p class="text-2xl font-bold text-blue-900">KES 1,200</p>
+              <p class="text-sm text-blue-600">+20% from last week</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg shadow-sm stat-card">
+              <p class="text-sm text-yellow-800"><i class="fas fa-lightbulb me-2"></i> Tip</p>
+              <p class="text-md font-medium text-yellow-900">Withdraw mid-month to avoid weekend delays.</p>
+              <p class="text-sm text-yellow-600">Last withdrawal took 2 days.</p>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg shadow-sm stat-card">
+              <p class="text-sm text-green-800"><i class="fas fa-money-check-alt me-2"></i> Savings Goal</p>
+              <p class="text-2xl font-bold text-green-900">KES 10,000</p>
+              <p class="text-sm text-green-600">80% reached for this month</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gradient text-white py-6">
+    <div class="container mx-auto text-center">
+      <p class="mb-4">© 2025 Connect. All rights reserved.</p>
+      <div class="flex justify-center space-x-4">
+        <a href="pages/about.html" class="hover:underline">About</a>
+        <a href="pages/contact.html" class="hover:underline">Contact</a>
+        <a href="pages/faq.html" class="hover:underline">FAQ</a>
+        <a href="pages/pricing.html" class="hover:underline">Pricing</a>
+        <a href="pages/safety.html" class="hover:underline">Safety</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Transaction Chart
+    const ctx = document.getElementById('transactionChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+        datasets: [
+          {
+            label: 'Deposits (KES)',
+            data: [5000, 3000, 8000, 4000],
+            backgroundColor: 'rgba(20, 184, 166, 0.5)',
+            borderColor: '#14B8A6',
+            borderWidth: 1
+          },
+          {
+            label: 'Withdrawals (KES)',
+            data: [2000, 1000, 2000, 1000],
+            backgroundColor: 'rgba(249, 115, 22, 0.5)',
+            borderColor: '#F97316',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Amount (KES)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Month'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    });
+
+    // Filter Transactions
+    function filterTransactions() {
+      const startDate = new Date(document.getElementById('startDate').value);
+      const endDate = new Date(document.getElementById('endDate').value);
+      const type = document.getElementById('transactionType').value;
+
+      const rows = document.querySelectorAll('tbody tr');
+      rows.forEach(row => {
+        const dateCell = row.cells[0].textContent;
+        const rowDate = new Date(dateCell);
+        const rowType = row.cells[1].textContent.toLowerCase();
+
+        const dateMatch = (!startDate || rowDate >= startDate) && (!endDate || rowDate <= endDate);
+        const typeMatch = type === 'all' || rowType.includes(type);
+
+        row.style.display = dateMatch && typeMatch ? '' : 'none';
+      });
+    }
+
+    // Event Listeners for Filters
+    document.getElementById('startDate').addEventListener('change', filterTransactions);
+    document.getElementById('endDate').addEventListener('change', filterTransactions);
+    document.getElementById('transactionType').addEventListener('change', filterTransactions);
+
+    // Mock Button Actions
+    document.querySelectorAll('.btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const text = e.target.textContent.trim();
+        if (text.includes('Deposit via M-Pesa')) {
+          alert('Initiating M-Pesa deposit...');
+        } else if (text.includes('Withdraw to M-Pesa')) {
+          alert('Initiating M-Pesa withdrawal...');
+        } else if (text.includes('Export to PDF')) {
+          alert('Generating PDF export...');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

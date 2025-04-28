@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect - Service Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../connect.css" />
+  <style>
+    body {
+      background: #F9FAFB;
+    }
+    .service-header {
+      background: linear-gradient(to right, #1E40AF, #2563EB);
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+    .service-header img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 4px solid white;
+    }
+    .service-body {
+      background: white;
+      margin-top: -3rem;
+      border-radius: 1rem;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #14B8A6, #1E40AF);
+      border: none;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(to right, #1E40AF, #2563EB);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="service-header">
+    <img id="service-image" src="" alt="Service Image" />
+    <h1 id="service-title" class="fw-bold"></h1>
+    <p class="lead" id="service-owner"></p>
+  </div>
+
+  <div class="service-body">
+    <h4 class="fw-bold mb-3">About This Service</h4>
+    <p id="service-description" class="text-muted mb-4"></p>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h5 class="text-success fw-bold">KES <span id="service-price"></span></h5>
+      </div>
+      <button class="btn btn-primary btn-lg">
+        <i class="fas fa-paper-plane me-2"></i>Contact Seller
+      </button>
+    </div>
+
+    <div class="text-center">
+      <a href="dashboard.html" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Services
+      </a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Fetch service details from localStorage
+    const service = JSON.parse(localStorage.getItem('selectedService'));
+
+    if (service) {
+      document.getElementById('service-title').textContent = service.title;
+      document.getElementById('service-owner').textContent = `Offered by ${service.owner}`;
+      document.getElementById('service-description').textContent = service.description;
+      document.getElementById('service-price').textContent = service.price;
+      document.getElementById('service-image').src = service.image;
+    } else {
+      document.querySelector('.service-body').innerHTML = '<div class="text-center text-danger fw-bold">Service not found.</div>';
+    }
+  </script>
+</body>
+</html>

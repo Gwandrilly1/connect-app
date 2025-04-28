@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Connect - Find and offer services in Kenya with ease. Book cleaning, errands, and more in Nairobi and beyond." />
+  <meta name="keywords" content="Connect, Kenya, services, jobs, cleaning, errands, Nairobi, M-Pesa" />
+  <title>Connect - Minimalist Modern Home</title>
+
+  <!-- Tailwind CSS with prefix to avoid conflicts -->
+  <script>
+    tailwind.config = {
+      prefix: 'tw-',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#14B8A6',
+            secondary: '#1E40AF',
+            accent: '#f59e42',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+      plugins: [],
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    a:hover {
+      color: #f59e42;
+    }
+    .btn-primary {
+      background: linear-gradient(90deg, #14b8a6 0%, #1e40af 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      transition: background 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #0f766e 0%, #1e3a8a 100%);
+    }
+    .btn-accent {
+      background-color: #f59e42;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-accent:hover {
+      background-color: #d97706;
+    }
+    .btn-outline {
+      border: 2px solid #6b7280;
+      color: #6b7280;
+      padding: 0.65rem 1.25rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: transparent;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-outline:hover {
+      background-color: #6b7280;
+      color: white;
+    }
+    .verified-badge {
+      color: #22c55e;
+      margin-left: 0.3rem;
+      font-size: 1.1rem;
+    }
+    .star {
+      color: #fbbf24;
+    }
+    .star-empty {
+      color: #e5e7eb;
+    }
+    /* Navbar */
+    nav {
+      background: linear-gradient(90deg, #14b8a6 0%, #1e40af 100%);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    }
+    nav .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    nav .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    nav .nav-links a {
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      position: relative;
+    }
+    nav .nav-links a:hover {
+      color: #f59e42;
+    }
+    nav .nav-links .notification {
+      position: relative;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+    nav .nav-links .notification .dot {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      background: #f59e42;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+    /* Responsive Nav */
+    @media (max-width: 768px) {
+      nav .nav-links {
+        display: none;
+      }
+      nav .menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        color: white;
+        cursor: pointer;
+      }
+      nav.active .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        right: 2rem;
+        background: #1e40af;
+        padding: 1rem 2rem;
+        border-radius: 0.5rem;
+        width: 200px;
+      }
+      nav.active .nav-links a {
+        padding: 0.5rem 0;
+      }
+    }
+    /* Hero */
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #e0f2f1;
+    }
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      max-width: 700px;
+      margin-bottom: 1rem;
+      color: #0f766e;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 500px;
+      margin-bottom: 2rem;
+      color: #374151;
+    }
+    .hero .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    /* Search */
+    .search-bar {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.75rem;
+      max-width: 700px;
+      width: 100%;
+    }
+    .search-bar input,
+    .search-bar select {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid #d1d5db;
+      font-size: 1rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
+    }
+    .search-bar input:focus,
+    .search-bar select:focus {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px #a7f3d0;
+    }
+    .search-bar button {
+      background: white;
+      border-radius: 0.5rem;
+      border: none;
+      padding: 0 1rem;
+      cursor: pointer;
+      color: #14b8a6;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.3s ease;
+    }
+    .search-bar button:hover {
+      color: #0f766e;
+    }
+    /* Categories */
+    .categories {
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(160px,1fr));
+      gap: 2rem;
+    }
+    .category-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 8px 16px rgb(0 0 0 / 0.05);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
+    }
+    .category-card i {
+      font-size: 2.5rem;
+      color: #f59e42;
+      margin-bottom: 1rem;
+    }
+    .category-card h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: #111827;
+    }
+    .category-card p {
+      font-size: 0.95rem;
+      color: #6b7280;
+      margin-bottom: 1rem;
+    }
+    .category-card a {
+      font-weight: 600;
+      color: #14b8a6;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+    }
+    .category-card a:hover {
+      color: #0f766e;
+    }
+    /* How It Works */
+    .how-it-works {
+      background: white;
+      padding: 4rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto 4rem;
+      text-align: center;
+    }
+    .how-it-works h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: #111827;
+    }
+    .how-it-works .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 3rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .step i {
+      font-size: 3rem;
+      color: #f59e42;
+    }
+    .step h3 {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #111827;
+    }
+    .step p {
+      color: #6b7280;
+      font-size: 1rem;
+      max-width: 280px;
+    }
+    /* Providers */
+    .providers {
+      max-width: 1200px;
+      margin: 0 auto 6rem;
+      padding: 0 1rem;
+    }
+    .providers h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #111827;
+    }
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 2rem;
+    }
+    .provider-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 8px 16px rgb(0 0 0 / 0.05);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+    .provider-card:hover {
+      box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
+    }
+    .provider-card img {
+      width: 96px;
+      height: 96px;
+      border-radius: 9999px;
+      object-fit: cover;
+      border: 3px solid #14b8a6;
+    }
+    .provider-name {
+      font-weight: 700;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: #111827;
+    }
+    .provider-role {
+      color: #6b7280;
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .stars {
+      display: flex;
+      gap: 0.15rem;
+      justify-content: center;
+      color: #fbbf24;
+      font-size: 1.1rem;
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    /* Modal */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      padding: 1rem;
+    }
+    .modal-bg.active {
+      display: flex;
+    }
+    .modal-content {
+      background: white;
+      border-radius: 1rem;
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 12px 24px rgb(0 0 0 / 0.15);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-content h3 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: #111827;
+    }
+    .modal-content label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #374151;
+    }
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
+      resize: vertical;
+    }
+    .modal-content input:focus,
+    .modal-content select:focus,
+    .modal-content textarea:focus {
+      border-color: #14b8a6;
+      box-shadow: 0 0 0 3px #a7f3d0;
+    }
+    .modal-content button {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .modal-content .btn-primary {
+      background: linear-gradient(90deg, #14b8a6 0%, #1e40af 100%);
+      color: white;
+      margin-bottom: 0.75rem;
+    }
+    .modal-content .btn-primary:hover {
+      background: linear-gradient(90deg, #0f766e 0%, #1e3a8a 100%);
+    }
+    .modal-content .btn-outline {
+      border: 2px solid #6b7280;
+      color: #6b7280;
+      background: transparent;
+    }
+    .modal-content .btn-outline:hover {
+      background: #6b7280;
+      color: white;
+    }
+    /* Footer */
+    footer {
+      background: linear-gradient(90deg, #14b8a6 0%, #1e40af 100%);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: white;
+      margin: 0 0.75rem;
+      font-size: 1.25rem;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #f59e42;
+    }
+    /* Back to top */
+    #backToTopBtn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #f59e42;
+      color: white;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.75rem;
+      cursor: pointer;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+      display: none;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    #backToTopBtn:hover {
+      background: #d97706;
+    }
+  </style>
+</head>
+<body class="tw-bg-gray-50 tw-text-gray-900">
+
+  <!-- Navbar -->
+  <nav id="navbar" role="navigation" aria-label="Primary Navigation">
+    <div class="container">
+      <a href="/" class="logo" aria-label="Connect Home"><i class="fas fa-handshake"></i> Connect</a>
+      <div class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" role="button" tabindex="0">
+        <i class="fas fa-bars"></i>
+      </div>
+      <div class="nav-links" id="navLinks">
+        <a href="/" tabindex="0">Home</a>
+        <a href="./pages/jobs.html" tabindex="0">Jobs</a>
+        <a href="./pages/map.html" tabindex="0">Map</a>
+        <a href="./pages/about.html" tabindex="0">About</a>
+        <a href="./pages/contact.html" tabindex="0">Contact</a>
+        <a href="#" class="notification" aria-label="Notifications" tabindex="0">
+          <i class="fas fa-bell"></i>
+          <span class="dot" aria-hidden="true"></span>
+        </a>
+        <div class="dropdown" style="position: relative;">
+          <a href="#" id="accountDropdown" aria-haspopup="true" aria-expanded="false" tabindex="0" style="color:white; font-weight:600;">
+            <i class="fas fa-user-circle"></i> Account <i class="fas fa-chevron-down" style="font-size: 0.7rem;"></i>
+          </a>
+          <div id="dropdownMenu" role="menu" aria-label="Account menu" style="display:none; position:absolute; right:0; background:white; border-radius:0.5rem; box-shadow:0 4px 12px rgb(0 0 0 / 0.15); min-width:160px; padding:0.5rem 0; z-index:1000;">
+            <a href="./pages/dashboard.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Dashboard</a>
+            <a href="./pages/profile.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Profile</a>
+            <a href="./pages/bookings.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">My Bookings</a>
+            <a href="./pages/login.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Log In</a>
+            <a href="./pages/register.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Sign Up</a>
+            <a href="./pages/blog.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Blog</a>
+            <a href="./pages/wallet.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Wallet</a>
+            <a href="./pages/settings.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">settings</a>
+            <a href="./pages/map.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Map</a>
+            <a href="./pages/support.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Support</a>
+            
+            <a href="#" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;" onclick="logout()">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <h1 id="heroTitle">Connect with Trusted Services in Kenya</h1>
+    <p>Find reliable cleaners, errand runners, and more in Nairobi and beyond.</p>
+    <div class="buttons" role="group" aria-label="Primary call to actions">
+      <a href="pages/jobs.html" class="btn-primary" role="button" tabindex="0">
+        <i class="fas fa-briefcase"></i> Find a Job
+      </a>
+      <a href="pages/dashboard.html" class="btn-accent" role="button" tabindex="0">
+        <i class="fas fa-hand-holding-heart"></i> Offer a Service
+      </a>
+    </div>
+    <form class="search-bar" role="search" aria-label="Search services form" onsubmit="event.preventDefault(); advancedSearch();">
+      <input type="text" id="search-services" placeholder="Search for services (e.g., Cleaning, Errands)" aria-label="Search services" autocomplete="off" />
+      <select id="search-category" aria-label="Select category">
+        <option value="">All Categories</option>
+        <option value="cleaning">Cleaning</option>
+        <option value="errands">Errands</option>
+        <option value="delivery">Delivery</option>
+        <option value="gardening">Gardening</option>
+        <option value="tutoring">Tutoring</option>
+      </select>
+      <input type="text" id="search-location" placeholder="Location (e.g., Nairobi)" aria-label="Location" autocomplete="off" />
+      <button type="submit" aria-label="Search">
+        <i class="fas fa-search"></i>
+      </button>
+    </form>
+  </section>
+
+  <!-- Popular Categories -->
+  <section class="categories" aria-labelledby="categoriesTitle">
+    <h2 id="categoriesTitle" class="tw-sr-only">Popular Service Categories</h2>
+    <a href="pages/jobs.html?category=cleaning" class="category-card" role="link" aria-label="Browse Cleaning jobs">
+      <i class="fas fa-broom" aria-hidden="true"></i>
+      <h3>Cleaning</h3>
+      <p>Professional home and office cleaning services.</p>
+      <span>Browse &rarr;</span>
+    </a>
+    <a href="pages/jobs.html?category=errands" class="category-card" role="link" aria-label="Browse Errands jobs">
+      <i class="fas fa-shopping-basket" aria-hidden="true"></i>
+      <h3>Errands</h3>
+      <p>Grocery shopping, deliveries, and more.</p>
+      <span>Browse &rarr;</span>
+    </a>
+    <a href="pages/jobs.html?category=delivery" class="category-card" role="link" aria-label="Browse Delivery jobs">
+      <i class="fas fa-truck" aria-hidden="true"></i>
+      <h3>Delivery</h3>
+      <p>Fast and reliable delivery services.</p>
+      <span>Browse &rarr;</span>
+    </a>
+    <a href="pages/jobs.html?category=gardening" class="category-card" role="link" aria-label="Browse Gardening jobs">
+      <i class="fas fa-seedling" aria-hidden="true"></i>
+      <h3>Gardening</h3>
+      <p>Lawn care and garden maintenance.</p>
+      <span>Browse &rarr;</span>
+    </a>
+    <a href="pages/jobs.html?category=tutoring" class="category-card" role="link" aria-label="Browse Tutoring jobs">
+      <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+      <h3>Tutoring</h3>
+      <p>Personalized academic and skill-based tutoring.</p>
+      <span>Browse &rarr;</span>
+    </a>
+    <a href="pages/jobs.html?category=more" class="category-card" role="link" aria-label="Browse More services">
+      <i class="fas fa-ellipsis-h" aria-hidden="true"></i>
+      <h3>More Services</h3>
+      <p>Explore additional services tailored to your needs.</p>
+      <span>Browse &rarr;</span>
+    </a>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" aria-labelledby="howItWorksTitle">
+    <h2 id="howItWorksTitle">How Connect Works</h2>
+    <div class="steps">
+      <div class="step" role="region" aria-label="Find a Service">
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <h3>Find a Service</h3>
+        <p>Search for trusted providers in your area for cleaning, errands, and more.</p>
+      </div>
+      <div class="step" role="region" aria-label="Book Instantly">
+        <i class="fas fa-calendar-check" aria-hidden="true"></i>
+        <h3>Book Instantly</h3>
+        <p>Schedule services at your convenience with secure M-Pesa payments.</p>
+      </div>
+      <div class="step" role="region" aria-label="Rate and Review">
+        <i class="fas fa-star" aria-hidden="true"></i>
+        <h3>Rate & Review</h3>
+        <p>Share feedback to help others find the best providers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Top Service Providers -->
+  <section class="providers" aria-labelledby="providersTitle">
+    <h2 id="providersTitle">Top Service Providers</h2>
+    <div class="provider-grid" role="list">
+      <article class="provider-card" role="listitem" aria-label="Jane Wanjiku, Cleaner and Errand Runner">
+        <img src="assets/img/avatar-placeholder.png" alt="Jane Wanjiku" loading="lazy" />
+        <div class="provider-name">
+          Jane Wanjiku
+          <span class="verified-badge" title="Verified Provider" aria-label="Verified provider"><i class="fas fa-check-circle"></i></span>
+        </div>
+        <div class="provider-role">Cleaner & Errand Runner</div>
+        <div class="stars" aria-label="4.5 out of 5 stars rating">
+          <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star-half-alt star"></i>
+        </div>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="openBookingModal('Jane Wanjiku')" aria-label="Book Jane Wanjiku">Book Now</button>
+          <button class="btn-outline" onclick="openReviewModal('Jane Wanjiku')" aria-label="View reviews for Jane Wanjiku">Reviews</button>
+        </div>
+      </article>
+
+      <article class="provider-card" role="listitem" aria-label="Peter Kamau, Delivery Specialist">
+        <img src="assets/img/avatar-placeholder.png" alt="Peter Kamau" loading="lazy" />
+        <div class="provider-name">Peter Kamau</div>
+        <div class="provider-role">Delivery Specialist</div>
+        <div class="stars" aria-label="5 out of 5 stars rating">
+          <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i>
+        </div>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="openBookingModal('Peter Kamau')" aria-label="Book Peter Kamau">Book Now</button>
+          <button class="btn-outline" onclick="openReviewModal('Peter Kamau')" aria-label="View reviews for Peter Kamau">Reviews</button>
+        </div>
+      </article>
+
+      <article class="provider-card" role="listitem" aria-label="Mary Achieng, Gardener">
+        <img src="assets/img/avatar-placeholder.png" alt="Mary Achieng" loading="lazy" />
+        <div class="provider-name">Mary Achieng</div>
+        <div class="provider-role">Gardener</div>
+        <div class="stars" aria-label="4 out of 5 stars rating">
+          <i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="fas fa-star star"></i><i class="far fa-star star-empty"></i>
+        </div>
+        <div class="btn-group">
+          <button class="btn-primary" onclick="openBookingModal('Mary Achieng')" aria-label="Book Mary Achieng">Book Now</button>
+          <button class="btn-outline" onclick="openReviewModal('Mary Achieng')" aria-label="View reviews for Mary Achieng">Reviews</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal-bg" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+      <h3 id="bookingModalTitle">Book Service</h3>
+      <form onsubmit="event.preventDefault(); openMpesaModal();" aria-label="Booking form">
+        <label for="bookingDate">Select Date & Time</label>
+        <input type="datetime-local" id="bookingDate" required />
+        <label for="bookingNotes">Notes (optional)</label>
+        <textarea id="bookingNotes" rows="3" placeholder="Additional details..."></textarea>
+        <button type="submit" class="btn-primary">Proceed to Payment</button>
+        <button type="button" class="btn-outline" onclick="closeBookingModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- M-Pesa Payment Modal -->
+  <div id="mpesaModal" class="modal-bg" role="dialog" aria-modal="true" aria-labelledby="mpesaModalTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+      <h3 id="mpesaModalTitle">M-Pesa Payment</h3>
+      <form onsubmit="event.preventDefault(); alert('Payment processed (demo).'); closeMpesaModal();" aria-label="M-Pesa payment form">
+        <label for="mpesaPhone">M-Pesa Phone Number</label>
+        <input type="tel" id="mpesaPhone" pattern="07[0-9]{8}" placeholder="e.g. 07XXXXXXXX" required />
+        <label for="mpesaAmount">Amount (KES)</label>
+        <input type="number" id="mpesaAmount" min="1" required />
+        <button type="submit" class="btn-primary">Pay Now</button>
+        <button type="button" class="btn-outline" onclick="closeMpesaModal()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reviews Modal -->
+  <div id="reviewModal" class="modal-bg" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle" aria-hidden="true" tabindex="-1">
+    <div class="modal-content">
+      <h3 id="reviewModalTitle">Provider Reviews</h3>
+      <div id="reviewsList" aria-live="polite" aria-atomic="true" style="margin-bottom:1.5rem;">
+        <article style="margin-bottom:1rem;">
+          <strong>Sarah K.</strong>
+          <div aria-label="5 stars rating" style="color:#fbbf24;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p>"Connect made finding a reliable cleaner so easy!"</p>
+        </article>
+        <article>
+          <strong>John M.</strong>
+          <div aria-label="4 stars rating" style="color:#fbbf24;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+          </div>
+          <p>"Quick booking and great service!"</p>
+        </article>
+      </div>
+      <form onsubmit="event.preventDefault(); alert('Review submitted (demo).'); closeReviewModal();" aria-label="Submit a review">
+        <label for="reviewRating">Your Rating</label>
+        <select id="reviewRating" required>
+          <option value="">Select...</option>
+          <option value="5">5 - Excellent</option>
+          <option value="4">4 - Good</option>
+          <option value="3">3 - Average</option>
+          <option value="2">2 - Poor</option>
+          <option value="1">1 - Terrible</option>
+        </select>
+        <label for="reviewText">Your Review</label>
+        <textarea id="reviewText" rows="3" required></textarea>
+        <button type="submit" class="btn-primary">Submit Review</button>
+        <button type="button" class="btn-outline" onclick="closeReviewModal()">Close</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Back to top button -->
+  <button id="backToTopBtn" aria-label="Back to top" title="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <!-- Scripts -->
+  <script>
+    // Responsive menu toggle
+    const nav = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const accountDropdown = document.getElementById('accountDropdown');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('active');
+      const expanded = nav.classList.contains('active');
+      menuToggle.setAttribute('aria-expanded', expanded);
+    });
+
+    menuToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        menuToggle.click();
+      }
+    });
+
+    accountDropdown.addEventListener('click', (e) => {
+      e.preventDefault();
+      const visible = dropdownMenu.style.display === 'block';
+      dropdownMenu.style.display = visible ? 'none' : 'block';
+      accountDropdown.setAttribute('aria-expanded', !visible);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!accountDropdown.contains(e.target) && !dropdownMenu.contains(e.target)) {
+        dropdownMenu.style.display = 'none';
+        accountDropdown.setAttribute('aria-expanded', false);
+      }
+    });
+
+    // Back to top button
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.style.display = 'block';
+      } else {
+        backToTopBtn.style.display = 'none';
+      }
+    });
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Advanced search redirect
+    function advancedSearch() {
+      const query = document.getElementById('search-services').value.trim();
+      const category = document.getElementById('search-category').value;
+      const location = document.getElementById('search-location').value.trim();
+      const params = new URLSearchParams();
+      if (query) params.append('query', query);
+      if (category) params.append('category', category);
+      if (location) params.append('location', location);
+      window.location.href = `pages/jobs.html?${params.toString()}`;
+    }
+
+    // Modal controls
+    function openBookingModal(provider) {
+      const modal = document.getElementById('bookingModal');
+      document.getElementById('bookingModalTitle').textContent = `Book Service with ${provider}`;
+      modal.setAttribute('aria-hidden', 'false');
+      modal.classList.add('active');
+      modal.querySelector('form').reset();
+      modal.querySelector('#bookingDate').focus();
+    }
+    function closeBookingModal() {
+      const modal = document.getElementById('bookingModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function openMpesaModal() {
+      closeBookingModal();
+      const modal = document.getElementById('mpesaModal');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.classList.add('active');
+      modal.querySelector('form').reset();
+      modal.querySelector('#mpesaPhone').focus();
+    }
+    function closeMpesaModal() {
+      const modal = document.getElementById('mpesaModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function openReviewModal(provider) {
+      const modal = document.getElementById('reviewModal');
+      document.getElementById('reviewModalTitle').textContent = `${provider} - Reviews`;
+      modal.setAttribute('aria-hidden', 'false');
+      modal.classList.add('active');
+      modal.querySelector('form').reset();
+      modal.querySelector('#reviewRating').focus();
+    }
+    function closeReviewModal() {
+      const modal = document.getElementById('reviewModal');
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    // Close modals on outside click or Escape key
+    ['bookingModal', 'mpesaModal', 'reviewModal'].forEach(id => {
+      const modal = document.getElementById(id);
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+        }
+      });
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        ['bookingModal', 'mpesaModal', 'reviewModal'].forEach(id => {
+          const modal = document.getElementById(id);
+          if (modal.classList.contains('active')) {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+    });
+
+    // Example logout
+    function logout() {
+      alert('Logged out (demo)');
+      // Implement real logout logic here
+    }
+  </script>
+</body>
+</html>

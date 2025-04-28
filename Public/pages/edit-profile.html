@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Edit Your Profile on Connect - Customize your details, preferences, and services in Kenya." />
+    <meta name="keywords" content="edit profile, jobs, Kenya, customization, Nairobi, M-Pesa, services" />
+    <title>Edit Profile - Connect</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        .bg-gradient {
+            background: linear-gradient(to right, #1E40AF, #2563EB);
+        }
+        
+        .btn-gradient-primary {
+            background: linear-gradient(to right, #14B8A6, #059669);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient-primary:hover {
+            background: linear-gradient(to right, #059669, #047857);
+            transform: translateY(-1px);
+        }
+        
+        .btn-gradient-secondary {
+            background: linear-gradient(to right, #F97316, #EA580C);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient-secondary:hover {
+            background: linear-gradient(to right, #EA580C, #C2410C);
+            transform: translateY(-1px);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg fixed-top bg-gradient text-white shadow-lg">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="../index.html">
+                <i class="fas fa-handshake me-2"></i>Connect
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="../index.html"><i class="fas fa-home me-1"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="jobs.html"><i class="fas fa-briefcase me-1"></i> Jobs</a></li>
+                    <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="faq.html"><i class="fas fa-question-circle me-1"></i> FAQ</a></li>
+
+                    <!-- Notifications -->
+                    <li class="nav-item me-2">
+                        <a class="nav-link text-white position-relative" href="#" id="notificationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                            <li class="p-2 bg-light border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold">Notifications</span>
+                                    <a href="#" class="text-decoration-none small">Mark all as read</a>
+                                </div>
+                            </li>
+                            <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-primary">New booking:</span> John M. has booked your service</a></li>
+                            <li><a class="dropdown-item py-2 border-bottom" href="#"><span class="text-success">Payment received:</span> KES 1,500 from Sarah K.</a></li>
+                            <li><a class="dropdown-item py-2" href="#"><span class="text-warning">Reminder:</span> Upcoming job tomorrow at 9 AM</a></li>
+                            <li class="text-center p-2 bg-light"><a href="#" class="text-decoration-none small">View all notifications</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Messages -->
+                    <li class="nav-item me-2">
+                        <a class="nav-link text-white position-relative" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-envelope"></i>
+                            <span class="notification-badge">2</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-0" style="width: 300px;">
+                            <li class="p-2 bg-light border-bottom">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold">Messages</span>
+                                    <a href="#" class="text-decoration-none small">View all</a>
+                                </div>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 border-bottom" href="#">
+                                    <div class="d-flex">
+                                        <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                                        <div>
+                                            <p class="mb-0 fw-bold">John M.</p>
+                                            <p class="small text-muted mb-0">What time will you arrive tomorrow?</p>
+                                            <p class="small text-muted mb-0">2 hours ago</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#">
+                                    <div class="d-flex">
+                                        <img src="../assets/img/avatar-placeholder.png" class="rounded-circle me-2" alt="Avatar" width="40" height="40">
+                                        <div>
+                                            <p class="mb-0 fw-bold">Sarah K.</p>
+                                            <p class="small text-muted mb-0">Thank you for your service yesterday!</p>
+                                            <p class="small text-muted mb-0">1 day ago</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- More Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-white hover:text-orange-400 dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-h me-1"></i> More
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdown">
+                            <li><a class="dropdown-item" href="about.html"><i class="fas fa-info-circle me-2"></i> About</a></li>
+                            <li><a class="dropdown-item" href="contact.html"><i class="fas fa-envelope me-2"></i> Contact</a></li>
+                            <li><a class="dropdown-item" href="pricing.html"><i class="fas fa-tag me-2"></i> Pricing</a></li>
+                            <li><a class="dropdown-item" href="safety.html"><i class="fas fa-shield-alt me-2"></i> Safety</a></li>
+                            <li><a class="dropdown-item" href="how-it-works.html"><i class="fas fa-question me-2"></i> How It Works</a></li>
+                            <li><a class="dropdown-item" href="testimonials.html"><i class="fas fa-star me-2"></i> Testimonials</a></li>
+                            <li><a class="dropdown-item" href="blog.html"><i class="fas fa-blog me-2"></i> Blog</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Profile Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="../assets/img/avatar-placeholder.png" class="rounded-circle" alt="Profile" width="40" height="40">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i> Profile</a></li>
+                            <li><a class="dropdown-item" href="wallet.html"><i class="fas fa-wallet me-2"></i> Wallet</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Edit Profile Section -->
+    <section id="edit-profile" class="container mx-auto px-4 py-12 pt-28 fade-in">
+        <h2 class="text-3xl font-bold text-blue-800 mb-4 text-center">Edit Your Profile</h2>
+        <div class="h-1 w-24 mx-auto mb-6 bg-gradient"></div>
+
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-md">
+            <form id="edit-profile-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Personal Information -->
+                <div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Personal Information</h3>
+                    <div class="mb-4">
+                        <label for="profile-name" class="block text-gray-700 mb-2">Full Name</label>
+                        <input type="text" id="profile-name" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" value="Jane Wanjiku" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-email" class="block text-gray-700 mb-2">Email Address</label>
+                        <input type="email" id="profile-email" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" value="jane.wanjiku@example.com" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-phone" class="block text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" id="profile-phone" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" placeholder="+254 7XX XXX XXX" pattern="\+254[0-9]{9}" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-dob" class="block text-gray-700 mb-2">Date of Birth</label>
+                        <input type="date" id="profile-dob" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" max="2007-04-15" />
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-gender" class="block text-gray-700 mb-2">Gender</label>
+                        <select id="profile-gender" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500">
+                            <option value="" disabled>Select Gender</option>
+                            <option value="female" selected>Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Professional Details -->
+                <div>
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Professional Details</h3>
+                    <div class="mb-4">
+                        <label for="profile-city" class="block text-gray-700 mb-2">City</label>
+                        <input type="text" id="profile-city" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" value="Nairobi" />
+                        <small class="text-gray-500">Autocomplete powered by Google Maps API (mock)</small>
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-bio" class="block text-gray-700 mb-2">Bio</label>
+                        <textarea id="profile-bio" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" rows="4" maxlength="200" oninput="updateBioCount()">Experienced cleaner and errand runner in Nairobi. Reliable and friendly!</textarea>
+                        <small class="text-gray-500">Characters left: <span id="bio-count">150</span></small>
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-skills" class="block text-gray-700 mb-2">Skills</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label><input type="checkbox" name="skills" value="Cleaning" checked class="mr-1" /> Cleaning</label>
+                            <label><input type="checkbox" name="skills" value="Errands" checked class="mr-1" /> Errands</label>
+                            <label><input type="checkbox" name="skills" value="Delivery" class="mr-1" /> Delivery</label>
+                            <label><input type="checkbox" name="skills" value="Tutoring" class="mr-1" /> Tutoring</label>
+                            <label><input type="checkbox" name="skills" value="Gardening" class="mr-1" /> Gardening</label>
+                            <label><input type="checkbox" name="skills" value="Cooking" class="mr-1" /> Cooking</label>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="profile-availability" class="block text-gray-700 mb-2">Availability</label>
+                        <select id="profile-availability" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500">
+                            <option value="full-time">Full-Time</option>
+                            <option value="part-time" selected>Part-Time</option>
+                            <option value="weekends">Weekends Only</option>
+                            <option value="custom">Custom Schedule</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Profile Media -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Profile Media</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="mb-4">
+                            <label for="profile-avatar" class="block text-gray-700 mb-2">Profile Picture</label>
+                            <input type="file" id="profile-avatar" class="w-full p-3 border rounded" accept="image/*" onchange="previewAvatar(event)" />
+                            <img id="avatar-preview" src="../assets/img/avatar-placeholder.png" class="mt-2 w-32 h-32 rounded-full border" alt="Profile Preview" />
+                            <small class="text-gray-500">Max size: 5MB (JPG, PNG)</small>
+                        </div>
+                        <div class="mb-4">
+                            <label for="cover-photo" class="block text-gray-700 mb-2">Cover Photo</label>
+                            <input type="file" id="cover-photo" class="w-full p-3 border rounded" accept="image/*" onchange="previewCover(event)" />
+                            <img id="cover-preview" src="../assets/img/cover-placeholder.png" class="mt-2 w-full h-32 object-cover rounded border" alt="Cover Preview" />
+                            <small class="text-gray-500">Recommended: 1200x300px</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacy Settings -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Privacy & Security</h3>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Profile Visibility</label>
+                        <select id="profile-visibility" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500">
+                            <option value="public" selected>Public - Visible to everyone</option>
+                            <option value="clients">Clients Only - Visible to booked clients</option>
+                            <option value="private">Private - Only you can see</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Update Password</label>
+                        <input type="password" id="new-password" placeholder="New Password" class="w-full p-3 mb-3 border rounded focus:ring-2 focus:ring-teal-500" />
+                        <input type="password" id="confirm-password" placeholder="Confirm New Password" class="w-full p-3 border rounded focus:ring-2 focus:ring-teal-500" />
+                        <small id="password-error" class="text-red-500 hidden">Passwords do not match or are too weak.</small>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Two-Factor Authentication</label>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="two-factor" class="mr-2" />
+                            <label for="two-factor">Enable 2FA via SMS or Email</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notification Preferences -->
+                <div class="col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-semibold text-blue-900 mb-4">Notification Preferences</h3>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">Email Notifications</label>
+                        <div class="flex flex-col gap-2">
+                            <label><input type="checkbox" name="notifications" value="job-updates" checked class="mr-2" /> Job Updates</label>
+                            <label><input type="checkbox" name="notifications" value="messages" checked class="mr-2" /> Messages</label>
+                            <label><input type="checkbox" name="notifications" value="payments" class="mr-2" /> Payments</label>
+                            <label><input type="checkbox" name="notifications" value="promotions" class="mr-2" /> Promotions</label>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 mb-2">SMS Notifications</label>
+                        <div class="flex flex-col gap-2">
+                            <label><input type="checkbox" name="sms-notifications" value="urgent" checked class="mr-2" /> Urgent Alerts</label>
+                            <label><input type="checkbox" name="sms-notifications" value="bookings" class="mr-2" /> New Bookings</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="col-span-1 md:col-span-2 flex gap-4">
+                    <button type="submit" class="btn btn-gradient-primary text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition-all flex-1">
+                        <i class="fas fa-save me-2"></i> Save Changes
+                    </button>
+                    <button type="button" id="cancel-btn" class="btn btn-gradient-secondary text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition-all flex-1">
+                        <i class="fas fa-times me-2"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient text-white py-6 fade-in">
+        <div class="container mx-auto text-center">
+            <p class="mb-4">© 2025 Connect. All rights reserved.</p>
+            <div class="flex justify-center space-x-4">
+                <a href="about.html" class="hover:underline">About</a>
+                <a href="contact.html" class="hover:underline">Contact</a>
+                <a href="faq.html" class="hover:underline">FAQ</a>
+                <a href="pricing.html" class="hover:underline">Pricing</a>
+                <a href="safety.html" class="hover:underline">Safety</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Bio Character Count
+        function updateBioCount() {
+            const bio = document.getElementById('profile-bio');
+            const count = document.getElementById('bio-count');
+            count.textContent = 200 - bio.value.length;
+        }
+
+        // Image Previews
+        function previewAvatar(event) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                document.getElementById('avatar-preview').src = reader.result;
+            };
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
+        function previewCover(event) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                document.getElementById('cover-preview').src = reader.result;
+            };
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
+        // Password Validation
+        function validatePassword() {
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const error = document.getElementById('password-error');
+
+            if (newPassword || confirmPassword) {
+                if (newPassword.length < 8) {
+                    error.textContent = 'Password must be at least 8 characters long.';
+                    error.classList.remove('hidden');
+                    return false;
+                }
+                if (newPassword !== confirmPassword) {
+                    error.textContent = 'Passwords do not match.';
+                    error.classList.remove('hidden');
+                    return false;
+                }
+                error.classList.add('hidden');
+            }
+            return true;
+        }
+
+        // Form Submission
+        document.getElementById('edit-profile-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validatePassword()) {
+                alert('Profile updated successfully!');
+                // In a real app, submit form data to backend
+            }
+        });
+
+        // Cancel Button
+        document.getElementById('cancel-btn').addEventListener('click', () => {
+            if (confirm('Discard changes and return to profile?')) {
+                window.location.href = 'profile.html';
+            }
+        });
+
+        // Initialize Bio Count
+        updateBioCount();
+    </script>
+</body>
+</html>

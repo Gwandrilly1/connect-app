@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Connect Support - Get help with jobs, payments, or accessibility in Kenya.">
+  <meta name="keywords" content="support, jobs, Kenya, M-Pesa, accessibility, Nairobi">
+  <title>Support - Connect</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome (for icons) -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg fixed-top text-white shadow-lg" style="background: linear-gradient(to right, #1E40AF, #2563EB)">
+    <div class="container">
+      <a class="navbar-brand text-white fw-bold fs-4" href="../index.html">Connect</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="../index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="jobs.html">Jobs</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="faq.html">FAQ</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="pricing.html">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="safety.html">Safety</a></li>
+          <li class="nav-item"><a class="nav-link text-white" href="contact.html">Contact</a></li>
+          <li class="nav-item">
+            <img src="../assets/img/avatar-placeholder.png" alt="Profile" class="rounded-full w-8 h-8 border-2 border-white hover:border-orange-400">
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Support Section -->
+  <section id="support" class="container mx-auto px-4 py-20 fade-in">
+    <h2 class="text-3xl font-bold text-blue-800 text-center mb-6">Support</h2>
+    <p class="text-center text-gray-600 mb-8">We're here to help with jobs, payments, accessibility, and more.</p>
+
+    <!-- Quick Actions -->
+    <div class="flex flex-wrap justify-center gap-4 mb-10">
+      <button class="btn text-white px-5 py-2 rounded-lg shadow-lg" style="background: linear-gradient(to right, #14B8A6, #059669)">
+        <i class="fas fa-comments mr-2"></i> Start Live Chat
+      </button>
+      <a href="mailto:support@connect.co.ke" class="btn text-white px-5 py-2 rounded-lg shadow-lg" style="background: linear-gradient(to right, #F97316, #EA580C)">
+        <i class="fas fa-envelope mr-2"></i> Email Us
+      </a>
+    </div>
+
+    <!-- Ticket Form -->
+    <form id="support-form" class="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
+      <h3 class="text-xl font-semibold text-blue-800 mb-4">Submit a Ticket</h3>
+      <div class="mb-3">
+        <label for="support-name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="support-name" required title="Enter your full name">
+      </div>
+      <div class="mb-3">
+        <label for="support-email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="support-email" required title="Enter a valid email">
+      </div>
+      <div class="mb-3">
+        <label for="support-issue" class="form-label">Issue Type</label>
+        <select class="form-select" id="support-issue" required>
+          <option>Job Dispute</option>
+          <option>Payment Issue</option>
+          <option>Account Problem</option>
+          <option>Accessibility</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="support-message" class="form-label">Message</label>
+        <textarea class="form-control" id="support-message" rows="4" required placeholder="Describe your issue..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-warning w-full text-white font-semibold">Submit Ticket</button>
+    </form>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content p-4">
+          <div class="modal-header border-0">
+            <h5 class="modal-title text-green-600">✅ Ticket Submitted!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-gray-700">
+            Thanks for reaching out. Our support team will respond within 24 hours.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="mt-10 max-w-3xl mx-auto">
+      <h3 class="text-xl font-semibold text-blue-800 mb-4 text-center">Frequently Asked Questions</h3>
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq1">How do I resolve a job dispute?</button></h2>
+          <div id="faq1" class="accordion-collapse collapse">
+            <div class="accordion-body">Submit a ticket with job details and communication logs. We’ll mediate within 24 hrs.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq2">Why is my payment delayed?</button></h2>
+          <div id="faq2" class="accordion-collapse collapse">
+            <div class="accordion-body">Check your M-Pesa account. Payment may be pending due to incomplete job confirmation.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#faq3">Is Connect accessible?</button></h2>
+          <div id="faq3" class="accordion-collapse collapse">
+            <div class="accordion-body">Yes, we support large fonts, screen readers, and keyboard navigation.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accessibility -->
+    <div class="mt-12 max-w-2xl mx-auto text-center">
+      <h3 class="text-xl font-semibold text-blue-800 mb-2">Accessibility Support</h3>
+      <p class="text-gray-600 mb-4">Our platform is inclusive. Here’s how you can enhance usability:</p>
+      <ul class="list-disc list-inside text-left text-gray-700">
+        <li>Zoom in: Press Ctrl + or Cmd +</li>
+        <li>Use screen readers like VoiceOver or TalkBack</li>
+        <li>Enable dark mode in your browser</li>
+        <li>Contact us for personalized help</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-white text-center py-6 mt-10 fade-in" style="background: linear-gradient(to right, #1E40AF, #2563EB)">
+    <p class="mb-2">© 2025 Connect. All rights reserved.</p>
+    <div class="flex justify-center space-x-6">
+      <a href="about.html" class="hover:underline">About</a>
+      <a href="faq.html" class="hover:underline">FAQ</a>
+      <a href="pricing.html" class="hover:underline">Pricing</a>
+      <a href="safety.html" class="hover:underline">Safety</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('support-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const modal = new bootstrap.Modal(document.getElementById('ticketModal'));
+      modal.show();
+      this.reset();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Mutinda1234",
+      "email": "Mutinda1234@gmail.com",
+      "password": "$2b$10$EiOdzl3h.ZBywYaJ7l7y1O7ZvI1f/G/1tkyzDlzfptEgg7mXIka7G",
+      "role": "user",
+      "walletBalance": 1500,
+      "mpesaLinked": true,
+      "notifications": [],
+      "messages": [],
+      "bookings": 0,
+      "earnings": 0,
+      "skills": []
+    },
+    {
+      "id": 2,
+      "name": "Mutinda1234",
+      "email": "Mutinda1234@gmail.com",
+      "password": "$2b$10$zfufGM9EVJfz2ozkRBW02O0tq/ZhId2x648slbVqQ3rb85Ff.c/cm",
+      "role": "user",
+      "walletBalance": 1500,
+      "mpesaLinked": true,
+      "notifications": [],
+      "messages": [],
+      "bookings": 0,
+      "earnings": 0,
+      "skills": []
+    }
+  ],
+  "bookings": [],
+  "jobs": [
+    {
+      "id": 1,
+      "title": "Boda-boda Delivery",
+      "company": "QuickRides",
+      "location": "Nairobi",
+      "pay": 2000,
+      "rating": 4,
+      "urgency": "Urgent",
+      "premium": true,
+      "skills": "Delivery, Navigation",
+      "description": "Deliver packages across Nairobi.",
+      "posted": "1 hr ago",
+      "category": "Delivery",
+      "tags": [
+        "Part-Time",
+        "Freelance"
+      ],
+      "payUnit": "day",
+      "postedBy": 1
+    }
+  ],
+  "examples": []
+}

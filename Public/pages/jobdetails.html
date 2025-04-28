@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find jobs in Kenya - errands, cleaning, deliveries, and more on Connect.">
+    <meta name="keywords" content="jobs, Kenya, Nairobi, Mombasa, Kisumu, errands, cleaning, delivery">
+    <title>Jobs - Connect</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --gradient-primary: linear-gradient(to right, #14B8A6, #1E40AF);
+            --text-color: #1f2937;
+        }
+        .fade-in { animation: fadeIn 1s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .job-card { transition: transform 0.3s; }
+        .job-card:hover { transform: scale(1.05); }
+        .dark-mode { background-color: #1f2937; color: #f3f4f6; }
+        .dark-mode .bg-white { background-color: #374151; }
+        .dark-mode .text-gray-600 { color: #d1d5db; }
+        #map-view { height: 500px; display: none; }
+        .high-contrast { filter: contrast(1.5); }
+        .btn-gradient-primary {
+            background: var(--gradient-primary);
+            color: white;
+            transition: opacity 0.3s;
+        }
+        .btn-gradient-primary:hover { opacity: 0.9; }
+        .stat-card {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .dark-mode .stat-card { background: #374151; }
+        .focus-visible { outline: 2px solid #4FD1C5; outline-offset: 2px; }
+        .suggestions { position: absolute; background: white; border: 1px solid #e5e7eb; max-height: 200px; overflow-y: auto; z-index: 10; }
+        .suggestion-item:hover { background: #f3f4f6; cursor: pointer; }
+        .tag { display: inline-block; background: #e5e7eb; color: #1f2937; padding: 4px 8px; border-radius: 12px; margin: 2px; cursor: pointer; }
+        .tag:hover { background: #d1d5db; }
+        .spotlight { background: #f0fdf4; border: 1px solid #4FD1C5; }
+        .dark-mode .spotlight { background: #374151; border-color: #6EE7B7; }
+        @media (prefers-reduced-motion: reduce) { .fade-in, .job-card:hover { animation: none; transform: none; } }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Jobs Section -->
+    <section id="jobs" class="container mx-auto px-4 py-12 pt-24 fade-in">
+        <h2 class="text-3xl font-bold text-blue-800 mb-4 text-center" data-i18n="available_jobs">Available Jobs</h2>
+        <div class="h-1 w-24 mx-auto mb-6" style="background: var(--gradient-primary)"></div>
+        <div id="spotlight" class="spotlight p-4 mb-6 rounded-lg text-center">
+            <h3 class="text-lg font-semibold" data-i18n="category_spotlight">Category of the Day: Cleaning</h3>
+            <p data-i18n="spotlight_desc">Explore top cleaning jobs in your area!</p>
+        </div>
+        <div class="mb-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <div class="relative flex-1">
+                <input type="text" id="searchInput" class="p-2 border rounded w-full focus:ring-2 focus:ring-teal-500 focus-visible" placeholder="Search jobs, skills, or locations..." aria-label="Search jobs">
+                <button id="voiceSearch" class="absolute right-2 top-2 text-gray-600 hover:text-teal-600" aria-label="Voice search">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                <div id="suggestions" class="suggestions hidden w-full rounded-b-lg"></div>
+            </div>
+            <select id="categoryFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Filter by category">
+                <option value="All">All Categories</option>
+                <option value="Errands">Errands</option>
+                <option value="Labor">Labor</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="Delivery">Delivery</option>
+                <option value="Gardening">Gardening</option>
+                <option value="Tutoring">Tutoring</option>
+                <option value="Painting">Painting</option>
+                <option value="Tech Help">Tech Help</option>
+            </select>
+            <select id="locationFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Filter by location">
+                <option value="All">All Locations</option>
+                <option value="Nairobi">Nairobi</option>
+                <option value="Mombasa">Mombasa</option>
+                <option value="Kisumu">Kisumu</option>
+            </select>
+            <select id="sortFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Sort jobs">
+                <option value="default">Sort By</option>
+                <option value="price-asc">Price: Low to High</option>
+                <option value="price-desc">Price: High to Low</option>
+                <option value="rating-desc">Rating: High to Low</option>
+                <option value="premium">Premium First</option>
+            </select>
+            <input type="range" id="payRange" min="500" max="5000" value="5000" class="p-2" aria-label="Filter by pay range">
+            <select id="urgencyFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Filter by urgency">
+                <option value="All">All Urgency</option>
+                <option value="Urgent">Urgent</option>
+                <option value="Flexible">Flexible</option>
+            </select>
+            <select id="savedFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Filter by saved jobs">
+                <option value="All">All Jobs</option>
+                <option value="Saved">Saved Jobs</option>
+            </select>
+            <select id="tagFilter" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Filter by job type">
+                <option value="All">All Types</option>
+                <option value="Part-Time">Part-Time</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Full-Time">Full-Time</option>
+            </select>
+            <button id="resetFilters" class="p-2 bg-red-600 text-white rounded hover:bg-red-700 focus-visible" aria-label="Reset filters" data-i18n="reset_filters">Reset</button>
+            <button id="toggleMap" class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus-visible" aria-label="Toggle map view" data-i18n="map_view">Map View</button>
+            <button id="toggleDarkMode" class="p-2 bg-gray-600 text-white rounded hover:bg-gray-700 focus-visible" aria-label="Toggle dark mode" data-i18n="dark_mode">Dark Mode</button>
+            <button id="toggleContrast" class="p-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 focus-visible" aria-label="Toggle high contrast" data-i18n="high_contrast">Contrast</button>
+            <select id="languageToggle" class="p-2 border rounded focus:ring-2 focus:ring-teal-500 focus-visible" aria-label="Select language">
+                <option value="en">English</option>
+                <option value="sw">Swahili</option>
+            </select>
+        </div>
+        <div class="mb-6 flex justify-between items-center">
+            <span id="jobCounter" class="text-gray-600" data-i18n="showing_jobs">Showing 40 jobs</span>
+            <button id="exportJobs" class="p-2 bg-green-600 text-white rounded hover:bg-green-700 focus-visible" data-i18n="export_jobs">Export as CSV</button>
+        </div>
+        <div id="recommendations" class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        <div id="map-view"></div>
+        <div id="jobs-container" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Service Bundle Card -->
+            <div class="stat-card p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold" data-i18n="service_bundle">Service Bundle</h3>
+                <select multiple class="p-2 border rounded w-full mb-2">
+                    <option>Fundi</option>
+                    <option>Cleaner</option>
+                    <option>Boda Boda</option>
+                </select>
+                <p data-i18n="bundle_discount">Save 10% on bundles!</p>
+                <button class="btn btn-gradient-primary px-4 py-2 rounded-lg" data-i18n="book_bundle">Book Bundle</button>
+            </div>
+        </div>
+        <div class="mt-6 flex justify-center space-x-2">
+            <button id="prevPage" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus-visible" aria-label="Previous page" data-i18n="previous">Previous</button>
+            <span id="pageInfo" class="py-2 px-4">Page 1 - Showing 1-15 of 40 jobs</span>
+            <button id="nextPage" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus-visible" aria-label="Next page" data-i18n="next">Next</button>
+        </div>
+        <div class="mt-4 text-center">
+            <button id="subscribeAlerts" class="px-4 py-2 bg-teal-600 text-white rounded hover:bg-teal-700 focus-visible" data-i18n="subscribe_alerts">Subscribe to Job Alerts</button>
+        </div>
+    </section>
+
+    <!-- Job Alerts Modal -->
+    <div class="modal fade" id="jobAlertsModal" tabindex="-1" aria-labelledby="jobAlertsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jobAlertsModalLabel" data-i18n="job_alerts">Job Alerts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="alertsForm">
+                        <div class="mb-3">
+                            <label for="alertCategory" class="form-label" data-i18n="category">Category</label>
+                            <select id="alertCategory" class="form-select">
+                                <option value="All">All Categories</option>
+                                <option value="Errands">Errands</option>
+                                <option value="Labor">Labor</option>
+                                <option value="Cleaning">Cleaning</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Gardening">Gardening</option>
+                                <option value="Tutoring">Tutoring</option>
+                                <option value="Painting">Painting</option>
+                                <option value="Tech Help">Tech Help</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alertLocation" class="form-label" data-i18n="location">Location</label>
+                            <select id="alertLocation" class="form-select">
+                                <option value="All">All Locations</option>
+                                <option value="Nairobi">Nairobi</option>
+                                <option value="Mombasa">Mombasa</option>
+                                <option value="Kisumu">Kisumu</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alertPay" class="form-label" data-i18n="min_pay">Minimum Pay (KES)</label>
+                            <input type="number" id="alertPay" class="form-control" min="500" value="500">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Close</button>
+                    <button type="button" class="btn btn-gradient-primary" onclick="saveAlerts()" data-i18n="save">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-8" style="background: var(--gradient-primary)">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4" data-i18n="connect">Connect</h3>
+                    <p class="text-sm" data-i18n="connect_desc">Connecting you with trusted services and job opportunities across Kenya.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4" data-i18n="links">Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="hover:underline" data-i18n="about">About</a></li>
+                        <li><a href="contact.html" class="hover:underline" data-i18n="contact">Contact</a></li>
+                        <li><a href="faq.html" class="hover:underline" data-i18n="faq">FAQ</a></li>
+                        <li><a href="pricing.html" class="hover:underline" data-i18n="pricing">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4" data-i18n="services">Services</h3>
+                    <ul class="space-y-2">
+                        <li><a href="jobs.html?category=cleaning" class="hover:underline" data-i18n="cleaning">Cleaning</a></li>
+                        <li><a href="jobs.html?category=delivery" class="hover:underline" data-i18n="delivery">Delivery</a></li>
+                        <li><a href="jobs.html?category=errands" class="hover:underline" data-i18n="errands">Errands</a></li>
+                        <li><a href="jobs.html?category=tutoring" class="hover:underline" data-i18n="tutoring">Tutoring</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4" data-i18n="follow_us">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-white hover:text-amber-400 focus-visible"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400 focus-visible"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400 focus-visible"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-amber-400 focus-visible"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Mock job data (40 unique jobs)
+        const jobs = [
+            { id: 1, title: "Boda-boda Delivery", company: "QuickRides", location: "Nairobi", pay: 2000, rating: 4, urgency: "Urgent", premium: true, skills: "Delivery, Navigation", description: "Deliver packages across Nairobi using a boda-boda.", posted: "1 hr ago", category: "Delivery", tags: ["Part-Time", "Freelance"], payUnit: "day" },
+            { id: 2, title: "House Cleaner", company: "Sparkle Homes", location: "Nairobi", pay: 1500, rating: 5, urgency: "Flexible", premium: false, skills: "Cleaning, Organization", description: "Deep clean residential homes in upscale Nairobi estates.", posted: "3 hrs ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
+            { id: 3, title: "Mama Mboga Errands", company: "Local Mart", location: "Mombasa", pay: 1000, rating: 3, urgency: "Flexible", premium: false, skills: "Shopping, Time Management", description: "Purchase and deliver fresh produce for clients.", posted: "5 hrs ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
+            { id: 4, title: "Fundi for Plumbing", company: "FixIt Pros", location: "Kisumu", pay: 2500, rating: 4, urgency: "Urgent", premium: true, skills: "Plumbing, Repairs", description: "Repair leaks and install pipes in Kisumu homes.", posted: "1 day ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
+            { id: 5, title: "Garden Trimming", company: "GreenSpaces", location: "Nairobi", pay: 1800, rating: 5, urgency: "Flexible", premium: false, skills: "Gardening, Landscaping", description: "Trim hedges and maintain lawns in Nairobi gardens.", posted: "2 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
+            { id: 6, title: "Math Tutor", company: "EduConnect", location: "Mombasa", pay: 3000, rating: 4, urgency: "Flexible", premium: true, skills: "Teaching, Math", description: "Tutor high school students in mathematics.", posted: "3 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
+            { id: 7, title: "House Painter", company: "ColorWorks", location: "Kisumu", pay: 2200, rating: 3, urgency: "Flexible", premium: false, skills: "Painting, Attention to Detail", description: "Paint interior walls for residential clients.", posted: "4 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            { id: 8, title: "Phone Repair", company: "TechFix", location: "Nairobi", pay: 3500, rating: 5, urgency: "Urgent", premium: true, skills: "Electronics, Customer Service", description: "Repair smartphones and tablets for clients.", posted: "5 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
+            { id: 9, title: "Food Delivery", company: "TastyBites", location: "Mombasa", pay: 1800, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Time Management", description: "Deliver restaurant orders to customers.", posted: "6 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
+            { id: 10, title: "Office Cleaner", company: "CleanCorp", location: "Kisumu", pay: 1400, rating: 3, urgency: "Flexible", premium: false, skills: "Cleaning, Efficiency", description: "Clean corporate offices in Kisumu CBD.", posted: "7 days ago", category: "Cleaning", tags: ["Full-Time"], payUnit: "day" },
+            { id: 11, title: "Market Runner", company: "ShopEasy", location: "Nairobi", pay: 1200, rating: 4, urgency: "Urgent", premium: false, skills: "Shopping, Communication", description: "Run errands for busy professionals.", posted: "2 hrs ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
+            { id: 12, title: "Construction Helper", company: "BuildRight", location: "Mombasa", pay: 2700, rating: 5, urgency: "Flexible", premium: true, skills: "Construction, Strength", description: "Assist in building projects at Mombasa sites.", posted: "1 day ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
+            { id: 13, title: "Lawn Mowing", company: "GreenCare", location: "Kisumu", pay: 1600, rating: 4, urgency: "Flexible", premium: false, skills: "Gardening, Equipment Use", description: "Mow lawns and maintain outdoor spaces.", posted: "2 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
+            { id: 14, title: "English Tutor", company: "LearnFast", location: "Nairobi", pay: 2800, rating: 5, urgency: "Flexible", premium: true, skills: "Teaching, Communication", description: "Teach English to secondary school students.", posted: "3 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
+            { id: 15, title: "Fence Painter", company: "PaintPro", location: "Mombasa", pay: 2000, rating: 4, urgency: "Flexible", premium: false, skills: "Painting, Precision", description: "Paint fences for residential properties.", posted: "4 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            { id: 16, title: "Laptop Setup", company: "TechAid", location: "Kisumu", pay: 3200, rating: 3, urgency: "Urgent", premium: false, skills: "IT, Troubleshooting", description: "Set up laptops for small businesses.", posted: "5 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
+            { id: 17, title: "Parcel Delivery", company: "SwiftSend", location: "Nairobi", pay: 1900, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Customer Service", description: "Deliver parcels within Nairobi CBD.", posted: "6 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
+            { id: 18, title: "Apartment Cleaning", company: "NeatNest", location: "Mombasa", pay: 1300, rating: 5, urgency: "Flexible", premium: false, skills: "Cleaning, Detail-Oriented", description: "Clean apartments for vacation rentals.", posted: "7 days ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
+            { id: 19, title: "Bill Payment Runner", company: "PayEasy", location: "Kisumu", pay: 1100, rating: 3, urgency: "Urgent", premium: false, skills: "Errands, Reliability", description: "Pay utility bills for clients.", posted: "1 hr ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
+            { id: 20, title: "Furniture Mover", company: "MoveIt", location: "Nairobi", pay: 2600, rating: 4, urgency: "Flexible", premium: true, skills: "Lifting, Teamwork", description: "Assist in moving furniture for relocations.", posted: "2 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
+            { id: 21, title: "Tree Planting", company: "EcoGrow", location: "Mombasa", pay: 1700, rating: 5, urgency: "Flexible", premium: false, skills: "Gardening, Environmental Care", description: "Plant trees for community projects.", posted: "3 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
+            { id: 22, title: "Science Tutor", company: "StudySmart", location: "Kisumu", pay: 2900, rating: 4, urgency: "Flexible", premium: true, skills: "Teaching, Science", description: "Tutor students in biology and chemistry.", posted: "4 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
+            { id: 23, title: "Wall Painter", company: "BrightCoats", location: "Nairobi", pay: 2100, rating: 3, urgency: "Flexible", premium: false, skills: "Painting, Creativity", description: "Paint exterior walls for commercial buildings.", posted: "5 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            { id: 24, title: "Wi-Fi Setup", company: "NetConnect", location: "Mombasa", pay: 3400, rating: 5, urgency: "Urgent", premium: true, skills: "Networking, IT", description: "Install Wi-Fi networks for offices.", posted: "6 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
+            { id: 25, title: "Grocery Delivery", company: "FreshCart", location: "Kisumu", pay: 1700, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Customer Service", description: "Deliver groceries to residential clients.", posted: "7 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
+            { id: 26, title: "Car Wash", company: "ShineAuto", location: "Nairobi", pay: 1600, rating: 3, urgency: "Flexible", premium: false, skills: "Cleaning, Vehicle Care", description: "Wash and polish vehicles at a car wash.", posted: "1 hr ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
+            { id: 27, title: "Dry Cleaning Pickup", company: "CleanPress", location: "Mombasa", pay: 1300, rating: 5, urgency: "Flexible", premium: false, skills: "Errands, Organization", description: "Pick up and deliver dry cleaning.", posted: "2 days ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
+            { id: 28, title: "Carpenter Assistant", company: "WoodCraft", location: "Kisumu", pay: 2400, rating: 4, urgency: "Flexible", premium: false, skills: "Carpentry, Teamwork", description: "Assist in crafting wooden furniture.", posted: "3 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
+            { id: 29, title: "Flower Bed Setup", company: "BloomEasy", location: "Nairobi", pay: 1900, rating: 3, urgency: "Flexible", premium: false, skills: "Gardening, Design", description: "Design and plant flower beds.", posted: "4 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
+            { id: 30, title: "Swahili Tutor", company: "LinguaLearn", location: "Mombasa", pay: 2700, rating: 5, urgency: "Flexible", premium: true, skills: "Teaching, Swahili", description: "Teach Swahili to non-native speakers.", posted: "5 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
+            { id: 31, title: "Room Painter", company: "ColorSplash", location: "Kisumu", pay: 2300, rating: 4, urgency: "Flexible", premium: false, skills: "Painting, Finishing", description: "Paint interior rooms for hotels.", posted: "6 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            { id: 32, title: "Software Installation", company: "SoftPeak", location: "Nairobi", pay: 3600, rating: 3, urgency: "Urgent", premium: false, skills: "IT, Software", description: "Install software for corporate clients.", posted: "7 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
+            { id: 33, title: "Courier Service", company: "SpeedyMail", location: "Mombasa", pay: 2000, rating: 5, urgency: "Flexible", premium: false, skills: "Delivery, Logistics", description: "Deliver documents across Mombasa.", posted: "1 hr ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
+            { id: 34, title: "Window Cleaner", company: "ClearView", location: "Kisumu", pay: 1500, rating: 4, urgency: "Flexible", premium: false, skills: "Cleaning, Safety", description: "Clean windows for commercial buildings.", posted: "2 days ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
+            { id: 35, title: "Document Delivery", company: "DocRun", location: "Nairobi", pay: 1400, rating: 3, urgency: "Urgent", premium: false, skills: "Errands, Punctuality", description: "Deliver legal documents for law firms.", posted: "3 days ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
+            { id: 36, title: "Electrician Helper", company: "SparkFix", location: "Mombasa", pay: 2800, rating: 5, urgency: "Flexible", premium: true, skills: "Electrical, Safety", description: "Assist in electrical installations.", posted: "4 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
+            { id: 37, title: "Hedge Trimming", company: "TrimTidy", location: "Kisumu", pay: 2000, rating: 4, urgency: "Flexible", premium: false, skills: "Gardening, Precision", description: "Trim hedges for residential estates.", posted: "5 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
+            { id: 38, title: "History Tutor", company: "PastLearn", location: "Nairobi", pay: 3000, rating: 3, urgency: "Flexible", premium: false, skills: "Teaching, History", description: "Tutor students in Kenyan history.", posted: "6 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
+            { id: 39, title: "Shop Painter", company: "VividColors", location: "Mombasa", pay: 2400, rating: 5, urgency: "Flexible", premium: false, skills: "Painting, Design", description: "Paint retail shops for branding.", posted: "7 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            { id: 40, title: "Printer Repair", company: "PrintPro", location: "Kisumu", pay: 3700, rating: 4, urgency: "Urgent", premium: false, skills: "Electronics, Repair", description: "Repair office printers for businesses.", posted: "1 hr ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" }
+        ];
+
+        // Mock suggestions
+        const suggestions = ["Boda-boda Delivery", "House Cleaner", "Nairobi", "Fundi", "Tutoring", "Painter", "Delivery", "Kisumu", "Tech Support", "Gardening"];
+
+        // Language translations
+        const translations = {
+            en: {
+                available_jobs: "Available Jobs",
+                category_spotlight: "Category of the Day: Cleaning",
+                spotlight_desc: "Explore top cleaning jobs in your area!",
+                service_bundle: "Service Bundle",
+                bundle_discount: "Save 10% on bundles!",
+                book_bundle: "Book Bundle",
+                previous: "Previous",
+                next: "Next",
+                subscribe_alerts: "Subscribe to Job Alerts",
+                job_alerts: "Job Alerts",
+                category: "Category",
+                location: "Location",
+                min_pay: "Minimum Pay (KES)",
+                close: "Close",
+                save: "Save",
+                reset_filters: "Reset",
+                map_view: "Map View",
+                dark_mode: "Dark Mode",
+                high_contrast: "Contrast",
+                export_jobs: "Export as CSV",
+                showing_jobs: "Showing {count} jobs",
+                connect: "Connect",
+                connect_desc: "Connecting you with trusted services and job opportunities across Kenya.",
+                links: "Links",
+                about: "About",
+                contact: "Contact",
+                faq: "FAQ",
+                pricing: "Pricing",
+                services: "Services",
+                cleaning: "Cleaning",
+                delivery: "Delivery",
+                errands: "Errands",
+                tutoring: "Tutoring",
+                follow_us: "Follow Us",
+                rate_job: "Rate Job"
+            },
+            sw: {
+                available_jobs: "Kazi Zinazopatikana",
+                category_spotlight: "Kategoria ya Siku: Kusafisha",
+                spotlight_desc: "Chunguza kazi za kusafisha za juu katika eneo lako!",
+                service_bundle: "Mkusanyiko wa Huduma",
+                bundle_discount: "Hifadhi 10% kwenye mikusanyiko!",
+                book_bundle: "Weka Mkusanyiko",
+                previous: "Iliyopita",
+                next: "Inayofuata",
+                subscribe_alerts: "Jiandikishe kwa Arifa za Kazi",
+                job_alerts: "Arifa za Kazi",
+                category: "Kategoria",
+                location: "Mahali",
+                min_pay: "Mshahara wa Chini (KES)",
+                close: "Funga",
+                save: "Hifadhi",
+                reset_filters: "Weka Upya",
+                map_view: "Mwoneo wa Ramani",
+                dark_mode: "Hali ya Giza",
+                high_contrast: "Tofauti ya Juu",
+                export_jobs: "Hamisha kama CSV",
+                showing_jobs: "Inaonyesha kazi {count}",
+                connect: "Unganisha",
+                connect_desc: "Kukuunganisha na huduma za kuaminika na nafasi za kazi kote Kenya.",
+                links: "Viungo",
+                about: "Kuhusu",
+                contact: "Mawasiliano",
+                faq: "Maswali Yanayoulizwa Mara kwa Mara",
+                pricing: "Bei",
+                services: "Huduma",
+                cleaning: "Kusafisha",
+                delivery: "Uwasilishaji",
+                errands: "Shughuli",
+                tutoring: "Kufundisha",
+                follow_us: "Tufuate",
+                rate_job: "Kadiria Kazi"
+            }
+        };
+
+        // Pagination
+        let currentPage = 1;
+        const jobsPerPage = 15;
+
+        // Load jobs
+        function loadJobs(page, filteredJobs) {
+            const start = (page - 1) * jobsPerPage;
+            const end = start + jobsPerPage;
+            const jobsToShow = filteredJobs.slice(start, end);
+            const container = document.getElementById("jobs-container");
+            container.innerHTML = `
+                <div class="stat-card p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold" data-i18n="service_bundle">Service Bundle</h3>
+                    <select multiple class="p-2 border rounded w-full mb-2">
+                        <option>Fundi</option>
+                        <option>Cleaner</option>
+                        <option>Boda Boda</option>
+                    </select>
+                    <p data-i18n="bundle_discount">Save 10% on bundles!</p>
+                    <button class="btn btn-gradient-primary px-4 py-2 rounded-lg" data-i18n="book_bundle">Book Bundle</button>
+                </div>
+            `;
+            jobsToShow.forEach(job => {
+                const isBookmarked = localStorage.getItem(`bookmark-${job.id}`) === "true";
+                const isApplied = localStorage.getItem(`applied-${job.id}`) === "true";
+                const userRating = localStorage.getItem(`rating-${job.id}`) || job.rating;
+                container.innerHTML += `
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card lazy-load"
+                         data-category="${job.category}" data-location="${job.location}" data-pay="${job.pay}"
+                         data-rating="${job.rating}" data-urgency="${job.urgency}" data-premium="${job.premium}"
+                         data-skills="${job.skills}" data-description="${job.description}" data-company="${job.company}"
+                         data-tags="${job.tags.join(',')}">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">${job.title} ${job.premium ? '<span class="badge bg-yellow-400 text-xs text-black ml-2">Premium</span>' : ''}</h3>
+                            <p class="text-gray-600">Company: ${job.company}</p>
+                            <p class="text-gray-500">Location: ${job.location}</p>
+                            <p class="text-teal-600">Pay: KES ${job.pay} / ${job.payUnit}</p>
+                            <p class="text-gray-400 text-sm">Posted: ${job.posted}</p>
+                            <p class="text-yellow-500">Rating: ${"★".repeat(userRating)}${"☆".repeat(5 - userRating)}</p>
+                            <p class="text-red-600 text-sm">${job.urgency === "Urgent" ? "Urgent" : ""}</p>
+                            <p class="text-green-600 text-sm ${isApplied ? '' : 'hidden'}" id="status-${job.id}">Applied</p>
+                            <div class="mt-2 flex flex-wrap gap-2">${job.tags.map(tag => `<span class="tag" onclick="filterByTag('${tag}')">${tag}</span>`).join('')}</div>
+                            <div class="mt-2 flex space-x-2 text-white">
+                                <button class="bg-blue-600 rounded px-4 py-2 focus-visible" onclick="viewDetails(${job.id})">View Details</button>
+                                <button class="bg-teal-600 rounded px-4 py-2 focus-visible" onclick="payMpesa(${job.pay}, ${job.id})">Apply & Pay</button>
+                                <button class="bg-gray-300 text-gray-800 rounded px-2 py-1 focus-visible" onclick="bookmarkJob(${job.id})" id="bookmark-${job.id}">${isBookmarked ? "★" : "☆"}</button>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-600">Skills: ${job.skills}</p>
+                            <button class="mt-2 text-blue-600 text-sm focus-visible" onclick="shareJob(${job.id})">Share Job</button>
+                            ${isApplied ? `
+                                <div class="mt-2">
+                                    <label for="rate-${job.id}" class="text-sm text-gray-600" data-i18n="rate_job">Rate Job:</label>
+                                    <select id="rate-${job.id}" class="p-1 border rounded" onchange="rateJob(${job.id}, this.value)">
+                                        <option value="0">Select Rating</option>
+                                        <option value="1">★</option>
+                                        <option value="2">★★</option>
+                                        <option value="3">★★★</option>
+                                        <option value="4">★★★★</option>
+                                        <option value="5">★★★★★</option>
+                                    </select>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById("pageInfo").textContent = `Page ${page} - Showing ${start + 1}-${Math.min(end, filteredJobs.length)} of ${filteredJobs.length} jobs`;
+            document.getElementById("prevPage").disabled = page === 1;
+            document.getElementById("nextPage").disabled = end >= filteredJobs.length;
+            document.getElementById("jobCounter").textContent = translations[localStorage.getItem("language") || "en"].showing_jobs.replace("{count}", filteredJobs.length);
+            lazyLoadJobs();
+            toggleLanguage(localStorage.getItem("language") || "en");
+        }
+
+        // Filter and sort jobs
+        function filterJobs() {
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const category = document.getElementById("categoryFilter").value;
+            const location = document.getElementById("locationFilter").value;
+            const pay = parseInt(document.getElementById("payRange").value);
+            const urgency = document.getElementById("urgencyFilter").value;
+            const saved = document.getElementById("savedFilter").value;
+            const tag = document.getElementById("tagFilter").value;
+            const sort = document.getElementById("sortFilter").value;
+
+            let filteredJobs = jobs.filter(job => {
+                const matchesSearch = job.title.toLowerCase().includes(search) ||
+                                     job.description.toLowerCase().includes(search) ||
+                                     job.skills.toLowerCase().includes(search) ||
+                                     job.company.toLowerCase().includes(search);
+                const matchesCategory = category === "All" || job.category === category;
+                const matchesLocation = location === "All" || job.location === location;
+                const matchesPay = job.pay <= pay;
+                const matchesUrgency = urgency === "All" || job.urgency === urgency;
+                const matchesSaved = saved === "All" || localStorage.getItem(`bookmark-${job.id}`) === "true";
+                const matchesTag = tag === "All" || job.tags.includes(tag);
+                return matchesSearch && matchesCategory && matchesLocation && matchesPay && matchesUrgency && matchesSaved && matchesTag;
+            });
+
+            if (sort === "price-asc") filteredJobs.sort((a, b) => a.pay - b.pay);
+            else if (sort === "price-desc") filteredJobs.sort((a, b) => b.pay - a.pay);
+            else if (sort === "rating-desc") filteredJobs.sort((a, b) => b.rating - a.rating);
+            else if (sort === "premium") filteredJobs.sort((a, b) => b.premium - a.premium);
+
+            currentPage = 1;
+            loadJobs(currentPage, filteredJobs);
+            updateMap(filteredJobs);
+            loadRecommendations(filteredJobs);
+        }
+
+        // Reset filters
+        document.getElementById("resetFilters").addEventListener("click", () => {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("categoryFilter").value = "All";
+            document.getElementById("locationFilter").value = "All";
+            document.getElementById("sortFilter").value = "default";
+            document.getElementById("payRange").value = 5000;
+            document.getElementById("urgencyFilter").value = "All";
+            document.getElementById("savedFilter").value = "All";
+            document.getElementById("tagFilter").value = "All";
+            filterJobs();
+        });
+
+        // Filter by tag
+        function filterByTag(tag) {
+            document.getElementById("tagFilter").value = tag;
+            filterJobs();
+        }
+
+        // Lazy load job cards
+        function lazyLoadJobs() {
+            const jobCards = document.querySelectorAll(".job-card.lazy-load");
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove("lazy-load");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: "100px" });
+            jobCards.forEach(card => observer.observe(card));
+        }
+
+        // Job recommendations
+        function loadRecommendations(filteredJobs) {
+            const recentSearches = localStorage.getItem("recentSearches") ? JSON.parse(localStorage.getItem("recentSearches")) : [];
+            const savedJobs = jobs.filter(job => localStorage.getItem(`bookmark-${job.id}`) === "true");
+            const recommended = [...savedJobs, ...filteredJobs.filter(job => recentSearches.some(s => job.title.toLowerCase().includes(s.toLowerCase())))]
+                .filter((job, index, self) => index === self.findIndex(j => j.id === job.id))
+                .slice(0, 3);
+            const container = document.getElementById("recommendations");
+            container.innerHTML = recommended.length ? `
+                <h3 class="text-xl font-semibold mb-4" data-i18n="recommended_jobs">Recommended Jobs</h3>
+                ${recommended.map(job => `
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden job-card">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">${job.title} ${job.premium ? '<span class="badge bg-yellow-400 text-xs text-black ml-2">Premium</span>' : ''}</h3>
+                            <p class="text-gray-600">Company: ${job.company}</p>
+                            <p class="text-teal-600">Pay: KES ${job.pay} / ${job.payUnit}</p>
+                            <button class="bg-blue-600 rounded px-4 py-2 text-white focus-visible" onclick="viewDetails(${job.id})">View Details</button>
+                        </div>
+                    </div>
+                `).join('')}
+            ` : '';
+        }
+
+        // Map view
+        let map, markers = [];
+        function initMap() {
+            map = L.map("map-view").setView([-1.2921, 36.8219], 13);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+        }
+
+        function updateMap(filteredJobs) {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            filteredJobs.forEach(job => {
+                const coords = {
+                    Nairobi: [-1.2921, 36.8219],
+                    Mombasa: [-4.0435, 39.6682],
+                    Kisumu: [-0.0917, 34.7680]
+                }[job.location];
+                if (coords) {
+                    const marker = L.marker(coords).addTo(map).bindPopup(job.title);
+                    markers.push(marker);
+                }
+            });
+        }
+
+        // Voice search
+        document.getElementById("voiceSearch").addEventListener("click", () => {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = localStorage.getItem("language") === "sw" ? "sw-KE" : "en-US";
+            recognition.onresult = event => {
+                document.getElementById("searchInput").value = event.results[0][0].transcript;
+                const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+                searches.unshift(event.results[0][0].transcript);
+                localStorage.setItem("recentSearches", JSON.stringify(searches.slice(0, 5)));
+                filterJobs();
+            };
+            recognition.start();
+        });
+
+        // Search suggestions
+        document.getElementById("searchInput").addEventListener("input", () => {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const suggestionsDiv = document.getElementById("suggestions");
+            if (query) {
+                const matches = suggestions.filter(s => s.toLowerCase().includes(query));
+                suggestionsDiv.innerHTML = matches.map(s => `<div class="suggestion-item p-2" onclick="selectSuggestion('${s}')">${s}</div>`).join("");
+                suggestionsDiv.classList.remove("hidden");
+            } else {
+                suggestionsDiv.classList.add("hidden");
+            }
+        });
+
+        function selectSuggestion(value) {
+            document.getElementById("searchInput").value = value;
+            document.getElementById("suggestions").classList.add("hidden");
+            const searches = JSON.parse(localStorage.getItem("recentSearches") || "[]");
+            searches.unshift(value);
+            localStorage.setItem("recentSearches", JSON.stringify(searches.slice(0, 5)));
+            filterJobs();
+        }
+
+        // Toggle map view
+        document.getElementById("toggleMap").addEventListener("click", () => {
+            const mapView = document.getElementById("map-view");
+            const jobsContainer = document.getElementById("jobs-container");
+            mapView.style.display = mapView.style.display === "none" ? "block" : "none";
+            jobsContainer.style.display = mapView.style.display === "none" ? "grid" : "none";
+            if (mapView.style.display === "block" && !map) initMap();
+            filterJobs();
+        });
+
+        // Dark mode
+        document.getElementById("toggleDarkMode").addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+        });
+
+        // High contrast
+        document.getElementById("toggleContrast").addEventListener("click", () => {
+            document.body.classList.toggle("high-contrast");
+            localStorage.setItem("highContrast", document.body.classList.contains("high-contrast"));
+        });
+
+        // Language toggle
+        document.getElementById("languageToggle").addEventListener("change", e => toggleLanguage(e.target.value));
+        function toggleLanguage(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                let text = translations[lang][el.dataset.i18n] || el.textContent;
+                if (el.dataset.i18n === "showing_jobs") {
+                    const count = document.getElementById("jobCounter").textContent.match(/\d+/) || [jobs.length];
+                    text = text.replace("{count}", count[0]);
+                }
+                el.textContent = text;
+            });
+            localStorage.setItem("language", lang);
+        }
+
+        // Pagination
+        document.getElementById("prevPage").addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                filterJobs();
+            }
+        });
+
+        document.getElementById("nextPage").addEventListener("click", () => {
+            currentPage++;
+            filterJobs();
+        });
+
+        // Job actions
+        function viewDetails(id) {
+            window.location.href = `job-details.html?id=${id}`;
+        }
+
+        function payMpesa(amount, id) {
+            alert(`Redirecting to M-Pesa for KES ${amount} payment...`);
+            localStorage.setItem(`applied-${id}`, "true");
+            document.getElementById(`status-${id}`).classList.remove("hidden");
+            filterJobs();
+        }
+
+        function bookmarkJob(id) {
+            const isBookmarked = localStorage.getItem(`bookmark-${id}`) === "true";
+            localStorage.setItem(`bookmark-${id}`, !isBookmarked);
+            document.getElementById(`bookmark-${id}`).textContent = !isBookmarked ? "★" : "☆";
+            filterJobs();
+        }
+
+        function shareJob(id) {
+            const job = jobs.find(j => j.id === id);
+            const text = `Check out this job: ${job.title} in ${job.location} for KES ${job.pay}! Apply on Connect: https://connect.ke/jobs/${id}`;
+            if (navigator.share) {
+                navigator.share({ title: job.title, text, url: `https://connect.ke/jobs/${id}` });
+            } else {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappUrl, "_blank");
+            }
+        }
+
+        function rateJob(id, rating) {
+            localStorage.setItem(`rating-${id}`, rating);
+            filterJobs();
+        }
+
+        // Job alerts
+        document.getElementById("subscribeAlerts").addEventListener("click", () => {
+            new bootstrap.Modal(document.getElementById("jobAlertsModal")).show();
+        });
+
+        function saveAlerts() {
+            const category = document.getElementById("alertCategory").value;
+            const location = document.getElementById("alertLocation").value;
+            const pay = document.getElementById("alertPay").value;
+            localStorage.setItem("jobAlerts", JSON.stringify({ category, location, pay }));
+            alert("Job alerts saved!");
+            bootstrap.Modal.getInstance(document.getElementById("jobAlertsModal")).hide();
+        }
+
+        // Export jobs
+        document.getElementById("exportJobs").addEventListener("click", () => {
+            const filteredJobs = jobs.filter(job => {
+                const search = document.getElementById("searchInput").value.toLowerCase();
+                const category = document.getElementById("categoryFilter").value;
+                const location = document.getElementById("locationFilter").value;
+                const pay = parseInt(document.getElementById("payRange").value);
+                const urgency = document.getElementById("urgencyFilter").value;
+                const saved = document.getElementById("savedFilter").value;
+                const tag = document.getElementById("tagFilter").value;
+                const matchesSearch = job.title.toLowerCase().includes(search) ||
+                                     job.description.toLowerCase().includes(search) ||
+                                     job.skills.toLowerCase().includes(search) ||
+                                     job.company.toLowerCase().includes(search);
+                const matchesCategory = category === "All" || job.category === category;
+                const matchesLocation = location === "All" || job.location === location;
+                const matchesPay = job.pay <= pay;
+                const matchesUrgency = urgency === "All" || job.urgency === urgency;
+                const matchesSaved = saved === "All" || localStorage.getItem(`bookmark-${job.id}`) === "true";
+                const matchesTag = tag === "All" || job.tags.includes(tag);
+                return matchesSearch && matchesCategory && matchesLocation && matchesPay && matchesUrgency && matchesSaved && matchesTag;
+            });
+            const csv = [
+                "ID,Title,Company,Location,Pay,Category,Urgency,Skills,Tags",
+                ...filteredJobs.map(job => `${job.id},${job.title},${job.company},${job.location},${job.pay},${job.category},${job.urgency},${job.skills},${job.tags.join(';')}`)
+            ].join("\n");
+            const blob = new Blob([csv], { type: "text/csv" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "jobs.csv";
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Initialize
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("darkMode") === "true") document.body.classList.add("dark-mode");
+            if (localStorage.getItem("highContrast") === "true") document.body.classList.add("high-contrast");
+            document.getElementById("searchInput").addEventListener("input", filterJobs);
+            document.getElementById("categoryFilter").addEventListener("change", filterJobs);
+            document.getElementById("locationFilter").addEventListener("change", filterJobs);
+            document.getElementById("payRange").addEventListener("input", filterJobs);
+            document.getElementById("urgencyFilter").addEventListener("change", filterJobs);
+            document.getElementById("savedFilter").addEventListener("change", filterJobs);
+            document.getElementById("tagFilter").addEventListener("change", filterJobs);
+            document.getElementById("sortFilter").addEventListener("change", filterJobs);
+            loadJobs(currentPage, jobs);
+        });
+    </script>
