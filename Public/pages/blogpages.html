@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Read detailed blog posts on Connect – Tips, careers, and earning guides in Kenya." />
+    <title>Blog Details - Connect</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Shared Blog Data -->
+    <script src="blogsData.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Blog Content -->
+    <section class="container mx-auto px-4 py-12 pt-24">
+        <div class="max-w-4xl mx-auto">
+            <a href="blog.html" class="text-blue-600 hover:underline"><i class="fas fa-arrow-left mr-2"></i>Back to Blogs</a>
+            <h1 class="text-4xl font-bold text-blue-900 mt-4" id="blog-title">Blog Title</h1>
+            <p class="text-sm text-gray-500 mt-2" id="blog-meta">By Connect • April 29, 2025</p>
+            <div class="h-1 w-24 my-6 bg-gradient-to-r from-orange-400 to-pink-500"></div>
+            <article id="blog-content" class="prose prose-lg max-w-none">
+                <!-- Dynamic blog content will be loaded here -->
+            </article>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <p class="text-sm">Connecting you with trusted services and job opportunities across Kenya.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="about.html" class="hover:underline">About</a></li>
+                        <li><a href="contact.html" class="hover:underline">Contact</a></li>
+                        <li><a href="faq.html" class="hover:underline">FAQ</a></li>
+                        <li><a href="pricing.html" class="hover:underline">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Services</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="jobs.html?category=cleaning" class="hover:underline">Cleaning</a></li>
+                        <li><a href="jobs.html?category=delivery" class="hover:underline">Delivery</a></li>
+                        <li><a href="jobs.html?category=errands" class="hover:underline">Errands</a></li>
+                        <li><a href="jobs.html?category=tutoring" class="hover:underline">Tutoring</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold mb-2">Newsletter</h3>
+                        <form id="newsletterForm">
+                            <input type="email" id="newsletterEmail" placeholder="you@example.com" class="w-full px-4 py-2 rounded-lg text-gray-800 focus:ring-2 focus:ring-teal-500" required>
+                            <button type="submit" class="bg-white text-teal-500 px-4 py-2 rounded-lg hover:bg-gray-100 transition mt-2 w-full">Subscribe</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Get blog from URL (e.g., blogpages.html?post=remote-job)
+        const params = new URLSearchParams(window.location.search);
+        const postId = params.get("post") || "remote-job";
+
+        // Set content
+        const blog = blogs[postId];
+        if (blog) {
+            document.getElementById("blog-title").textContent = blog.title;
+            document.getElementById("blog-meta").textContent = `By ${blog.author} • ${blog.date}`;
+            document.getElementById("blog-content").innerHTML = blog.content;
+        } else {
+            document.getElementById("blog-title").textContent = "Blog Not Found";
+            document.getElementById("blog-content").innerHTML = `<p class='text-red-500'>Sorry, the blog post you're looking for doesn't exist.</p>`;
+        }
+
+        // Newsletter subscription
+        document.getElementById("newsletterForm").addEventListener("submit", e => {
+            e.preventDefault();
+            const email = document.getElementById("newsletterEmail").value;
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+            alert("Thank you for subscribing!");
+            document.getElementById("newsletterEmail").value = "";
+        });
+    </script>
+</body>
+</html>

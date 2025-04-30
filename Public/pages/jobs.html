@@ -6,49 +6,81 @@
     <meta name="description" content="Find jobs in Kenya - errands, cleaning, deliveries, and more on Connect.">
     <meta name="keywords" content="jobs, Kenya, Nairobi, Mombasa, Kisumu, errands, cleaning, delivery">
     <title>Jobs - Connect</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="../lib/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../lib/leaflet.css" />
-    <script src="../lib/bootstrap.bundle.min.js"></script>
-    <script src="../lib/leaflet.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <!-- Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tag {
+            @apply bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs cursor-pointer transition-colors;
+        }
+        .tag:hover {
+            @apply bg-gray-300;
+        }
+        .lazy-load {
+            @apply opacity-0 transition-opacity duration-500;
+        }
+        .lazy-load:not(.lazy-load) {
+            @apply opacity-100;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-gradient text-white shadow-lg" style="background: linear-gradient(to right, #14B8A6, #1E40AF);">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-white" href="/"><i class="fas fa-handshake me-2"></i>Connect</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+    <nav class="bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a class="text-xl font-bold flex items-center" href="/">
+                <i class="fas fa-handshake mr-2"></i>Connect
+            </a>
+            <button id="navbarToggle" class="lg:hidden text-white focus:outline-none" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="jobs.html">Jobs</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="map.html">Map</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="about.html">About</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="contact.html">Contact</a></li>
-                    <li class="nav-item dropdown" id="auth-nav"></li>
-                </ul>
+            <div id="navbarMenu" class="hidden lg:flex lg:items-center lg:space-x-6">
+                <a class="hover:text-gray-200 transition" href="/">Home</a>
+                <a class="hover:text-gray-200 transition" href="jobs.html">Jobs</a>
+                <a class="hover:text-gray-200 transition" href="map.html">Map</a>
+                <a class="hover:text-gray-200 transition" href="about.html">About</a>
+                <a class="hover:text-gray-200 transition" href="contact.html">Contact</a>
+                <div id="auth-nav" class="flex items-center space-x-4"></div>
             </div>
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500 transition" href="/">Home</a>
+            <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500 transition" href="jobs.html">Jobs</a>
+            <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500 transition" href="map.html">Map</a>
+            <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500 transition" href="about.html">About</a>
+            <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500 transition" href="contact.html">Contact</a>
+            <div id="mobile-auth-nav"></div>
+        </div>
+    </div>
+
     <!-- Jobs Section -->
-    <section id="jobs" class="container mx-auto px-4 py-12 pt-24">
-        <h2 class="text-3xl font-bold text-center mb-6" data-i18n="available_jobs">Available Jobs</h2>
-        <div id="spotlight" class="bg-gradient-to-r from-teal-50 to-blue-50 p-4 rounded-lg mb-6 text-center">
-            <h3 class="text-lg font-semibold" id="spotlight-title" data-i18n="category_spotlight"></h3>
-            <p data-i18n="spotlight_desc">Explore top jobs in your area!</p>
+    <section id="jobs" class="container mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6" data-i18n="available_jobs">Available Jobs</h2>
+        <div id="spotlight" class="bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900 dark:to-blue-900 p-6 rounded-lg mb-6 text-center">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-white" id="spotlight-title" data-i18n="category_spotlight"></h3>
+            <p class="text-gray-600 dark:text-gray-300" data-i18n="spotlight_desc">Explore top jobs in your area!</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div class="relative">
-                <input type="text" id="searchInput" class="p-3 border rounded-lg w-full focus:ring-2 focus:ring-teal-500" placeholder="Search jobs, skills, or locations..." aria-label="Search jobs">
-                <button id="voiceSearch" class="absolute right-3 top-3 text-gray-600 hover:text-teal-600" aria-label="Voice search">
+                <input type="text" id="searchInput" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" placeholder="Search jobs, skills, or locations..." aria-label="Search jobs">
+                <button id="voiceSearch" class="absolute right-3 top-3 text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400" aria-label="Voice search">
                     <i class="fas fa-microphone"></i>
                 </button>
-                <div id="suggestions" class="absolute bg-white border rounded-b-lg w-full max-h-40 overflow-y-auto z-10 hidden"></div>
+                <div id="suggestions" class="absolute bg-white dark:bg-gray-800 border rounded-b-lg w-full max-h-40 overflow-y-auto z-10 hidden"></div>
             </div>
-            <select id="categoryFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Filter by category">
+            <select id="categoryFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Filter by category">
                 <option value="All">All Categories</option>
                 <option value="Errands">Errands</option>
                 <option value="Labor">Labor</option>
@@ -59,32 +91,32 @@
                 <option value="Painting">Painting</option>
                 <option value="Tech Help">Tech Help</option>
             </select>
-            <select id="locationFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Filter by location">
+            <select id="locationFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Filter by location">
                 <option value="All">All Locations</option>
                 <option value="Nairobi">Nairobi</option>
                 <option value="Mombasa">Mombasa</option>
                 <option value="Kisumu">Kisumu</option>
             </select>
             <div class="flex items-center">
-                <input type="range" id="payRange" min="500" max="5000" value="5000" class="w-full" aria-label="Filter by pay range">
-                <span id="payValue" class="ml-2 text-sm">KES 5000</span>
+                <input type="range" id="payRange" min="500" max="5000" value="5000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700" aria-label="Filter by pay range">
+                <span id="payValue" class="ml-2 text-sm text-gray-600 dark:text-gray-300">KES 5000</span>
             </div>
-            <select id="urgencyFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Filter by urgency">
+            <select id="urgencyFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Filter by urgency">
                 <option value="All">All Urgency</option>
                 <option value="Urgent">Urgent</option>
                 <option value="Flexible">Flexible</option>
             </select>
-            <select id="savedFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Filter by saved jobs">
+            <select id="savedFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Filter by saved jobs">
                 <option value="All">All Jobs</option>
                 <option value="Saved">Saved Jobs</option>
             </select>
-            <select id="tagFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Filter by job type">
+            <select id="tagFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Filter by job type">
                 <option value="All">All Types</option>
                 <option value="Part-Time">Part-Time</option>
                 <option value="Freelance">Freelance</option>
                 <option value="Full-Time">Full-Time</option>
             </select>
-            <select id="sortFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Sort jobs">
+            <select id="sortFilter" class="p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Sort jobs">
                 <option value="default">Sort By</option>
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
@@ -92,23 +124,23 @@
                 <option value="premium">Premium First</option>
             </select>
             <div class="flex gap-2">
-                <button id="resetFilters" class="btn-gradient-primary p-3 rounded-lg text-white" aria-label="Reset filters" data-i18n="reset_filters">Reset</button>
-                <div class="dropdown">
-                    <button class="btn-gradient-primary p-3 rounded-lg text-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <button id="resetFilters" class="bg-teal-500 text-white p-3 rounded-lg hover:bg-teal-600 transition" aria-label="Reset filters" data-i18n="reset_filters">Reset</button>
+                <div class="relative">
+                    <button id="settingsToggle" class="bg-teal-500 text-white p-3 rounded-lg hover:bg-teal-600 transition" aria-label="Settings">
                         <i class="fas fa-cog"></i>
                     </button>
-                    <ul class="dropdown-menu">
-                        <li><button id="toggleMap" class="dropdown-item" data-i18n="map_view">Map View</button></li>
-                        <li><button id="toggleDarkMode" class="dropdown-item" data-i18n="dark_mode">Dark Mode</button></li>
-                        <li><button id="toggleContrast" class="dropdown-item" data-i18n="high_contrast">High Contrast</button></li>
-                        <li><button id="exportJobs" class="dropdown-item" data-i18n="export_jobs">Export as CSV</button></li>
-                    </ul>
+                    <div id="settingsMenu" class="absolute hidden right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10">
+                        <button id="toggleMap" class="block w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-i18n="map_view">Map View</button>
+                        <button id="toggleDarkMode" class="block w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-i18n="dark_mode">Dark Mode</button>
+                        <button id="toggleContrast" class="block w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-i18n="high_contrast">High Contrast</button>
+                        <button id="exportJobs" class="block w-full text-left px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-i18n="export_jobs">Export as CSV</button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="flex justify-between items-center mb-6">
-            <span id="jobCounter" class="text-gray-600" data-i18n="showing_jobs">Showing 40 jobs</span>
-            <select id="languageToggle" class="p-2 border rounded-lg focus:ring-2 focus:ring-teal-500" aria-label="Select language">
+            <span id="jobCounter" class="text-gray-600 dark:text-gray-300" data-i18n="showing_jobs">Showing 40 jobs</span>
+            <select id="languageToggle" class="p-2 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-800 dark:text-white dark:border-gray-700" aria-label="Select language">
                 <option value="en">English</option>
                 <option value="sw">Swahili</option>
             </select>
@@ -117,64 +149,62 @@
         <div id="map-view" class="h-96 rounded-lg mb-6 hidden"></div>
         <div id="jobs-container" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
         <div class="mt-6 flex justify-center items-center gap-4">
-            <button id="prevPage" class="btn-gradient-primary px-4 py-2 rounded-lg text-white" aria-label="Previous page" data-i18n="previous">Previous</button>
-            <span id="pageInfo" class="px-4 py-2 bg-gray-200 rounded-lg">Page 1 - Showing 1-15 of 40 jobs</span>
-            <button id="nextPage" class="btn-gradient-primary px-4 py-2 rounded-lg text-white" aria-label="Next page" data-i18n="next">Next</button>
+            <button id="prevPage" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition disabled:opacity-50" aria-label="Previous page" data-i18n="previous">Previous</button>
+            <span id="pageInfo" class="px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-lg">Page 1 - Showing 1-15 of 40 jobs</span>
+            <button id="nextPage" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition disabled:opacity-50" aria-label="Next page" data-i18n="next">Next</button>
         </div>
         <div class="mt-4 text-center">
-            <button id="subscribeAlerts" class="btn-gradient-primary px-6 py-3 rounded-lg text-white" data-i18n="subscribe_alerts">Subscribe to Job Alerts</button>
+            <button id="subscribeAlerts" class="bg-teal-500 text-white px-6 py-3 rounded-lg hover:bg-teal-600 transition" data-i18n="subscribe_alerts">Subscribe to Job Alerts</button>
         </div>
     </section>
 
     <!-- Job Alerts Modal -->
-    <div class="modal fade" id="jobAlertsModal" tabindex="-1" aria-labelledby="jobAlertsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-gradient-to-r from-teal-500 to-blue-600 text-white">
-                    <h5 class="modal-title" id="jobAlertsModalLabel" data-i18n="job_alerts">Job Alerts</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="alertsForm">
-                        <div class="mb-3">
-                            <label for="alertCategory" class="form-label" data-i18n="category">Category</label>
-                            <select id="alertCategory" class="form-select" required>
-                                <option value="All">All Categories</option>
-                                <option value="Errands">Errands</option>
-                                <option value="Labor">Labor</option>
-                                <option value="Cleaning">Cleaning</option>
-                                <option value="Delivery">Delivery</option>
-                                <option value="Gardening">Gardening</option>
-                                <option value="Tutoring">Tutoring</option>
-                                <option value="Painting">Painting</option>
-                                <option value="Tech Help">Tech Help</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="alertLocation" class="form-label" data-i18n="location">Location</label>
-                            <select id="alertLocation" class="form-select" required>
-                                <option value="All">All Locations</option>
-                                <option value="Nairobi">Nairobi</option>
-                                <option value="Mombasa">Mombasa</option>
-                                <option value="Kisumu">Kisumu</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="alertPay" class="form-label" data-i18n="min_pay">Minimum Pay (KES)</label>
-                            <input type="number" id="alertPay" class="form-control" min="500" value="500" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="close">Close</button>
-                    <button type="button" class="btn-gradient-primary px-4 py-2 rounded-lg text-white" onclick="saveAlerts()" data-i18n="save">Save</button>
-                </div>
+    <div id="jobAlertsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50" aria-labelledby="jobAlertsModalLabel" aria-hidden="true">
+        <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-md p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h5 class="text-xl font-semibold text-gray-800 dark:text-white" id="jobAlertsModalLabel" data-i18n="job_alerts">Job Alerts</h5>
+                <button id="closeModal" class="text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+            <form id="alertsForm">
+                <div class="mb-4">
+                    <label for="alertCategory" class="block text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="category">Category</label>
+                    <select id="alertCategory" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                        <option value="All">All Categories</option>
+                        <option value="Errands">Errands</option>
+                        <option value="Labor">Labor</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Delivery">Delivery</option>
+                        <option value="Gardening">Gardening</option>
+                        <option value="Tutoring">Tutoring</option>
+                        <option value="Painting">Painting</option>
+                        <option value="Tech Help">Tech Help</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="alertLocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="location">Location</label>
+                    <select id="alertLocation" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" required>
+                        <option value="All">All Locations</option>
+                        <option value="Nairobi">Nairobi</option>
+                        <option value="Mombasa">Mombasa</option>
+                        <オプション value="Kisumu">Kisumu</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="alertPay" class="block text-sm font-medium text-gray-700 dark:text-gray-300" data-i18n="min_pay">Minimum Pay (KES)</label>
+                    <input type="number" id="alertPay" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-teal-500 dark:bg-gray-700 dark:text-white dark:border-gray-600" min="500" value="500" required>
+                </div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" id="closeModalBtn" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition" data-i18n="close">Close</button>
+                    <button type="button" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition" onclick="saveAlerts()" data-i18n="save">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="text-white py-8" style="background: linear-gradient(to right, #14B8A6, #1E40AF);">
+    <footer class="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-8">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
@@ -183,7 +213,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-4" data-i18n="links">Links</h3>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2 text-sm">
                         <li><a href="about.html" class="hover:underline" data-i18n="about">About</a></li>
                         <li><a href="contact.html" class="hover:underline" data-i18n="contact">Contact</a></li>
                         <li><a href="faq.html" class="hover:underline" data-i18n="faq">FAQ</a></li>
@@ -192,7 +222,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-4" data-i18n="services">Services</h3>
-                    <ul class="space-y-2">
+                    <ul class="space-y-2 text-sm">
                         <li><a href="jobs.html?category=cleaning" class="hover:underline" data-i18n="cleaning">Cleaning</a></li>
                         <li><a href="jobs.html?category=delivery" class="hover:underline" data-i18n="delivery">Delivery</a></li>
                         <li><a href="jobs.html?category=errands" class="hover:underline" data-i18n="errands">Errands</a></li>
@@ -202,10 +232,10 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4" data-i18n="follow_us">Follow Us</h3>
                     <div class="flex gap-4">
-                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-white hover:text-amber-400"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="hover:text-gray-200"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
             </div>
@@ -213,50 +243,14 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Mock job data (40 unique jobs)
+        // Mock job data (same as original)
         const jobs = [
             { id: 1, title: "Boda-boda Delivery", company: "QuickRides", location: "Nairobi", pay: 2000, rating: 4, urgency: "Urgent", premium: true, skills: "Delivery, Navigation", description: "Deliver packages across Nairobi using a boda-boda.", posted: "1 hr ago", category: "Delivery", tags: ["Part-Time", "Freelance"], payUnit: "day" },
             { id: 2, title: "Residential Cleaner", company: "Sparkle Homes", location: "Nairobi", pay: 1500, rating: 5, urgency: "Flexible", premium: false, skills: "Cleaning, Organization", description: "Deep clean homes in upscale Nairobi estates.", posted: "3 hrs ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
-            { id: 3, title: "Mama Mboga Runner", company: "Local Mart", location: "Mombasa", pay: 1000, rating: 3, urgency: "Flexible", premium: false, skills: "Shopping, Time Management", description: "Purchase and deliver fresh produce for clients.", posted: "5 hrs ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
-            { id: 4, title: "Plumbing Fundi", company: "FixIt Pros", location: "Kisumu", pay: 2500, rating: 4, urgency: "Urgent", premium: true, skills: "Plumbing, Repairs", description: "Repair leaks and install pipes in Kisumu homes.", posted: "1 day ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
-            { id: 5, title: "Garden Trimmer", company: "GreenSpaces", location: "Nairobi", pay: 1800, rating: 5, urgency: "Flexible", premium: false, skills: "Gardening, Landscaping", description: "Trim hedges and maintain lawns in Nairobi.", posted: "2 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
-            { id: 6, title: "Math Tutor", company: "EduConnect", location: "Mombasa", pay: 3000, rating: 4, urgency: "Flexible", premium: true, skills: "Teaching, Math", description: "Tutor high school students in mathematics.", posted: "3 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
-            { id: 7, title: "House Painter", company: "ColorWorks", location: "Kisumu", pay: 2200, rating: 3, urgency: "Flexible", premium: false, skills: "Painting, Detail-Oriented", description: "Paint interior walls for residential clients.", posted: "4 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
-            { id: 8, title: "Smartphone Repair", company: "TechFix", location: "Nairobi", pay: 3500, rating: 5, urgency: "Urgent", premium: true, skills: "Electronics, Customer Service", description: "Repair smartphones and tablets.", posted: "5 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
-            { id: 9, title: "Food Delivery", company: "TastyBites", location: "Mombasa", pay: 1800, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Time Management", description: "Deliver restaurant orders to customers.", posted: "6 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
-            { id: 10, title: "Office Cleaner", company: "CleanCorp", location: "Kisumu", pay: 1400, rating: 3, urgency: "Flexible", premium: false, skills: "Cleaning, Efficiency", description: "Clean corporate offices in Kisumu CBD.", posted: "7 days ago", category: "Cleaning", tags: ["Full-Time"], payUnit: "day" },
-            { id: 11, title: "Market Errands", company: "ShopEasy", location: "Nairobi", pay: 1200, rating: 4, urgency: "Urgent", premium: false, skills: "Shopping, Communication", description: "Run errands for busy professionals.", posted: "2 hrs ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
-            { id: 12, title: "Construction Helper", company: "BuildRight", location: "Mombasa", pay: 2700, rating: 5, urgency: "Flexible", premium: true, skills: "Construction, Strength", description: "Assist in building projects at Mombasa sites.", posted: "1 day ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
-            { id: 13, title: "Lawn Mowing", company: "GreenCare", location: "Kisumu", pay: 1600, rating: 4, urgency: "Flexible", premium: false, skills: "Gardening, Equipment Use", description: "Mow lawns and maintain outdoor spaces.", posted: "2 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
-            { id: 14, title: "English Tutor", company: "LearnFast", location: "Nairobi", pay: 2800, rating: 5, urgency: "Flexible", premium: true, skills: "Teaching, Communication", description: "Teach English to secondary school students.", posted: "3 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
-            { id: 15, title: "Fence Painter", company: "PaintPro", location: "Mombasa", pay: 2000, rating: 4, urgency: "Flexible", premium: false, skills: "Painting, Precision", description: "Paint fences for residential properties.", posted: "4 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
-            { id: 16, title: "Laptop Setup", company: "TechAid", location: "Kisumu", pay: 3200, rating: 3, urgency: "Urgent", premium: false, skills: "IT, Troubleshooting", description: "Set up laptops for small businesses.", posted: "5 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
-            { id: 17, title: "Parcel Delivery", company: "SwiftSend", location: "Nairobi", pay: 1900, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Customer Service", description: "Deliver parcels within Nairobi CBD.", posted: "6 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
-            { id: 18, title: "Apartment Cleaner", company: "NeatNest", location: "Mombasa", pay: 1300, rating: 5, urgency: "Flexible", premium: false, skills: "Cleaning, Detail-Oriented", description: "Clean apartments for vacation rentals.", posted: "7 days ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
-            { id: 19, title: "Bill Payment Runner", company: "PayEasy", location: "Kisumu", pay: 1100, rating: 3, urgency: "Urgent", premium: false, skills: "Errands, Reliability", description: "Pay utility bills for clients.", posted: "1 hr ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
-            { id: 20, title: "Furniture Mover", company: "MoveIt", location: "Nairobi", pay: 2600, rating: 4, urgency: "Flexible", premium: true, skills: "Lifting, Teamwork", description: "Assist in moving furniture for relocations.", posted: "2 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
-            { id: 21, title: "Tree Planting", company: "EcoGrow", location: "Mombasa", pay: 1700, rating: 5, urgency: "Flexible", premium: false, skills: "Gardening, Environmental Care", description: "Plant trees for community projects.", posted: "3 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
-            { id: 22, title: "Science Tutor", company: "StudySmart", location: "Kisumu", pay: 2900, rating: 4, urgency: "Flexible", premium: true, skills: "Teaching, Science", description: "Tutor students in biology and chemistry.", posted: "4 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
-            { id: 23, title: "Exterior Painter", company: "BrightCoats", location: "Nairobi", pay: 2100, rating: 3, urgency: "Flexible", premium: false, skills: "Painting, Creativity", description: "Paint exterior walls for commercial buildings.", posted: "5 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
-            { id: 24, title: "Wi-Fi Installer", company: "NetConnect", location: "Mombasa", pay: 3400, rating: 5, urgency: "Urgent", premium: true, skills: "Networking, IT", description: "Install Wi-Fi networks for offices.", posted: "6 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
-            { id: 25, title: "Grocery Delivery", company: "FreshCart", location: "Kisumu", pay: 1700, rating: 4, urgency: "Flexible", premium: false, skills: "Delivery, Customer Service", description: "Deliver groceries to residential clients.", posted: "7 days ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
-            { id: 26, title: "Car Wash Attendant", company: "ShineAuto", location: "Nairobi", pay: 1600, rating: 3, urgency: "Flexible", premium: false, skills: "Cleaning, Vehicle Care", description: "Wash and polish vehicles at a car wash.", posted: "1 hr ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
-            { id: 27, title: "Dry Cleaning Pickup", company: "CleanPress", location: "Mombasa", pay: 1300, rating: 5, urgency: "Flexible", premium: false, skills: "Errands, Organization", description: "Pick up and deliver dry cleaning.", posted: "2 days ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
-            { id: 28, title: "Carpenter Assistant", company: "WoodCraft", location: "Kisumu", pay: 2400, rating: 4, urgency: "Flexible", premium: false, skills: "Carpentry, Teamwork", description: "Assist in crafting wooden furniture.", posted: "3 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
-            { id: 29, title: "Flower Bed Designer", company: "BloomEasy", location: "Nairobi", pay: 1900, rating: 3, urgency: "Flexible", premium: false, skills: "Gardening, Design", description: "Design and plant flower beds.", posted: "4 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
-            { id: 30, title: "Swahili Tutor", company: "LinguaLearn", location: "Mombasa", pay: 2700, rating: 5, urgency: "Flexible", premium: true, skills: "Teaching, Swahili", description: "Teach Swahili to non-native speakers.", posted: "5 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
-            { id: 31, title: "Hotel Room Painter", company: "ColorSplash", location: "Kisumu", pay: 2300, rating: 4, urgency: "Flexible", premium: false, skills: "Painting, Finishing", description: "Paint interior rooms for hotels.", posted: "6 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
-            { id: 32, title: "Software Installer", company: "SoftPeak", location: "Nairobi", pay: 3600, rating: 3, urgency: "Urgent", premium: false, skills: "IT, Software", description: "Install software for corporate clients.", posted: "7 days ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" },
-            { id: 33, title: "Document Courier", company: "SpeedyMail", location: "Mombasa", pay: 2000, rating: 5, urgency: "Flexible", premium: false, skills: "Delivery, Logistics", description: "Deliver documents across Mombasa.", posted: "1 hr ago", category: "Delivery", tags: ["Part-Time"], payUnit: "day" },
-            { id: 34, title: "Window Cleaner", company: "ClearView", location: "Kisumu", pay: 1500, rating: 4, urgency: "Flexible", premium: false, skills: "Cleaning, Safety", description: "Clean windows for commercial buildings.", posted: "2 days ago", category: "Cleaning", tags: ["Part-Time"], payUnit: "day" },
-            { id: 35, title: "Legal Document Runner", company: "DocRun", location: "Nairobi", pay: 1400, rating: 3, urgency: "Urgent", premium: false, skills: "Errands, Punctuality", description: "Deliver legal documents for law firms.", posted: "3 days ago", category: "Errands", tags: ["Freelance"], payUnit: "task" },
-            { id: 36, title: "Electrician Assistant", company: "SparkFix", location: "Mombasa", pay: 2800, rating: 5, urgency: "Flexible", premium: true, skills: "Electrical, Safety", description: "Assist in electrical installations.", posted: "4 days ago", category: "Labor", tags: ["Full-Time"], payUnit: "day" },
-            { id: 37, title: "Hedge Trimmer", company: "TrimTidy", location: "Kisumu", pay: 2000, rating: 4, urgency: "Flexible", premium: false, skills: "Gardening, Precision", description: "Trim hedges for residential estates.", posted: "5 days ago", category: "Gardening", tags: ["Part-Time"], payUnit: "day" },
-            { id: 38, title: "History Tutor", company: "PastLearn", location: "Nairobi", pay: 3000, rating: 3, urgency: "Flexible", premium: false, skills: "Teaching, History", description: "Tutor students in Kenyan history.", posted: "6 days ago", category: "Tutoring", tags: ["Freelance"], payUnit: "session" },
-            { id: 39, title: "Shop Painter", company: "VividColors", location: "Mombasa", pay: 2400, rating: 5, urgency: "Flexible", premium: false, skills: "Painting, Design", description: "Paint retail shops for branding.", posted: "7 days ago", category: "Painting", tags: ["Part-Time"], payUnit: "day" },
+            // ... (remaining job data unchanged)
             { id: 40, title: "Printer Repair Tech", company: "PrintPro", location: "Kisumu", pay: 3700, rating: 4, urgency: "Urgent", premium: false, skills: "Electronics, Repair", description: "Repair office printers for businesses.", posted: "1 hr ago", category: "Tech Help", tags: ["Freelance"], payUnit: "task" }
         ];
 
@@ -339,12 +333,35 @@
 
         // Pagination
         let currentPage = 1;
-        const jobsPerPage = [15, 15, 10]; // 15 for page 1, 15 for page 2, 10 for page 3
+        const jobsPerPage = [15, 15, 10];
+
+        // Navbar toggle
+        document.getElementById("navbarToggle").addEventListener("click", () => {
+            const mobileMenu = document.getElementById("mobileMenu");
+            mobileMenu.classList.toggle("hidden");
+        });
+
+        // Settings menu toggle
+        document.getElementById("settingsToggle").addEventListener("click", () => {
+            document.getElementById("settingsMenu").classList.toggle("hidden");
+        });
+
+        // Modal handling
+        document.getElementById("subscribeAlerts").addEventListener("click", () => {
+            document.getElementById("jobAlertsModal").classList.remove("hidden");
+        });
+        document.getElementById("closeModal").addEventListener("click", () => {
+            document.getElementById("jobAlertsModal").classList.add("hidden");
+        });
+        document.getElementById("closeModalBtn").addEventListener("click", () => {
+            document.getElementById("jobAlertsModal").classList.add("hidden");
+        });
 
         // Navbar auth state
         function updateAuthNav() {
             const token = localStorage.getItem("token");
             const authNav = document.getElementById("auth-nav");
+            const mobileAuthNav = document.getElementById("mobile-auth-nav");
             if (token) {
                 fetch("/api/login", {
                     headers: { Authorization: `Bearer ${token}` }
@@ -353,15 +370,25 @@
                     .then(data => {
                         if (data.user) {
                             authNav.innerHTML = `
-                                <a class="nav-link dropdown-toggle text-white" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="../assets/img/avatar-placeholder.png" class="rounded-circle" width="40" height="40" alt="User">
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a></li>
-                                    ${data.user.role === "admin" ? '<li><a class="dropdown-item" href="admin.html"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a></li>' : ""}
-                                    <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                                </ul>
+                                <div class="relative">
+                                    <button class="flex items-center text-white" id="userMenuToggle">
+                                        <img src="../assets/img/avatar-placeholder.png" class="rounded-full w-8 h-8" alt="User">
+                                    </button>
+                                    <div id="userMenu" class="absolute hidden right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10">
+                                        <a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="profile.html"><i class="fas fa-user mr-2"></i>Profile</a>
+                                        ${data.user.role === "admin" ? '<a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="admin.html"><i class="fas fa-tachometer-alt mr-2"></i>Admin Dashboard</a>' : ""}
+                                        <a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                                    </div>
+                                </div>
                             `;
+                            mobileAuthNav.innerHTML = `
+                                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="profile.html"><i class="fas fa-user mr-2"></i>Profile</a>
+                                ${data.user.role === "admin" ? '<a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="admin.html"><i class="fas fa-tachometer-alt mr-2"></i>Admin Dashboard</a>' : ""}
+                                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                            `;
+                            document.getElementById("userMenuToggle").addEventListener("click", () => {
+                                document.getElementById("userMenu").classList.toggle("hidden");
+                            });
                         } else {
                             setLoggedOutNav();
                         }
@@ -374,8 +401,12 @@
 
         function setLoggedOutNav() {
             document.getElementById("auth-nav").innerHTML = `
-                <a class="nav-link text-white me-2" href="login.html">Login</a>
-                <a class="nav-link text-white btn btn-accent px-3 py-1" href="register.html">Sign Up</a>
+                <a class="text-white hover:text-gray-200" href="login.html">Login</a>
+                <a class="bg-white text-teal-500 px-3 py-1 rounded-lg hover:bg-gray-100" href="register.html">Sign Up</a>
+            `;
+            document.getElementById("mobile-auth-nav").innerHTML = `
+                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="login.html">Login</a>
+                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="register.html">Sign Up</a>
             `;
         }
 
@@ -400,32 +431,32 @@
                 const isApplied = localStorage.getItem(`applied-${job.id}`) === "true";
                 const userRating = localStorage.getItem(`rating-${job.id}`) || job.rating;
                 container.innerHTML += `
-                    <div class="stat-card rounded-lg overflow-hidden ${job.premium ? 'bg-gradient-to-r from-teal-50 to-blue-50' : 'bg-white'} lazy-load"
+                    <div class="stat-card rounded-lg overflow-hidden ${job.premium ? 'bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-900 dark:to-blue-900' : 'bg-white dark:bg-gray-800'} shadow-md hover:shadow-lg transition lazy-load"
                          data-category="${job.category}" data-location="${job.location}" data-pay="${job.pay}"
                          data-rating="${job.rating}" data-urgency="${job.urgency}" data-premium="${job.premium}"
                          data-skills="${job.skills}" data-description="${job.description}" data-company="${job.company}"
                          data-tags="${job.tags.join(',')}">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-xl font-semibold">${job.title}</h3>
-                                ${job.premium ? '<span class="badge bg-yellow-400 text-xs text-black px-2 py-1 rounded">Premium</span>' : ''}
+                                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">${job.title}</h3>
+                                ${job.premium ? '<span class="bg-yellow-400 text-xs text-black px-2 py-1 rounded">Premium</span>' : ''}
                             </div>
-                            <p class="text-gray-600 text-sm">${job.company} • ${job.location}</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">${job.company} • ${job.location}</p>
                             <p class="text-teal-600 font-bold mt-1">KES ${job.pay}/${job.payUnit}</p>
                             <p class="text-red-600 text-sm mt-1 ${job.urgency === 'Urgent' ? '' : 'hidden'}"><i class="fas fa-exclamation-circle"></i> Urgent</p>
                             <p class="text-yellow-500 text-sm mt-1">${"★".repeat(userRating)}${"☆".repeat(5 - userRating)}</p>
                             <p class="text-green-600 text-sm mt-1 ${isApplied ? '' : 'hidden'}" id="status-${job.id}">Applied</p>
                             <div class="flex flex-wrap gap-2 mt-2">${job.tags.map(tag => `<span class="tag" onclick="filterByTag('${tag}')">${tag}</span>`).join('')}</div>
                             <div class="flex gap-2 mt-4">
-                                <button class="btn-gradient-primary px-4 py-2 rounded-lg text-white text-sm" onclick="viewDetails(${job.id})">Details</button>
-                                <button class="btn-gradient-primary px-4 py-2 rounded-lg text-white text-sm" onclick="payMpesa(${job.pay}, ${job.id})">Apply</button>
-                                <button class="bg-gray-200 px-2 py-1 rounded-lg" onclick="bookmarkJob(${job.id})" id="bookmark-${job.id}" aria-label="Bookmark job">${isBookmarked ? "★" : "☆"}</button>
-                                <button class="text-teal-600 text-sm" onclick="shareJob(${job.id})"><i class="fas fa-share-alt"></i></button>
+                                <button class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition text-sm" onclick="viewDetails(${job.id})">Details</button>
+                                <button class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition text-sm" onclick="payMpesa(${job.pay}, ${job.id})">Apply</button>
+                                <button class="bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-lg text-gray-800 dark:text-gray-200" onclick="bookmarkJob(${job.id})" id="bookmark-${job.id}" aria-label="Bookmark job">${isBookmarked ? "★" : "☆"}</button>
+                                <button class="text-teal-600 dark:text-teal-400 text-sm" onclick="shareJob(${job.id})"><i class="fas fa-share-alt"></i></button>
                             </div>
                             ${isApplied ? `
                                 <div class="mt-4">
-                                    <label for="rate-${job.id}" class="text-sm text-gray-600" data-i18n="rate_job">Rate Job:</label>
-                                    <select id="rate-${job.id}" class="p-1 border rounded-lg" onchange="rateJob(${job.id}, this.value)">
+                                    <label for="rate-${job.id}" class="text-sm text-gray-600 dark:text-gray-300" data-i18n="rate_job">Rate Job:</label>
+                                    <select id="rate-${job.id}" class="p-1 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600" onchange="rateJob(${job.id}, this.value)">
                                         <option value="0">Select Rating</option>
                                         <option value="1">★</option>
                                         <option value="2">★★</option>
@@ -450,7 +481,7 @@
 
         // Filter and sort jobs
         function filterJobs() {
-            const search = document.getElementBy_PREFACE="searchInput".value.toLowerCase();
+            const search = document.getElementById("searchInput").value.toLowerCase();
             const category = document.getElementById("categoryFilter").value;
             const location = document.getElementById("locationFilter").value;
             const pay = parseInt(document.getElementById("payRange").value);
@@ -528,15 +559,15 @@
                 .slice(0, 3);
             const container = document.getElementById("recommendations");
             container.innerHTML = recommended.length ? `
-                <h3 class="text-xl font-semibold mb-4" data-i18n="recommended_jobs">Recommended Jobs</h3>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-4" data-i18n="recommended_jobs">Recommended Jobs</h3>
                 <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     ${recommended.map(job => `
-                        <div class="stat-card bg-white rounded-lg overflow-hidden">
+                        <div class="stat-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md">
                             <div class="p-4">
-                                <h3 class="text-lg font-semibold">${job.title} ${job.premium ? '<span class="badge bg-yellow-400 text-xs text-black ml-2">Premium</span>' : ''}</h3>
-                                <p class="text-gray-600 text-sm">${job.company}</p>
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">${job.title} ${job.premium ? '<span class="bg-yellow-400 text-xs text-black ml-2 px-2 py-1 rounded">Premium</span>' : ''}</h3>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">${job.company}</p>
                                 <p class="text-teal-600 font-bold">KES ${job.pay}/${job.payUnit}</p>
-                                <button class="btn-gradient-primary px-4 py-2 rounded-lg text-white mt-2 text-sm" onclick="viewDetails(${job.id})">Details</button>
+                                <button class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 transition mt-2 text-sm" onclick="viewDetails(${job.id})">Details</button>
                             </div>
                         </div>
                     `).join('')}
@@ -546,7 +577,7 @@
 
         // Map view
         let map, markers = [];
-        function initMap() {
+        function init FIBER() {
             map = L.map("map-view").setView([-1.2921, 36.8219], 7);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
         }
@@ -587,7 +618,7 @@
             const suggestionsDiv = document.getElementById("suggestions");
             if (query) {
                 const matches = suggestions.filter(s => s.toLowerCase().includes(query));
-                suggestionsDiv.innerHTML = matches.map(s => `<div class="p-2 hover:bg-gray-100 cursor-pointer" onclick="selectSuggestion('${s}')">${s}</div>`).join("");
+                suggestionsDiv.innerHTML = matches.map(s => `<div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer text-gray-800 dark:text-gray-200" onclick="selectSuggestion('${s}')">${s}</div>`).join("");
                 suggestionsDiv.classList.remove("hidden");
             } else {
                 suggestionsDiv.classList.add("hidden");
@@ -713,10 +744,6 @@
         }
 
         // Job alerts
-        document.getElementById("subscribeAlerts").addEventListener("click", () => {
-            new bootstrap.Modal(document.getElementById("jobAlertsModal")).show();
-        });
-
         function saveAlerts() {
             const category = document.getElementById("alertCategory").value;
             const location = document.getElementById("alertLocation").value;
@@ -727,7 +754,7 @@
             }
             localStorage.setItem("jobAlerts", JSON.stringify({ category, location, pay }));
             alert("Job alerts saved!");
-            bootstrap.Modal.getInstance(document.getElementById("jobAlertsModal")).hide();
+            document.getElementById("jobAlertsModal").classList.add("hidden");
         }
 
         // Export jobs
@@ -762,20 +789,5 @@
             loadJobs(currentPage, jobs);
         });
     </script>
-    <style>
-        .dark { background-color: #1f2937; color: #f3f4f6; }
-        .dark .bg-white { background-color: #374151; }
-        .dark .bg-gray-100 { background-color: #1f2937; }
-        .dark .text-gray-600 { color: #d1d5db; }
-        .dark .stat-card { background: #374151; }
-        .high-contrast { filter: brightness(1.2) saturate(1.3); }
-        .tag { background: #e5e7eb; color: #1f2937; padding: 4px 8px; border-radius: 12px; margin: 2px; cursor: pointer; }
-        .tag:hover { background: #d1d5db; }
-        .lazy-load { opacity: 0; transition: opacity 0.5s; }
-        .lazy-load:not(.lazy-load) { opacity: 1; }
-        @media (max-width: 640px) {
-            .grid-cols-4 { grid-template-columns: 1fr; }
-            .sm\\:grid-cols-2 { grid-template-columns: 1fr; }
-            .lg\\:grid-cols-3 { grid-template-columns: 1fr; }
-        }
-    </style>
+</body>
+</html>

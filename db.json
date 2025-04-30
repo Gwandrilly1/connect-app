@@ -27,6 +27,34 @@
       "bookings": 0,
       "earnings": 0,
       "skills": []
+    },
+    {
+      "id": 3,
+      "name": "Blessing Mutinda",
+      "email": "blessingmumo1@gmail.com",
+      "password": "$2b$10$3Ablq6tU/34nU2oFnA5RdO9nUNysUpBgHx80yY5c/w8ewUTICGWzm",
+      "role": "admin",
+      "walletBalance": 1500,
+      "mpesaLinked": true,
+      "notifications": [],
+      "messages": [],
+      "bookings": 0,
+      "earnings": 0,
+      "skills": []
+    },
+    {
+      "id": 4,
+      "name": "Blessing Mutinda",
+      "email": "blessingmumo1@gmail.com",
+      "password": "$2b$10$z9pQ2SwkYdCKS26t.Ettiu9g81bcElpt8X.H/B96NpgKJpFkB3w/.",
+      "role": "admin",
+      "walletBalance": 1500,
+      "mpesaLinked": true,
+      "notifications": [],
+      "messages": [],
+      "bookings": 0,
+      "earnings": 0,
+      "skills": []
     }
   ],
   "bookings": [],

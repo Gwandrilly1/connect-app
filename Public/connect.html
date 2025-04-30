@@ -7,6 +7,7 @@
   <meta name="keywords" content="Connect, Kenya, services, jobs, cleaning, errands, Nairobi, M-Pesa" />
   <title>Connect - Minimalist Modern Home</title>
 
+  <link rel="icon" type="image/x-icon" href="C:\Users\blessings.mutinda\Desktop\ProjectFolder\assets\images\favicon.ico" />
   <!-- Tailwind CSS with prefix to avoid conflicts -->
   <script>
     tailwind.config = {
@@ -540,9 +541,10 @@
       <div class="nav-links" id="navLinks">
         <a href="/" tabindex="0">Home</a>
         <a href="./pages/jobs.html" tabindex="0">Jobs</a>
-        <a href="./pages/map.html" tabindex="0">Map</a>
         <a href="./pages/about.html" tabindex="0">About</a>
         <a href="./pages/contact.html" tabindex="0">Contact</a>
+        <a href="./pages/login.html" tabindex="0" >Log In</a>
+        <a href="./pages/register.html" tabindex="0" >Sign Up</a>
         <a href="#" class="notification" aria-label="Notifications" tabindex="0">
           <i class="fas fa-bell"></i>
           <span class="dot" aria-hidden="true"></span>
@@ -555,8 +557,7 @@
             <a href="./pages/dashboard.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Dashboard</a>
             <a href="./pages/profile.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Profile</a>
             <a href="./pages/bookings.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">My Bookings</a>
-            <a href="./pages/login.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Log In</a>
-            <a href="./pages/register.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Sign Up</a>
+
             <a href="./pages/blog.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Blog</a>
             <a href="./pages/wallet.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">Wallet</a>
             <a href="./pages/settings.html" role="menuitem" tabindex="-1" style="display:block; padding:0.5rem 1rem; color:#111827;">settings</a>
@@ -782,6 +783,46 @@
   <button id="backToTopBtn" aria-label="Back to top" title="Back to top">
     <i class="fas fa-chevron-up"></i>
   </button>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-8">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-lg font-semibold mb-4" data-i18n="connect">Connect</h3>
+                <p class="text-sm" data-i18n="connect_desc">Connecting you with trusted services and job opportunities across Kenya.</p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4" data-i18n="links">Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="about.html" class="hover:underline" data-i18n="about">About</a></li>
+                    <li><a href="contact.html" class="hover:underline" data-i18n="contact">Contact</a></li>
+                    <li><a href="faq.html" class="hover:underline" data-i18n="faq">FAQ</a></li>
+                    <li><a href="pricing.html" class="hover:underline" data-i18n="pricing">Pricing</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4" data-i18n="services">Services</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="jobs.html?category=cleaning" class="hover:underline" data-i18n="cleaning">Cleaning</a></li>
+                    <li><a href="jobs.html?category=delivery" class="hover:underline" data-i18n="delivery">Delivery</a></li>
+                    <li><a href="jobs.html?category=errands" class="hover:underline" data-i18n="errands">Errands</a></li>
+                    <li><a href="jobs.html?category=tutoring" class="hover:underline" data-i18n="tutoring">Tutoring</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold mb-4" data-i18n="follow_us">Follow Us</h3>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-gray-200"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-gray-200"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="hover:text-gray-200"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="hover:text-gray-200"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="mt-8 text-center text-sm">© 2025 Connect. All rights reserved.</p>
+    </div>
+</footer>
 
   <!-- Scripts -->
   <script>

@@ -4,274 +4,371 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Connect - Map</title>
-
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
+    html, body, #app { height: 100%; margin: 0; padding: 0; font-family: 'Inter', sans-serif; background: #f9fafb;}
+    #map { height: 100vh; min-height: 400px; width: 100%; border-radius: 1rem; box-shadow: 0 2px 16px rgba(0,0,0,0.08);}
+    .sidebar-details { display: none; }
+    .sidebar-details.active { display: block; }
+    @media (max-width: 1024px) {
+      #sidebar { width: 100vw !important; position: fixed; z-index: 20; left: 0; top: 64px; height: calc(100vh - 64px);}
+      #main-content { margin-left: 0 !important; }
     }
-    #map {
-      height: 100vh;
-      width: 100%;
-    }
-    .leaflet-popup-content-wrapper {
-      max-width: 300px !important;
-    }
-    .floating-ui {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 1000;
-      background: white;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .profile-img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-    }
-    .marker-animate {
-      transition: transform 0.5s ease;
-    }
-    /* Profile modal fixes */
-    #profileModal {
-      z-index: 9999 !important;
-      display: none;
-    }
-    #profileModal.active {
-      display: flex;
-    }
-    .modal-content {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      position: relative;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
-    .close-button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 24px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: #666;
-    }
-    .close-button:hover {
-      color: #ff0000;
-    }
+    .chat-box { max-height: 140px; overflow-y: auto; background: #f3f4f6; padding: 0.5rem; border-radius: 0.5rem;}
+    .chat-msg-user { text-align: right; color: #2563eb;}
+    .chat-msg-worker { text-align: left; color: #059669;}
+    .chart-bar { height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden; }
   </style>
 </head>
-<body>
+<body class="bg-gray-50">
 
-  <!-- Floating Filters + Buttons -->
-  <div class="floating-ui space-y-2">
-    <select id="jobFilter" class="border rounded px-2 py-1 w-full">
-      <option value="All">All Jobs</option>
-      <option value="Cleaning">Cleaning</option>
-      <option value="Plumbing">Plumbing</option>
-      <option value="Pet Care">Pet Care</option>
-      <option value="Delivery">Delivery</option>
-      <option value="Education">Education</option>
-      <option value="Errands">Errands</option>
-    </select>
-    <button onclick="toggleHeatmap()" class="bg-blue-500 text-white px-3 py-1 rounded w-full">Toggle Heatmap</button>
-  </div>
-
-  <!-- Map container -->
-  <div id="map"></div>
-
-  <!-- Profile Modal (Improved) -->
-  <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
-    <div class="modal-content">
-      <button onclick="closeProfile()" class="close-button">&times;</button>
-      <div id="profileContent" class="mt-2"></div>
+<!-- Unified Navigation -->
+<nav class="bg-white shadow-sm fixed top-0 left-0 right-0 z-30">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" class="h-8 w-8" alt="Connect Logo">
+      <span class="text-xl font-bold">Connect</span>
+    </div>
+    <div class="flex items-center space-x-4" id="authState">
+      <a href="#" class="text-blue-600" onclick="toggleAuth()">Login/Signup</a>
     </div>
   </div>
+</nav>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<div id="app" class="h-screen flex pt-16 bg-gray-50">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-96 bg-white h-full shadow-lg flex flex-col justify-between py-8 px-6 overflow-y-auto" style="width: 380px;">
+    <div>
+      <!-- Bookmarks Management -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold mb-2">Bookmarked Workers</h2>
+        <div id="bookmarksList" class="space-y-2 text-sm"></div>
+      </div>
+      <!-- Analytics Dashboard -->
+      <div class="mb-8">
+        <h2 class="text-lg font-semibold mb-2">Your Dashboard</h2>
+        <div id="dashboardStats" class="space-y-2"></div>
+      </div>
+      <!-- Job Filter -->
+      <div class="mb-8">
+        <label for="jobFilter" class="block text-gray-700 font-medium mb-2">Filter by Job</label>
+        <select id="jobFilter" class="border border-gray-300 rounded px-3 py-2 w-full bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="All">All Jobs</option>
+          <option value="Cleaning">Cleaning</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Pet Care">Pet Care</option>
+          <option value="Delivery">Delivery</option>
+          <option value="Education">Education</option>
+          <option value="Errands">Errands</option>
+        </select>
+      </div>
+      <div class="mb-8">
+        <button onclick="toggleHeatmap()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded transition">Toggle Heatmap</button>
+      </div>
+      <!-- Legend -->
+      <div class="mb-8">
+        <h2 class="text-gray-700 font-semibold mb-2">Legend</h2>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/809/809957.png" class="w-5 h-5" alt="Cleaning"/><span>Cleaning</span></li>
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/2965/2965567.png" class="w-5 h-5" alt="Plumbing"/><span>Plumbing</span></li>
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" class="w-5 h-5" alt="Pet Care"/><span>Pet Care</span></li>
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" class="w-5 h-5" alt="Delivery"/><span>Delivery</span></li>
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/3135/3135756.png" class="w-5 h-5" alt="Education"/><span>Education</span></li>
+          <li class="flex items-center space-x-2"><img src="https://cdn-icons-png.flaticon.com/512/1828/1828919.png" class="w-5 h-5" alt="Errands"/><span>Errands</span></li>
+        </ul>
+      </div>
+      <!-- Worker Details Panel -->
+      <div id="workerDetails" class="sidebar-details"></div>
+    </div>
+    <!-- Footer -->
+    <footer class="text-xs text-gray-400 text-center mt-8 border-t pt-4">
+      <div class="flex justify-center space-x-4 mb-2">
+        <a href="/about" class="hover:text-gray-600">About</a>
+        <a href="/contact" class="hover:text-gray-600">Contact</a>
+        <a href="/privacy" class="hover:text-gray-600">Privacy</a>
+      </div>
+      <div>&copy; 2025 Connect. All rights reserved.</div>
+    </footer>
+  </aside>
 
-  <script>
-    const map = L.map('map').setView([-1.2921, 36.8219], 7);
+  <!-- Main Content -->
+  <main id="main-content" class="flex-1 flex flex-col items-center justify-center p-6">
+    <div class="w-full h-full flex flex-col">
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold text-gray-800">Map of Local Workers</h2>
+        <p class="text-gray-500 text-sm">Click a marker to view profile or book.</p>
+      </div>
+      <div id="map" class="flex-1"></div>
+    </div>
+  </main>
+</div>
 
-    // Map tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+<!-- Leaflet JS and plugins -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<script>
+// --- Demo Data and State ---
+const jobTypes = ["Cleaning", "Plumbing", "Pet Care", "Delivery", "Education", "Errands"];
+const demoReviews = [
+  {author: "Alice", comment: "Great service, very professional!", date: "2025-01-15"},
+  {author: "Bob", comment: "Arrived on time and did a fantastic job.", date: "2025-02-10"},
+  {author: "Carol", comment: "Would recommend to others.", date: "2025-03-05"}
+];
+const workers = [];
+for (let i = 1; i <= 100; i++) {
+  const type = jobTypes[Math.floor(Math.random() * jobTypes.length)];
+  const coords = [
+    -1.3 + (Math.random() - 0.5) * 5,
+    36.8 + (Math.random() - 0.5) * 5
+  ];
+  const rating = (Math.random() * 2 + 3).toFixed(1);
+  workers.push({
+    id: i,
+    name: `Worker ${i}`,
+    type,
+    rating,
+    price: `KES ${Math.floor(500 + Math.random() * 5000)}`,
+    lat: coords[0],
+    lng: coords[1],
+    profilePic: `https://randomuser.me/api/portraits/men/${i % 99}.jpg`,
+    reviews: [demoReviews[Math.floor(Math.random()*3)], demoReviews[Math.floor(Math.random()*3)]]
+  });
+}
 
-    const defaultIcon = L.icon({
-      iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-      popupAnchor: [0, -30]
-    });
+// --- Bookmark Management ---
+let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
+function updateBookmarksDisplay() {
+  const list = document.getElementById('bookmarksList');
+  if (!bookmarks.length) {
+    list.innerHTML = '<div class="text-gray-400">No bookmarks yet.</div>';
+    return;
+  }
+  list.innerHTML = bookmarks.map(worker => `
+    <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+      <span>${worker.name}</span>
+      <div class="space-x-2">
+        <button onclick="showWorkerDetails(${worker.id})" class="text-blue-600 text-xs">View</button>
+        <button onclick="removeBookmark(${worker.id})" class="text-red-600 text-xs">×</button>
+      </div>
+    </div>
+  `).join('');
+}
+function addBookmark(worker) {
+  if (!bookmarks.some(w => w.id === worker.id)) {
+    bookmarks.push(worker);
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    updateBookmarksDisplay();
+  }
+}
+function removeBookmark(id) {
+  bookmarks = bookmarks.filter(w => w.id !== id);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  updateBookmarksDisplay();
+}
+updateBookmarksDisplay();
 
-    const customIcons = {
-      "Cleaning": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/809/809957.png', iconSize: [30, 30] }),
-      "Plumbing": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/2965/2965567.png', iconSize: [30, 30] }),
-      "Pet Care": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', iconSize: [30, 30] }),
-      "Delivery": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/1048/1048953.png', iconSize: [30, 30] }),
-      "Education": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135756.png', iconSize: [30, 30] }),
-      "Errands": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/1828/1828919.png', iconSize: [30, 30] })
-    };
+// --- Analytics Dashboard (Demo) ---
+function updateDashboard() {
+  // Demo stats
+  const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+  const favType = bookings.length ? bookings.reduce((acc, b) => {
+    acc[b.type] = (acc[b.type]||0)+1; return acc;
+  }, {}) : {};
+  const favTypeStr = Object.keys(favType).length ? Object.entries(favType).sort((a,b)=>b[1]-a[1])[0][0] : "None";
+  document.getElementById('dashboardStats').innerHTML = `
+    <div>Bookings: <span class="font-bold">${bookings.length}</span></div>
+    <div>Favorite Job Type: <span class="font-bold">${favTypeStr}</span></div>
+    <div>Preferred Locations: <span class="font-bold">Nairobi, Mombasa</span></div>
+  `;
+}
+updateDashboard();
 
-    const clusterGroup = L.markerClusterGroup();
-    const heatData = [];
-    const workers = [];
+// --- Map Setup ---
+const map = L.map('map', { zoomControl: true, attributionControl: false }).setView([-1.2921, 36.8219], 7);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
 
-    const jobTypes = ["Cleaning", "Plumbing", "Pet Care", "Delivery", "Education", "Errands"];
-    const cities = ["Nairobi", "Mombasa", "Kisumu", "Eldoret", "Nakuru"];
+const customIcons = {
+  "Cleaning": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/809/809957.png', iconSize: [30, 30] }),
+  "Plumbing": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/2965/2965567.png', iconSize: [30, 30] }),
+  "Pet Care": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/616/616408.png', iconSize: [30, 30] }),
+  "Delivery": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/1048/1048953.png', iconSize: [30, 30] }),
+  "Education": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135756.png', iconSize: [30, 30] }),
+  "Errands": L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/1828/1828919.png', iconSize: [30, 30] })
+};
+const defaultIcon = L.icon({
+  iconUrl: 'https://cdn-icons-png.flaticon.com/512/854/854878.png',
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -30]
+});
 
-    for (let i = 1; i <= 100; i++) {
-      const type = jobTypes[Math.floor(Math.random() * jobTypes.length)];
-      const coords = [
-        -1.3 + (Math.random() - 0.5) * 5,
-        36.8 + (Math.random() - 0.5) * 5
-      ];
-      const rating = (Math.random() * 2 + 3).toFixed(1);
+const clusterGroup = L.markerClusterGroup();
+let heatLayer;
+const heatData = [];
 
-      const worker = {
-        id: i,
-        name: `Worker ${i}`,
-        type,
-        rating,
-        price: `KES ${Math.floor(500 + Math.random() * 5000)}`,
-        lat: coords[0],
-        lng: coords[1],
-        profilePic: `https://randomuser.me/api/portraits/men/${i % 99}.jpg`
-      };
-      workers.push(worker);
-    }
+function renderMarkers(filter = "All") {
+  clusterGroup.clearLayers();
+  heatData.length = 0;
+  workers.forEach(worker => {
+    if (filter !== "All" && worker.type !== filter) return;
+    const icon = customIcons[worker.type] || defaultIcon;
+    const marker = L.marker([worker.lat, worker.lng], { icon });
+    marker.on('click', () => showWorkerDetails(worker.id));
+    clusterGroup.addLayer(marker);
+    heatData.push([worker.lat, worker.lng, 0.5 + Math.random()]);
+  });
+  map.addLayer(clusterGroup);
+  if (heatLayer) heatLayer.remove();
+  heatLayer = L.heatLayer(heatData, { radius: 25, blur: 20 });
+  heatLayer.addTo(map);
+}
+renderMarkers();
 
-    let heatLayer;
+document.getElementById("jobFilter").addEventListener("change", (e) => {
+  renderMarkers(e.target.value);
+});
 
-    function renderMarkers(filter = "All") {
-      clusterGroup.clearLayers();
-      heatData.length = 0;
+// --- Heatmap Toggle ---
+function toggleHeatmap() {
+  if (map.hasLayer(heatLayer)) {
+    map.removeLayer(heatLayer);
+  } else {
+    heatLayer.addTo(map);
+  }
+}
 
-      workers.forEach(worker => {
-        if (filter !== "All" && worker.type !== filter) return;
-
-        const icon = customIcons[worker.type] || defaultIcon;
-        const marker = L.marker([worker.lat, worker.lng], { icon });
-
-        const popup = `
-          <div class="flex items-start space-x-3">
-            <img src="${worker.profilePic}" class="profile-img" />
-            <div>
-              <h4 class="font-bold">${worker.name}</h4>
-              <p>Type: ${worker.type}</p>
-              <p>Rating: ⭐ ${worker.rating}</p>
-              <p>Price: ${worker.price}</p>
-              <button class="text-blue-600 mt-2" onclick="viewProfile(${worker.id})">View Profile</button>
-              <br/>
-              <button class="text-green-600 mt-1" onclick="bookWorker('${worker.name}')">Book</button>
-              <br/>
-              <button class="text-yellow-500 mt-1" onclick="bookmark('${worker.name}')">Bookmark</button>
-            </div>
-          </div>
-        `;
-
-        marker.bindPopup(popup);
-        clusterGroup.addLayer(marker);
-        heatData.push([worker.lat, worker.lng, 0.5 + Math.random()]);
-      });
-
-      map.addLayer(clusterGroup);
-      if (heatLayer) heatLayer.remove();
-      heatLayer = L.heatLayer(heatData, { radius: 25, blur: 20 }).addTo(map);
-    }
-
-    renderMarkers();
-
-    // Filter change
-    document.getElementById("jobFilter").addEventListener("change", (e) => {
-      renderMarkers(e.target.value);
-    });
-
-    function toggleHeatmap() {
-      if (map.hasLayer(heatLayer)) {
-        map.removeLayer(heatLayer);
-      } else {
-        heatLayer.addTo(map);
-      }
-    }
-
-    function viewProfile(id) {
-      const worker = workers.find(w => w.id === id);
-      const html = `
-        <div class="text-center">
-          <img src="${worker.profilePic}" class="w-24 h-24 rounded-full mx-auto mb-2" />
-          <h3 class="text-xl font-semibold">${worker.name}</h3>
-          <p class="text-gray-700">Specialty: ${worker.type}</p>
-          <p class="text-gray-700">Rating: ⭐ ${worker.rating}</p>
-          <p class="text-gray-700">Rate: ${worker.price}</p>
-          <div class="mt-4 flex justify-center space-x-2">
-            <button class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700" onclick="bookWorker('${worker.name}')">Book Now</button>
-            <button class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600" onclick="bookmark('${worker.name}')">Bookmark</button>
-          </div>
+// --- Worker Details in Sidebar ---
+function showWorkerDetails(id) {
+  const worker = workers.find(w => w.id === id);
+  const details = document.getElementById('workerDetails');
+  details.classList.add('active');
+  details.innerHTML = `
+    <div class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-semibold">${worker.name}</h3>
+        <button onclick="closeWorkerDetails()" class="text-gray-500 text-2xl">&times;</button>
+      </div>
+      <div class="flex items-center space-x-3">
+        <img src="${worker.profilePic}" class="w-16 h-16 rounded-full border border-gray-200" />
+        <div>
+          <div class="font-medium">${worker.type}</div>
+          <div>⭐ ${worker.rating}</div>
+          <div class="text-sm text-gray-500">${worker.price}</div>
         </div>
-      `;
-      document.getElementById('profileContent').innerHTML = html;
-      document.getElementById('profileModal').classList.add('active');
-    }
+      </div>
+      <div class="flex space-x-2">
+        <button onclick="bookWorker(${worker.id})" class="bg-green-600 text-white px-3 py-1 rounded">Book</button>
+        <button onclick="bookmarkWorker(${worker.id})" class="border border-blue-600 text-blue-600 px-3 py-1 rounded">
+          ${bookmarks.some(w => w.id === worker.id) ? 'Bookmarked' : 'Bookmark'}
+        </button>
+        <button onclick="startChat(${worker.id})" class="bg-purple-600 text-white px-3 py-1 rounded">Message</button>
+      </div>
+      <div>
+        <h4 class="font-semibold mb-2">Reviews</h4>
+        ${worker.reviews.map(review => `
+          <div class="mb-2 p-2 rounded bg-gray-50">
+            <div class="font-medium">${review.author}</div>
+            <div class="text-gray-600">${review.comment}</div>
+            <div class="text-xs text-gray-400">${review.date}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div id="chatSection-${worker.id}" style="display:none;">
+        <h4 class="font-semibold mb-2">Chat</h4>
+        <div id="chatBox-${worker.id}" class="chat-box mb-2"></div>
+        <div class="flex space-x-2">
+          <input id="chatInput-${worker.id}" type="text" class="border rounded p-1 flex-1" placeholder="Type a message..." />
+          <button onclick="sendMessage(${worker.id})" class="bg-blue-600 text-white px-3 py-1 rounded">Send</button>
+        </div>
+      </div>
+    </div>
+  `;
+  // Scroll sidebar to top for mobile
+  document.getElementById('sidebar').scrollTo({top:0, behavior:'smooth'});
+}
+function closeWorkerDetails() {
+  document.getElementById('workerDetails').classList.remove('active');
+}
 
-    function closeProfile() {
-      document.getElementById('profileModal').classList.remove('active');
-    }
+// --- Bookmark from Details ---
+function bookmarkWorker(id) {
+  const worker = workers.find(w => w.id === id);
+  if (!bookmarks.some(w => w.id === worker.id)) {
+    addBookmark(worker);
+  }
+  else {
+    removeBookmark(worker.id);
+    closeWorkerDetails();
+  }
+  showWorkerDetails(worker.id);
+}
 
-    function bookWorker(name) {
-      alert(`Booking ${name}... Push notification sent!`);
-      closeProfile(); // Close modal after booking
-    }
+// --- Book Worker ---
+function bookWorker(id) {
+  const worker = workers.find(w => w.id === id);
+  alert(`Booking ${worker.name}...`);
+  // Save to booking history
+  let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
+  bookings.push({id:worker.id, name:worker.name, type:worker.type, date: new Date().toISOString()});
+  localStorage.setItem('bookings', JSON.stringify(bookings));
+  updateDashboard();
+}
 
-    function bookmark(name) {
-      alert(`You saved ${name} to your bookmarks!`);
-      closeProfile(); // Close modal after bookmarking
-    }
+// --- Chat Integration ---
+let chats = JSON.parse(localStorage.getItem('chats')) || {};
+function startChat(id) {
+  document.getElementById(`chatSection-${id}`).style.display = 'block';
+  updateChatBox(id);
+}
+function sendMessage(id) {
+  const input = document.getElementById(`chatInput-${id}`);
+  if (!input.value.trim()) return;
+  if (!chats[id]) chats[id] = [];
+  chats[id].push({from:'user', text:input.value, ts: new Date().toLocaleTimeString()});
+  localStorage.setItem('chats', JSON.stringify(chats));
+  input.value = '';
+  updateChatBox(id);
+}
+function updateChatBox(id) {
+  const box = document.getElementById(`chatBox-${id}`);
+  if (!chats[id]) { box.innerHTML = ''; return; }
+  box.innerHTML = chats[id].map(msg=>`
+    <div class="${msg.from==='user'?'chat-msg-user':'chat-msg-worker'} text-xs mb-1">
+      <span>${msg.text}</span> <span class="text-gray-400">${msg.ts}</span>
+    </div>
+  `).join('');
+  box.scrollTop = box.scrollHeight;
+}
 
-    // Optional: Simulated animated marker movement
-    setInterval(() => {
-      const markerList = clusterGroup.getLayers();
-      markerList.forEach(marker => {
-        const latlng = marker.getLatLng();
-        const lat = latlng.lat + (Math.random() - 0.5) * 0.001;
-        const lng = latlng.lng + (Math.random() - 0.5) * 0.001;
-        marker.setLatLng([lat, lng]);
-      });
-    }, 10000); // update every 10s
+// --- Auth State Demo ---
+let isLoggedIn = false;
+function toggleAuth() {
+  isLoggedIn = !isLoggedIn;
+  document.getElementById('authState').innerHTML = isLoggedIn ? `
+    <div class="flex items-center space-x-2">
+      <span>Welcome User!</span>
+      <button onclick="toggleAuth()" class="text-red-600">Logout</button>
+    </div>
+  ` : `<a href="#" class="text-blue-600" onclick="toggleAuth()">Login/Signup</a>`;
+}
+toggleAuth();
 
-    // Close modal when clicking outside content area
-    document.getElementById('profileModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeProfile();
-      }
-    });
-
-    // Also close modal on escape key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeProfile();
-      }
-    });
-  </script>
+// --- Simulated animated marker movement (optional) ---
+setInterval(() => {
+  const markerList = clusterGroup.getLayers();
+  markerList.forEach(marker => {
+    const latlng = marker.getLatLng();
+    const lat = latlng.lat + (Math.random() - 0.5) * 0.001;
+    const lng = latlng.lng + (Math.random() - 0.5) * 0.001;
+    marker.setLatLng([lat, lng]);
+  });
+}, 10000);
+</script>
 </body>
 </html>

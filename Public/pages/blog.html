@@ -1,139 +1,595 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Connect Blog - Tips, guides, and updates on job opportunities in Kenya">
+  <meta name="keywords" content="jobs, Kenya, blog, remote work, freelancing, career advice">
   <title>Connect Blog</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-  <!-- Bootstrap 5 -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    const blogs = {
+      "remote-job": {
+        id: 1,
+        title: "How to Land Your First Remote Job (Even Without Experience)",
+        author: "Connect Team",
+        date: "Apr 29, 2025",
+        readingTime: "5 min read",
+        tags: ["Remote", "Jobs", "Career"],
+        category: "Career Advice",
+        image: "https://source.unsplash.com/random/800x300?remote,work",
+        excerpt: "Learn how to break into remote work with no experience. Discover in-demand roles, essential skills, and tips to land your first gig.",
+        comments: []
+      },
+      "make-money": {
+        id: 2,
+        title: "7 Proven Ways to Make Money With Your Skills Using Connect",
+        author: "Connect Team",
+        date: "Apr 29, 2025",
+        readingTime: "4 min read",
+        tags: ["Tips", "Freelancing", "Jobs"],
+        category: "Freelancing",
+        image: "https://source.unsplash.com/random/800x300?freelance,skills",
+        excerpt: "Turn your skills into income with Connect. From tutoring to designing, explore 7 ways to earn money daily.",
+        comments: []
+      }
+    };
+    const posts = Object.keys(blogs).map(key => ({ postId: key, ...blogs[key] }));
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .tag-btn {
+      @apply px-3 py-1 text-sm rounded-full font-medium transition shadow-sm cursor-pointer;
+    }
+    .post-card {
+      @apply bg-white dark:bg-gray-800 rounded-lg p-5 shadow-md hover:shadow-xl transition duration-300;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900 transition-all duration-300" id="body">
-  
-  <!-- Header -->
-  <header class="bg-white shadow-md sticky top-0 z-20 py-4 px-6 flex items-center justify-between">
-    <h1 class="text-3xl font-bold text-blue-700">Connect Blog</h1>
-    <div class="flex items-center gap-2 w-full max-w-md">
-      <input id="searchInput" type="text" placeholder="Search articles..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
-      <button id="toggleDark" class="text-gray-600 hover:text-black" title="Toggle Dark Mode">
-        <i data-feather="moon"></i>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <nav class="bg-gradient-to-r from-teal-500 to-blue-600 text-white shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a class="text-xl font-bold flex items-center" href="/">
+        <i class="fas fa-handshake mr-2"></i>Connect
+      </a>
+      <button id="navbarToggle" class="lg:hidden text-white focus:outline-none" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
       </button>
+      <div id="navbarMenu" class="hidden lg:flex lg:items-center lg:space-x-6">
+        <a href="/" class="hover:text-gray-200">Home</a>
+        <a href="jobs.html" class="hover:text-gray-200">Jobs</a>
+        <a href="map.html" class="hover:text-gray-200">Map</a>
+        <a href="about.html" class="hover:text-gray-200">About</a>
+        <a href="contact.html" class="hover:text-gray-200">Contact</a>
+        <a href="blog.html" class="hover:text-gray-200 font-semibold underline">Blog</a>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- Main Layout -->
-  <main class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 max-w-7xl mx-auto">
-    
-    <!-- Sidebar Tags -->
-    <aside class="md:col-span-1">
-      <h2 class="text-lg font-semibold mb-4">Filter by Tag</h2>
-      <div class="flex flex-wrap gap-3">
-        <button class="tag-btn bg-blue-100 hover:bg-blue-200">#Jobs</button>
-        <button class="tag-btn bg-green-100 hover:bg-green-200">#Tips</button>
-        <button class="tag-btn bg-purple-100 hover:bg-purple-200">#Nairobi</button>
-        <button class="tag-btn bg-yellow-100 hover:bg-yellow-200">#Remote</button>
+  <main class="container mx-auto px-4 py-12 max-w-7xl grid grid-cols-1 md:grid-cols-4 gap-6">
+    <aside class="md:col-span-1 space-y-6">
+      <div>
+        <h2 class="text-lg font-semibold">Search</h2>
+        <input type="text" placeholder="Search articles..." class="w-full px-4 py-2 border rounded-lg">
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Tags</h2>
+        <div class="flex flex-wrap gap-2">
+          <button class="tag-btn bg-teal-100 text-teal-800">#Jobs</button>
+          <button class="tag-btn bg-yellow-100 text-yellow-800">#Tips</button>
+          <button class="tag-btn bg-purple-100 text-purple-800">#Remote</button>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Categories</h2>
+        <div class="flex flex-col gap-2">
+          <button class="tag-btn bg-blue-100 text-blue-800">Career Advice</button>
+          <button class="tag-btn bg-green-100 text-green-800">Freelancing</button>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-lg font-semibold">Recent Posts</h2>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="text-teal-600 hover:underline">Landing a Remote Job</a></li>
+          <li><a href="#" class="text-teal-600 hover:underline">Earn with Your Skills</a></li>
+        </ul>
       </div>
     </aside>
 
-    <!-- Main Content -->
     <section class="md:col-span-3 space-y-10">
-
-      <!-- Featured Post -->
-      <article class="relative bg-white rounded-lg shadow-md overflow-hidden group transform transition duration-300 hover:scale-[1.01]">
-        <img src="https://source.unsplash.com/random/800x300?remote,work" alt="Featured" class="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-90">
-        <div class="p-6">
-          <h2 class="text-2xl font-bold text-blue-800">How to land your first remote job</h2>
-          <p class="text-sm text-gray-500 mt-1">By Connect Team · Apr 1, 2025</p>
-          <p class="mt-3 text-gray-700">Learn strategies to find and secure remote jobs in Kenya using Connect. This guide includes actionable tips from local professionals.</p>
-          <a href="#" class="mt-4 inline-block text-blue-600 hover:underline">Read More →</a>
-        </div>
-      </article>
-
-      <!-- Blog Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="blogPosts">
-        <!-- Blog Cards -->
-        <article class="post-card">
-          <h3 class="text-lg font-semibold">Top 5 gigs this week</h3>
-          <p class="text-sm text-gray-500">April 12, 2025</p>
-          <p class="mt-2 text-sm text-gray-700">Explore the highest paying gigs from our Nairobi listings this week.</p>
-        </article>
-        <article class="post-card">
-          <h3 class="text-lg font-semibold">Safety tips for freelancers</h3>
-          <p class="text-sm text-gray-500">April 10, 2025</p>
-          <p class="mt-2 text-sm text-gray-700">Always meet in public, verify client details, and trust your instincts.</p>
-        </article>
-        <article class="post-card">
-          <h3 class="text-lg font-semibold">How to get verified</h3>
-          <p class="text-sm text-gray-500">April 8, 2025</p>
-          <p class="mt-2 text-sm text-gray-700">Verified profiles get 3x more job offers. Here's how to do it...</p>
-        </article>
+      <div id="featuredPost" class="rounded-lg shadow-lg overflow-hidden bg-white dark:bg-gray-800">
+        <!-- Featured post will load dynamically -->
       </div>
 
-      <!-- Load More -->
-      <div class="flex justify-center pt-4">
-        <button id="loadMoreBtn" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">Load More</button>
+      <div id="blogPosts" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Blog posts will load dynamically -->
       </div>
 
+      <div class="flex justify-center">
+        <button class="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600">Load More</button>
+      </div>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white mt-10 py-10 text-center shadow-inner">
-    <h2 class="text-xl font-semibold">Stay Updated</h2>
-    <p class="text-gray-500 text-sm mt-1">Subscribe to our newsletter for the latest posts and job updates.</p>
-    <div class="flex flex-col sm:flex-row justify-center gap-3 mt-4 px-4">
-      <input type="email" placeholder="you@example.com" class="border px-4 py-2 rounded w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-green-400" />
-      <button class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Subscribe</button>
+  <footer class="bg-gradient-to-r from-teal-500 to-blue-600 text-white py-8">
+    <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="text-lg font-semibold">Connect</h3>
+        <p class="text-sm">Connecting you with trusted services and job opportunities across Kenya.</p>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Links</h3>
+        <ul class="text-sm space-y-2">
+          <li><a href="about.html" class="hover:underline">About</a></li>
+          <li><a href="contact.html" class="hover:underline">Contact</a></li>
+          <li><a href="faq.html" class="hover:underline">FAQ</a></li>
+          <li><a href="pricing.html" class="hover:underline">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Categories</h3>
+        <ul class="text-sm space-y-2">
+          <li><a href="blog.html?category=career" class="hover:underline">Career Advice</a></li>
+          <li><a href="blog.html?category=freelancing" class="hover:underline">Freelancing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-lg font-semibold">Subscribe</h3>
+        <form class="mt-2">
+          <input type="email" placeholder="Your email" class="w-full px-3 py-2 rounded-md text-black">
+          <button type="submit" class="mt-2 w-full bg-white text-teal-600 px-3 py-2 rounded-md hover:bg-gray-100">Subscribe</button>
+        </form>
+      </div>
     </div>
+    <p class="mt-8 text-center text-sm">&copy; 2025 Connect. All rights reserved.</p>
   </footer>
+</body>
+</html>
 
-  <!-- Script -->
-  <script>
-    feather.replace();
 
-    // Live search filter
-    document.getElementById('searchInput').addEventListener('input', function (e) {
-      const query = e.target.value.toLowerCase();
-      document.querySelectorAll('#blogPosts article').forEach(card => {
-        const isVisible = card.textContent.toLowerCase().includes(query);
-        card.style.display = isVisible ? 'block' : 'none';
-      });
-    });
+    <!-- Scripts -->
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                search: "Search",
+                filter_by_tag: "Filter by Tag",
+                filter_by_category: "Filter by Category",
+                recent_posts: "Recent Posts",
+                load_more: "Load More",
+                comments: "Comments",
+                post_comment: "Post Comment",
+                author_profile: "Author Profile",
+                connect: "Connect",
+                connect_desc: "Connecting you with trusted services and job opportunities across Kenya.",
+                links: "Links",
+                about: "About",
+                contact: "Contact",
+                faq: "FAQ",
+                pricing: "Pricing",
+                services: "Services",
+                cleaning: "Cleaning",
+                delivery: "Delivery",
+                errands: "Errands",
+                tutoring: "Tutoring",
+                follow_us: "Follow Us",
+                newsletter: "Newsletter",
+                subscribe: "Subscribe",
+                your_stats: "Your Stats",
+                no_comments: "No comments yet."
+            },
+            sw: {
+                search: "Tafuta",
+                filter_by_tag: "Chuja kwa Lebo",
+                filter_by_category: "Chuja kwa Jamii",
+                recent_posts: "Machapisho ya Hivi Karibuni",
+                load_more: "Pakia Zaidi",
+                comments: "Maoni",
+                post_comment: "Chapisha Maoni",
+                author_profile: "Wasifu wa Mwandishi",
+                connect: "Unganisha",
+                connect_desc: "Kukuunganisha na huduma za kuaminika na nafasi za kazi kote Kenya.",
+                links: "Viungo",
+                about: "Kuhusu",
+                contact: "Mawasiliano",
+                faq: "Maswali Yanayoulizwa Mara kwa Mara",
+                pricing: "Bei",
+                services: "Huduma",
+                cleaning: "Kusafisha",
+                delivery: "Uwasilishaji",
+                errands: "Shughuli",
+                tutoring: "Kufundisha",
+                follow_us: "Tufuate",
+                newsletter: "Jarida",
+                subscribe: "Jiandikishe",
+                your_stats: "Takwimu Zako",
+                no_comments: "Hakuna maoni bado."
+            }
+        };
 
-    // Load more
-    document.getElementById('loadMoreBtn').addEventListener('click', () => {
-      const newCard = document.createElement('article');
-      newCard.className = 'post-card';
-      newCard.innerHTML = `
-        <h3 class="text-lg font-semibold">New Article Title</h3>
-        <p class="text-sm text-gray-500">April 16, 2025</p>
-        <p class="mt-2 text-sm text-gray-700">This is a new dynamically added post. Replace with real content.</p>
-      `;
-      document.getElementById('blogPosts').appendChild(newCard);
-    });
+        // Convert blogs object to array for easier handling
+        let posts = [];
+        try {
+            posts = Object.keys(blogs).map(key => ({ postId: key, ...blogs[key] }));
+            console.log("Blog posts loaded:", posts); // Debug log
+        } catch (e) {
+            console.error("Error loading blogs:", e);
+            document.getElementById("blogPosts").innerHTML = `<p class="text-red-500">Error loading blogs. Please check the console for details.</p>`;
+        }
 
-    // Dark mode toggle
-    document.getElementById('toggleDark').addEventListener('click', () => {
-      const body = document.getElementById('body');
-      body.classList.toggle('bg-gray-900');
-      body.classList.toggle('text-white');
-    });
-  </script>
+        // State
+        let currentPosts = posts.length ? posts.slice(0, 3) : [];
+        let currentPage = 1;
+        const postsPerPage = 3;
 
-  <!-- Custom Styles -->
-  <style>
-    .tag-btn {
-      @apply px-3 py-1 text-sm rounded-full font-medium transition shadow-sm;
-    }
-    .post-card {
-      @apply bg-white rounded-lg p-5 shadow-md hover:shadow-xl transition duration-300;
-    }
-  </style>
+        // Navbar auth state
+        function updateAuthNav() {
+            const token = localStorage.getItem("token");
+            const authNav = document.getElementById("auth-nav");
+            const mobileAuthNav = document.getElementById("mobile-auth-nav");
+            if (token) {
+                fetch("/api/login", {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.user) {
+                            authNav.innerHTML = `
+                                <div class="relative">
+                                    <button class="flex items-center text-white" id="userMenuToggle">
+                                        <img src="../assets/img/avatar-placeholder.png" class="rounded-full w-8 h-8" alt="User">
+                                    </button>
+                                    <div id="userMenu" class="absolute hidden right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10">
+                                        <a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="profile.html"><i class="fas fa-user mr-2"></i>Profile</a>
+                                        ${data.user.role === "admin" ? '<a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="admin.html"><i class="fas fa-tachometer-alt mr-2"></i>Admin Dashboard</a>' : ""}
+                                        <a class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                                    </div>
+                                </div>
+                            `;
+                            mobileAuthNav.innerHTML = `
+                                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="profile.html"><i class="fas fa-user mr-2"></i>Profile</a>
+                                ${data.user.role === "admin" ? '<a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="admin.html"><i class="fas fa-tachometer-alt mr-2"></i>Admin Dashboard</a>' : ""}
+                                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="#" onclick="logout()"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+                            `;
+                            document.getElementById("userMenuToggle").addEventListener("click", () => {
+                                document.getElementById("userMenu").classList.toggle("hidden");
+                            });
+                            loadAnalyticsDashboard(data.user);
+                        } else {
+                            setLoggedOutNav();
+                        }
+                    })
+                    .catch(() => setLoggedOutNav());
+            } else {
+                setLoggedOutNav();
+            }
+        }
+
+        function setLoggedOutNav() {
+            document.getElementById("auth-nav").innerHTML = `
+                <a class="text-white hover:text-gray-200" href="login.html">Login</a>
+                <a class="bg-white text-teal-500 px-3 py-1 rounded-lg hover:bg-gray-100" href="register.html">Sign Up</a>
+            `;
+            document.getElementById("mobile-auth-nav").innerHTML = `
+                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="login.html">Login</a>
+                <a class="text-gray-800 dark:text-gray-200 hover:text-teal-500" href="register.html">Sign Up</a>
+            `;
+        }
+
+        function logout() {
+            localStorage.removeItem ("token | 500 Internal Server Error | Internal Server Error | text/plain | 0.003s )
+            | localStorage.removeItem("user");
+            updateAuthNav();
+            window.location.href = "/";
+        }
+
+        // Load featured post
+        function loadFeaturedPost() {
+            if (!posts.length) {
+                document.getElementById("featuredPost").innerHTML = `<p class="p-6 text-red-500">No featured post available.</p>`;
+                return;
+            }
+            const post = posts[0]; // First post as featured
+            document.getElementById("featuredPost").innerHTML = `
+                <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover transition-opacity duration-300 group-hover:opacity-90">
+                <div class="p-6">
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        ${post.tags.map(tag => `<span class="tag-btn bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-teal-100">${tag}</span>`).join('')}
+                    </div>
+                    <h2 class="text-2xl font-bold text-teal-800 dark:text-teal-100">${post.title}</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">By <a href="#" onclick="viewAuthor('${post.author}')" class="hover:underline">${post.author}</a> · ${post.date} · ${post.readingTime}</p>
+                    <p class="mt-3 text-gray-700 dark:text-gray-300">${post.excerpt}</p>
+                    <div class="mt-4 flex items-center gap-4">
+                        <a href="blogpages.html?post=${post.postId}" class="text-teal-600 dark:text-teal-400 hover:underline">Read More →</a>
+                        <button class="text-gray-600 dark:text-gray-300 hover:text-teal-500" onclick="showComments(${post.id})" title="View comments">
+                            <i class="fas fa-comment"></i> <span id="commentCount-${post.id}">${(localStorage.getItem(`comments-${post.id}`) ? JSON.parse(localStorage.getItem(`comments-${post.id}`)).length : 0) || post.comments.length}</span>
+                        </button>
+                        <button class="text-gray-600 dark:text-gray-300 hover:text-teal-500" onclick="sharePost(${post.id})" title="Share post">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load blog posts
+        function loadPosts() {
+            console.log("Current posts:", currentPosts); // Debug log
+            const blogPosts = document.getElementById("blogPosts");
+            if (!currentPosts.length) {
+                blogPosts.innerHTML = `<p class="text-gray-600 dark:text-gray-300">No posts found.</p>`;
+                return;
+            }
+            blogPosts.innerHTML = "";
+            currentPosts.forEach(post => {
+                const commentCount = (localStorage.getItem(`comments-${post.id}`) ? JSON.parse(localStorage.getItem(`comments-${post.id}`)).length : 0) || post.comments.length;
+                blogPosts.innerHTML += `
+                    <article class="post-card">
+                        <img src="${post.image}" alt="${post.title}" class="w-full h-32 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                ${post.tags.map(tag => `<span class="tag-btn bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-teal-100">${tag}</span>`).join('')}
+                            </div>
+                            <h3 class="text-lg font-semibold text-teal-800 dark:text-teal-100">${post.title}</h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">By <a href="#" onclick="viewAuthor('${post.author}')" class="hover:underline">${post.author}</a> · ${post.date} · ${post.readingTime}</p>
+                            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">${post.excerpt}</p>
+                            <div class="mt-4 flex items-center gap-4">
+                                <a href="blogpages.html?post=${post.postId}" class="text-teal-600 dark:text-teal-400 hover:underline">Read More →</a>
+                                <button class="text-gray-600 dark:text-gray-300 hover:text-teal-500" onclick="showComments(${post.id})" title="View comments">
+                                    <i class="fas fa-comment"></i> <span id="commentCount-${post.id}">${commentCount}</span>
+                                </button>
+                                <button class="text-gray-600 dark:text-gray-300 hover:text-teal-500" onclick="sharePost(${post.id})" title="Share post">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+            toggleLanguage(localStorage.getItem("language") || "en");
+        }
+
+        // Load recent posts
+        function loadRecentPosts() {
+            const recentPosts = document.getElementById("recentPosts");
+            if (!posts.length) {
+                recentPosts.innerHTML = `<p class="text-gray-600 dark:text-gray-300">No recent posts.</p>`;
+                return;
+            }
+            recentPosts.innerHTML = posts.slice(0, 3).map(post => `
+                <div class="flex items-center gap-3">
+                    <img src="${post.image}" alt="${post.title}" class="w-16 h-12 object-cover rounded">
+                    <div>
+                        <a href="blogpages.html?post=${post.postId}" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline">${post.title}</a>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${post.date}</p>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        // Load analytics dashboard
+        function loadAnalyticsDashboard(user) {
+            if (!user) return;
+            const dashboard = document.getElementById("analyticsDashboard");
+            dashboard.classList.remove("hidden");
+            const readPosts = JSON.parse(localStorage.getItem(`readPosts-${user.id}`) || "[]");
+            const favoriteTags = JSON.parse(localStorage.getItem(`favoriteTags-${user.id}`) || "[]");
+            document.getElementById("analyticsContent").innerHTML = `
+                <p><strong>Posts Read:</strong> ${readPosts.length}</p>
+                <p><strong>Favorite Tags:</strong> ${favoriteTags.length ? favoriteTags.join(", ") : "None"}</p>
+                <p><strong>Preferred Categories:</strong> ${[...new Set(posts.filter(p => readPosts.includes(p.id)).map(p => p.category))].join(", ") || "None"}</p>
+            `;
+        }
+
+        // Search filter
+        let searchTimeout;
+        document.getElementById("searchInput").addEventListener("input", () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = document.getElementById("searchInput").value.toLowerCase();
+                currentPosts = posts.filter(post =>
+                    post.title.toLowerCase().includes(query) ||
+                    post.excerpt.toLowerCase().includes(query) ||
+                    post.tags.some(tag => tag.toLowerCase().includes(query))
+                );
+                currentPage = 1;
+                loadPosts();
+            }, 300);
+        });
+
+        // Tag filter
+        document.getElementById("tagFilter").addEventListener("click", e => {
+            if (e.target.classList.contains("tag-btn")) {
+                const tag = e.target.dataset.tag;
+                currentPosts = tag === "All" ? posts : posts.filter(post => post.tags.includes(tag));
+                currentPage = 1;
+                loadPosts();
+                document.querySelectorAll("#tagFilter .tag-btn").forEach(btn => btn.classList.remove("ring-2", "ring-teal-500"));
+                e.target.classList.add("ring-2", "ring-teal-500");
+            }
+        });
+
+        // Category filter
+        document.getElementById("categoryFilter").addEventListener("click", e => {
+            if (e.target.classList.contains("tag-btn")) {
+                const category = e.target.dataset.category;
+                currentPosts = category === "All" ? posts : posts.filter(post => post.category === category);
+                currentPage = 1;
+                loadPosts();
+                document.querySelectorAll("#categoryFilter .tag-btn").forEach(btn => btn.classList.remove("ring-2", "ring-teal-500"));
+                e.target.classList.add("ring-2", "ring-teal-500");
+            }
+        });
+
+        // Load more
+        document.getElementById("loadMoreBtn").addEventListener("click", () => {
+            currentPage++;
+            const start = (currentPage - 1) * postsPerPage;
+            const newPosts = posts.slice(start, start + postsPerPage);
+            currentPosts = [...currentPosts, ...newPosts];
+            loadPosts();
+            if (currentPosts.length >= posts.length) {
+                document.getElementById("loadMoreBtn").disabled = true;
+                document.getElementById("loadMoreBtn").classList.add("opacity-50", "cursor-not-allowed");
+            }
+        });
+
+        // View post
+        function viewPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (!post) {
+                console.error(`Post with id ${id} not found`);
+                return;
+            }
+            const user = JSON.parse(localStorage.getItem("user") || "{}");
+            if (user.id) {
+                const readPosts = JSON.parse(localStorage.getItem(`readPosts-${user.id}`) || "[]");
+                if (!readPosts.includes(id)) {
+                    readPosts.push(id);
+                    localStorage.setItem(`readPosts-${user.id}`, JSON.stringify(readPosts));
+                    loadAnalyticsDashboard(user);
+                }
+            }
+            window.location.href = `blogpages.html?post=${post.postId}`;
+        }
+
+        // Show comments
+        function showComments(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) {
+                console.error(`Post with id ${postId} not found`);
+                return;
+            }
+            const comments = JSON.parse(localStorage.getItem(`comments-${postId}`) || "[]") || post.comments;
+            document.getElementById("commentList").innerHTML = comments.length ? comments.map(comment => `
+                <div class="p-2 bg-gray-100 dark:bg-gray-700 rounded">
+                    <p class="text-sm text-gray-800 dark:text-gray-200">${comment.text}</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">${comment.date}</p>
+                </div>
+            `).join("") : `<p class="text-gray-600 dark:text-gray-300">${translations[localStorage.getItem("language") || "en"].no_comments}</p>`;
+            document.getElementById("commentModal").classList.remove("hidden");
+            document.getElementById("commentForm").onsubmit = e => {
+                e.preventDefault();
+                const text = document.getElementById("commentInput").value;
+                if (!text) return;
+                const comment = { text, date: new Date().toLocaleDateString() };
+                comments.push(comment);
+                localStorage.setItem(`comments-${postId}`, JSON.stringify(comments));
+                document.getElementById(`commentCount-${postId}`).textContent = comments.length;
+                document.getElementById("commentInput").value = "";
+                showComments(postId);
+            };
+        }
+
+        // Share post
+        function sharePost(id) {
+            const post = posts.find(p => p.id === id);
+            if (!post) {
+                console.error(`Post with id ${id} not found`);
+                return;
+            }
+            const text = `Check out this article: ${post.title} on Connect Blog! http://localhost/blogpages.html?post=${post.postId}`;
+            if (navigator.share) {
+                navigator.share({ title: post.title, text, url: `http://localhost/blogpages.html?post=${post.postId}` });
+            } else {
+                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+                window.open(whatsappUrl, "_blank");
+            }
+        }
+
+        // View author
+        function viewAuthor(author) {
+            const authorPosts = posts.filter(p => p.author === author);
+            document.getElementById("authorContent").innerHTML = `
+                <img src="https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 99)}.jpg" class="w-24 h-24 rounded-full mx-auto mb-2" alt="${author}">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">${author}</h3>
+                <p class="text-gray-600 dark:text-gray-300">Expert in career advice and local job markets in Kenya.</p>
+                <div class="mt-4">
+                    <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Other Posts</h4>
+                    <div class="space-y-2 mt-2">
+                        ${authorPosts.map(post => `
+                            <a href="blogpages.html?post=${post.postId}" class="block text-sm text-teal-600 dark:text-teal-400 hover:underline">${post.title}</a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById("authorModal").classList.remove("hidden");
+        }
+
+        // Modal handling
+        document.getElementById("closeCommentModal").addEventListener("click", () => {
+            document.getElementById("commentModal").classList.add("hidden");
+        });
+        document.getElementById("commentModal").addEventListener("click", e => {
+            if (e.target === document.getElementById("commentModal")) {
+                document.getElementById("commentModal").classList.add("hidden");
+            }
+        });
+        document.getElementById("closeAuthorModal").addEventListener("click", () => {
+            document.getElementById("authorModal").classList.add("hidden");
+        });
+        document.getElementById("authorModal").addEventListener("click", e => {
+            if (e.target === document.getElementById("authorModal")) {
+                document.getElementById("authorModal").classList.add("hidden");
+            }
+        });
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape") {
+                document.getElementById("commentModal").classList.add("hidden");
+                document.getElementById("authorModal").classList.add("hidden");
+            }
+        });
+
+        // Newsletter subscription
+        document.getElementById("newsletterForm").addEventListener("submit", e => {
+            e.preventDefault();
+            const email = document.getElementById("newsletterEmail").value;
+            if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+            alert("Thank you for subscribing!");
+            document.getElementById("newsletterEmail").value = "";
+        });
+
+        // Dark mode toggle
+        document.addEventListener("click", e => {
+            if (e.target.closest("#toggleDarkMode")) {
+                document.body.classList.toggle("dark");
+                localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+            }
+        });
+
+        // Language toggle
+        document.getElementById("languageToggle")?.addEventListener("change", e => toggleLanguage(e.target.value));
+        function toggleLanguage(lang) {
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                el.textContent = translations[lang][el.dataset.i18n] || el.textContent;
+            });
+            localStorage.setItem("language", lang);
+            loadPosts();
+            loadRecentPosts();
+            loadFeaturedPost();
+        }
+
+        // Navbar toggle
+        document.getElementById("navbarToggle").addEventListener("click", () => {
+            document.getElementById("mobileMenu").classList.toggle("hidden");
+        });
+
+        // Initialize
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("darkMode") === "true") document.body.classList.add("dark");
+            updateAuthNav();
+            loadFeaturedPost();
+            loadPosts();
+            loadRecentPosts();
+            toggleLanguage(localStorage.getItem("language") || "en");
+        });
+    </script>
 </body>
 </html>

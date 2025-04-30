@@ -1,97 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="About Connect - Connecting Kenyans for quick jobs and trusted services.">
-    <meta name="keywords" content="about, jobs, Kenya, errands, cleaning, delivery, Nairobi">
-    <title>About - Connect</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Bootstrap CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="connect.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Connect - Connecting Kenyans for quick jobs and trusted services.">
+  <meta name="keywords" content="about, jobs, Kenya, errands, cleaning, delivery, Nairobi">
+  <title>About - Connect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="connect.css">
 </head>
-<body class="bg-gray-50">
-    <!-- Navbar -->
-    <ul class="navbar-nav ms-auto align-items-center">
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="../index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="jobs.html">Jobs</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="faq.html">FAQ</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="pricing.html">Pricing</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="safety.html">Safety</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="blog.html">Blog</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="about.html">About</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="contact.html">Contact</a></li>
-        <li class="nav-item"><a class="nav-link text-white hover:text-orange-400" href="profile.html">Profile</a></li>
-        <li class="nav-item dropdown">
-            <a class="nav-link text-white hover:text-orange-400 dropdown-toggle" href="#" id="moreDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                More
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="moreDropdown">
-                <li><a class="dropdown-item" href="how-it-works.html">How It Works</a></li>
-                <li><a class="dropdown-item" href="testimonials.html">Testimonials</a></li>
-                <li><a class="dropdown-item" href="city-spotlight.html">City Spotlight</a></li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a href="profile.html">
-                <img src="../assets/img/avatar-placeholder.png" alt="Profile" class="rounded-full w-8 h-8 border-2 border-white hover:border-orange-400 transition-all">
-            </a>
-        </li>
-    </ul>
+<body class="bg-gray-50 font-sans text-gray-800">
 
-    <!-- About Section -->
-    <section id="about" class="container mx-auto px-4 py-12 pt-24 fade-in">
-        <h2 class="text-3xl font-bold text-blue-800 mb-4 text-center">About Connect</h2>
-        <div class="h-1 w-24 mx-auto mb-6" style="background: linear-gradient(to right, #14B8A6, #1E40AF)"></div>
-        <p class="text-gray-700 mb-6 max-w-2xl mx-auto text-center">
-            Connect is Kenya’s platform for quick, reliable services. We empower clients to hire trusted workers for errands, cleaning, deliveries, and more, while helping workers earn fair wages with flexible jobs.
+  <!-- Navbar -->
+  <nav class="bg-blue-900 text-white px-4 py-3 shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="../index.html" class="text-xl font-bold tracking-tight">Connect</a>
+      <ul class="flex space-x-4 text-sm">
+        <li><a class="hover:text-orange-400" href="../index.html">Home</a></li>
+        <li><a class="hover:text-orange-400" href="jobs.html">Jobs</a></li>
+        <li><a class="hover:text-orange-400" href="faq.html">FAQ</a></li>
+        <li><a class="hover:text-orange-400" href="pricing.html">Pricing</a></li>
+        <li><a class="hover:text-orange-400" href="safety.html">Safety</a></li>
+        <li><a class="hover:text-orange-400" href="blog.html">Blog</a></li>
+        <li><a class="hover:text-orange-400" href="about.html">About</a></li>
+        <li><a class="hover:text-orange-400" href="contact.html">Contact</a></li>
+        <li><a class="hover:text-orange-400" href="profile.html">Profile</a></li>
+        <li><a href="profile.html"><img src="../assets/img/avatar-placeholder.png" alt="Profile" class="rounded-full w-8 h-8 border-2 border-white hover:border-orange-400"></a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- About Section -->
+  <section class="container mx-auto px-4 py-16">
+    <h2 class="text-4xl font-bold text-center text-blue-800 mb-4">About Connect</h2>
+    <div class="w-24 h-1 mx-auto mb-6 bg-gradient-to-r from-teal-500 to-blue-800"></div>
+    <p class="text-center max-w-2xl mx-auto text-lg mb-8">
+      Connect is Kenya’s go-to platform for reliable, on-demand services. We empower users to hire trusted professionals for errands, cleaning, deliveries, and more.
+    </p>
+
+    <!-- Mission & Vision -->
+    <div class="grid md:grid-cols-2 gap-8 mb-12">
+      <div>
+        <h3 class="text-2xl font-semibold text-blue-800 mb-3">Our Mission</h3>
+        <p>
+          To simplify everyday life by creating job opportunities and connecting Kenyans to reliable help—anywhere, anytime.
         </p>
-        <div class="mb-8">
-            <h3 class="text-lg font-semibold text-blue-800 mb-4 text-center">Our Mission</h3>
-            <p class="text-gray-600 max-w-2xl mx-auto text-center">
-                To make everyday tasks easier and create earning opportunities for Kenyans, from Nairobi’s bustling streets to Mombasa’s coastal communities.
-            </p>
-        </div>
-        <div class="mb-8">
-            <h3 class="text-lg font-semibold text-blue-800 mb-4 text-center">Why Choose Connect?</h3>
-            <ul class="list-disc text-gray-600 max-w-2xl mx-auto">
-                <li class="mb-2">Trusted workers verified for safety.</li>
-                <li class="mb-2">Transparent pricing with no hidden fees.</li>
-                <li class="mb-2">Jobs in cities across Kenya, including Kisumu, Eldoret, and Nakuru.</li>
-                <li class="mb-2">Support for both clients and workers to ensure smooth experiences.</li>
-            </ul>
-        </div>
-        <div class="text-center">
-            <a
-                href="jobs.html"
-                class="btn text-white px-6 py-3 rounded-lg shadow hover:shadow-lg transition-all"
-                style="background: linear-gradient(to right, #F97316, #EA580C)"
-            >
-                Join the Community
-            </a>
-        </div>
-    </section>
+      </div>
+      <div>
+        <h3 class="text-2xl font-semibold text-blue-800 mb-3">Our Vision</h3>
+        <p>
+          A future where every Kenyan has access to safe, efficient, and dignified work and services at their fingertips.
+        </p>
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="text-white py-6 fade-in" style="background: linear-gradient(to right, #1E40AF, #2563EB)">
-        <div class="container mx-auto text-center">
-            <p class="mb-4">© 2025 Connect. All rights reserved.</p>
-            <div class="flex justify-center space-x-4">
-                <a href="#" class="hover:underline">About</a>
-                <a href="contact.html" class="hover:underline">Contact</a>
-                <a href="faq.html" class="hover:underline">FAQ</a>
-                <a href="pricing.html" class="hover:underline">Pricing</a>
-                <a href="safety.html" class="hover:underline">Safety</a>
-            </div>
-        </div>
-    </footer>
+    <!-- Core Values -->
+    <div class="bg-white rounded-lg shadow p-6 mb-12">
+      <h3 class="text-2xl font-semibold text-blue-800 mb-4">Core Values</h3>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <li><strong>Trust:</strong> Verified workers, secure transactions.</li>
+        <li><strong>Community:</strong> Uplifting local talent.</li>
+        <li><strong>Transparency:</strong> No hidden costs or shady practices.</li>
+        <li><strong>Innovation:</strong> Smart tech for everyday challenges.</li>
+      </ul>
+    </div>
 
-    <!-- Bootstrap JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Custom JS -->
-    <script src="connect.js"></script>
+    <!-- Meet the Team -->
+    <div class="text-center mb-12">
+      <h3 class="text-2xl font-semibold text-blue-800 mb-4">Meet the Team</h3>
+      <p class="mb-6">We’re a passionate group of problem-solvers, techies, and visionaries.</p>
+      <div class="flex flex-wrap justify-center gap-8">
+        <div class="bg-white p-4 rounded-xl shadow w-64">
+          <img src="../assets/img/avatar-placeholder.png" alt="CEO" class="w-24 h-24 mx-auto rounded-full">
+          <h4 class="mt-3 font-semibold">Blessing Mutinda</h4>
+          <p class="text-sm text-gray-500">CEO & Co-founder</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow w-64">
+          <img src="../assets/img/avatar-placeholder.png" alt="CTO" class="w-24 h-24 mx-auto rounded-full">
+          <h4 class="mt-3 font-semibold">Blessing Mutinda</h4>
+          <p class="text-sm text-gray-500">CTO & Product Lead</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="mb-16">
+      <h3 class="text-2xl font-semibold text-blue-800 mb-4 text-center">Our Journey</h3>
+      <ol class="border-l-2 border-blue-500 pl-6">
+        <li class="mb-4">
+          <div class="text-sm text-gray-600">2023</div>
+          <p class="font-semibold">Connect launches in Nairobi</p>
+        </li>
+        <li class="mb-4">
+          <div class="text-sm text-gray-600">2024</div>
+          <p class="font-semibold">Reached 100,000 users and expanded to 4 major cities</p>
+        </li>
+        <li class="mb-4">
+          <div class="text-sm text-gray-600">2025</div>
+          <p class="font-semibold">New features: Wallet, Real-time Map, Verified Ratings</p>
+        </li>
+      </ol>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center">
+      <a href="jobs.html" class="inline-block bg-gradient-to-r from-orange-400 to-orange-600 text-white text-lg px-6 py-3 rounded-full shadow hover:shadow-lg transition">
+        Join the Connect Community
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-6 text-center">
+    <p class="mb-2">© 2025 Connect. All rights reserved.</p>
+    <div class="space-x-4 text-sm">
+      <a href="about.html" class="hover:underline">About</a>
+      <a href="contact.html" class="hover:underline">Contact</a>
+      <a href="faq.html" class="hover:underline">FAQ</a>
+      <a href="pricing.html" class="hover:underline">Pricing</a>
+      <a href="safety.html" class="hover:underline">Safety</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="connect.js"></script>
 </body>
 </html>
